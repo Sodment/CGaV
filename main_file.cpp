@@ -27,14 +27,18 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdlib.h>
 #include <stdio.h>
+#include <vector>
 #include "constants.h"
 #include "lodepng.h"
 #include "shaderprogram.h"
 #include "camera.h"
 #include "myCube.h"
 #include "myTeapot.h"
+#include "mySkybox.h"
 
 float aspectRatio = 1;
+float near_clip = 0.1f;
+float far_clip = 100.0f;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 float lastX = SCR_WIDTH / 2.0f;
@@ -43,6 +47,7 @@ bool firstMouse = true;
 
 Camera* camera;
 ShaderProgram* sp;
+ShaderProgram* spSkyBox;
 
 
 //Odkomentuj, żeby rysować kostkę
@@ -54,6 +59,7 @@ float* c1 = myCubeC1;
 float* c2 = myCubeC2;
 float* c3 = myCubeC3;
 int vertexCount = myCubeVertexCount;
+GLuint vao, vbo;
 
 
 
@@ -70,6 +76,27 @@ GLuint tex0;
 GLuint tex1;
 GLuint tex2;
 GLuint tex3;
+GLuint skyBox;
+
+//const char* skyboxFaces[6] = 
+//{ 
+//	"right.jpg",
+//	"left.jpg",
+//	"top.jpg",
+//	"bottom.jpg",
+//	"front.jpg",
+//	"back.jpg" 
+//};
+
+const char* skyboxFaces[6] =
+{
+	"right.png",
+	"left.png",
+	"top.png",
+	"bottom.png",
+	"front.png",
+	"back.png"
+};
 
 //Procedura obsługi błędów
 void error_callback(int error, const char* description) {
@@ -144,6 +171,35 @@ GLuint readTexture(const char* filename) {
     return tex;
 }
 
+GLuint loadCubemap(const char* faces[6])
+{
+	GLuint textureID;
+	glActiveTexture(GL_TEXTURE0);
+
+	glGenTextures(1, &textureID);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+	std::vector<unsigned char> image;
+	unsigned width, height;
+
+	for (unsigned int i = 0; i < 6; i++)
+	{
+		unsigned error = lodepng::decode(image, width, height, faces[i]);
+		if (error != 0) printf("KURWA");
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
+			0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*)image.data());
+		image.clear();
+	}
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	return textureID;
+}
+
 
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
@@ -155,21 +211,31 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetScrollCallback(window, scrollCallback);
-	glfwSetKeyCallback(window,keyCallback);
 
 	camera = new Camera();
 	sp = new ShaderProgram("v_simplest.glsl",NULL,"f_simplest.glsl");
+	spSkyBox = new ShaderProgram("skybox_v.glsl",NULL,"skybox_f.glsl");
 	tex0 = readTexture("bricks3b_diffuse.png");
 	tex1 = readTexture("bricks3b_normal.png");
 	tex2 = readTexture("bricks3b_height.png");
 	tex3 = readTexture("bricks3b_specular.png");
+	skyBox = loadCubemap(skyboxFaces);
+
+	/*glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, 3 * 36 * sizeof(float), &skyboxVertices, GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);*/
 }
 
 
 //Zwolnienie zasobów zajętych przez program
 void freeOpenGLProgram(GLFWwindow* window) {
-    //************Tutaj umieszczaj kod, który należy wykonać po zakończeniu pętli głównej************
-
+	delete camera;
     delete sp;
 }
 
@@ -181,11 +247,9 @@ void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysujący obraz******************l
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//glm::mat4 V= glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 	glm::mat4 V = camera->GetViewMatrix();
 
-    //glm::mat4 P=glm::perspective(glm::radians(fov), aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
-	glm::mat4 P = camera->GetPerspectiveMatrix(aspectRatio, 0.01f, 50.0f);
+	glm::mat4 P = camera->GetPerspectiveMatrix(aspectRatio, near_clip, far_clip);
 
     glm::mat4 M=glm::mat4(1.0f);
 
@@ -235,12 +299,30 @@ void drawScene(GLFWwindow* window) {
 
 	glDrawArrays(GL_TRIANGLES, 0, vertexCount); //Narysuj obiekt
 
-    glDisableVertexAttribArray(sp->a("vertex"));  //Wyłącz przesyłanie danych do atrybutu vertex
-    glDisableVertexAttribArray(sp->a("c1"));  //Wyłącz przesyłanie danych do atrybutu vertex
-    glDisableVertexAttribArray(sp->a("c2"));  //Wyłącz przesyłanie danych do atrybutu vertex
-    glDisableVertexAttribArray(sp->a("c3"));  //Wyłącz przesyłanie danych do atrybutu vertex
+	glDisableVertexAttribArray(sp->a("vertex"));  //Wyłącz przesyłanie danych do atrybutu vertex
+	glDisableVertexAttribArray(sp->a("c1"));  //Wyłącz przesyłanie danych do atrybutu vertex
+	glDisableVertexAttribArray(sp->a("c2"));  //Wyłącz przesyłanie danych do atrybutu vertex
+	glDisableVertexAttribArray(sp->a("c3"));  //Wyłącz przesyłanie danych do atrybutu vertex
 	glDisableVertexAttribArray(sp->a("texCoord0"));  //Wyłącz przesyłanie danych do atrybutu texCoord0
 
+	M = glm::mat4(1.0f);
+	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));
+
+	spSkyBox->use();
+	glDepthMask(GL_FALSE);
+	glUniformMatrix4fv(spSkyBox->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spSkyBox->u("V"), 1, false, glm::value_ptr(V));
+
+	glEnableVertexAttribArray(spSkyBox->a("aPos"));  //Włącz przesyłanie danych do atrybutu vertex
+	glVertexAttribPointer(spSkyBox->a("aPos"), 3, GL_FLOAT, false, 0, skyboxVertices); //Wskaż tablicę z danymi dla atrybutu vertex
+
+	glUniform1i(spSkyBox->u("skybox"), 4);
+	glActiveTexture(GL_TEXTURE4);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, skyBox);
+
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+
+	glDepthMask(GL_TRUE);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
 
@@ -283,7 +365,6 @@ int main(void)
 		deltaTime = currentFrame - lastFrame;
 		camera->ProcessKeyboard(deltaTime);
         glfwSetTime(0); //Zeruj timer
-		//ProcessKeyboard();
 		drawScene(window); //Wykonaj procedurę rysującą
 		glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
 	}

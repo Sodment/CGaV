@@ -23,6 +23,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="lodepng.h" />
     <ClInclude Include="myCube.h" />
+    <ClInclude Include="mySkybox.h" />
     <ClInclude Include="myTeapot.h" />
     <ClInclude Include="shaderprogram.h" />
   </ItemGroup>
@@ -33,6 +34,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="f_simplest.glsl" />
+    <None Include="skybox_f.glsl" />
+    <None Include="skybox_v.glsl" />
     <None Include="v_simplest.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
