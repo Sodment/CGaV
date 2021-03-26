@@ -32,9 +32,8 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "lodepng.h"
 #include "shaderprogram.h"
 #include "camera.h"
-#include "myCube.h"
-#include "myTeapot.h"
-#include "mySkybox.h"
+#include "models.h"
+#include "read_textures.h"
 
 float aspectRatio = 1;
 float near_clip = 0.1f;
@@ -59,44 +58,12 @@ float* c1 = myCubeC1;
 float* c2 = myCubeC2;
 float* c3 = myCubeC3;
 int vertexCount = myCubeVertexCount;
-GLuint vao, vbo;
-
-
-
-//float* vertices = myTeapotVertices;
-//float* normals = myTeapotVertexNormals;
-//float* texCoords = myTeapotTexCoords;
-//float* colors = myTeapotColors;
-// float* c1 = myTeapotC1_2;
-// float* c2 = myTeapotC2_2;
-// float* c3 = myTeapotC3_2;
-//int vertexCount = myTeapotVertexCount;
 
 GLuint tex0;
 GLuint tex1;
 GLuint tex2;
 GLuint tex3;
 GLuint skyBox;
-
-//const char* skyboxFaces[6] = 
-//{ 
-//	"right.jpg",
-//	"left.jpg",
-//	"top.jpg",
-//	"bottom.jpg",
-//	"front.jpg",
-//	"back.jpg" 
-//};
-
-const char* skyboxFaces[6] =
-{
-	"right.png",
-	"left.png",
-	"top.png",
-	"bottom.png",
-	"front.png",
-	"back.png"
-};
 
 //Procedura obsługi błędów
 void error_callback(int error, const char* description) {
@@ -148,59 +115,6 @@ void windowResizeCallback(GLFWwindow* window,int width,int height) {
 }
 
 
-GLuint readTexture(const char* filename) {
-    GLuint tex;
-    glActiveTexture(GL_TEXTURE0);
-
-    //Wczytanie do pamięci komputera
-    std::vector<unsigned char> image;   //Alokuj wektor do wczytania obrazka
-    unsigned width, height;   //Zmienne do których wczytamy wymiary obrazka
-    //Wczytaj obrazek
-    unsigned error = lodepng::decode(image, width, height, filename);
-
-    //Import do pamięci karty graficznej
-    glGenTextures(1, &tex); //Zainicjuj jeden uchwyt
-    glBindTexture(GL_TEXTURE_2D, tex); //Uaktywnij uchwyt
-    //Wczytaj obrazek do pamięci KG skojarzonej z uchwytem
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0,
-        GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*)image.data());
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    return tex;
-}
-
-GLuint loadCubemap(const char* faces[6])
-{
-	GLuint textureID;
-	glActiveTexture(GL_TEXTURE0);
-
-	glGenTextures(1, &textureID);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
-
-	std::vector<unsigned char> image;
-	unsigned width, height;
-
-	for (unsigned int i = 0; i < 6; i++)
-	{
-		unsigned error = lodepng::decode(image, width, height, faces[i]);
-		if (error != 0) printf("KURWA");
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-			0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*)image.data());
-		image.clear();
-	}
-
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	return textureID;
-}
-
-
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
@@ -215,27 +129,18 @@ void initOpenGLProgram(GLFWwindow* window) {
 	camera = new Camera();
 	sp = new ShaderProgram("v_simplest.glsl",NULL,"f_simplest.glsl");
 	spSkyBox = new ShaderProgram("skybox_v.glsl",NULL,"skybox_f.glsl");
-	tex0 = readTexture("bricks3b_diffuse.png");
-	tex1 = readTexture("bricks3b_normal.png");
-	tex2 = readTexture("bricks3b_height.png");
-	tex3 = readTexture("bricks3b_specular.png");
+	tex0 = loadTexture("bricks3b_diffuse.png");
+	tex1 = loadTexture("bricks3b_normal.png");
+	tex2 = loadTexture("bricks3b_height.png");
+	tex3 = loadTexture("bricks3b_specular.png");
 	skyBox = loadCubemap(skyboxFaces);
-
-	/*glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, 3 * 36 * sizeof(float), &skyboxVertices, GL_STATIC_DRAW);
-
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);*/
 }
 
 
 //Zwolnienie zasobów zajętych przez program
 void freeOpenGLProgram(GLFWwindow* window) {
 	delete camera;
+	delete spSkyBox;
     delete sp;
 }
 

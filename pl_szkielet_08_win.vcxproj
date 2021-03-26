@@ -22,9 +22,10 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="lodepng.h" />
+    <ClInclude Include="models.h" />
     <ClInclude Include="myCube.h" />
     <ClInclude Include="mySkybox.h" />
-    <ClInclude Include="myTeapot.h" />
+    <ClInclude Include="read_textures.h" />
     <ClInclude Include="shaderprogram.h" />
   </ItemGroup>
   <ItemGroup>
