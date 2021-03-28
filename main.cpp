@@ -212,7 +212,7 @@ int main(void)
 
 	glfwSetErrorCallback(error_callback);
 
-	if (!glfwInit()) 
+	if (!glfwInit())
 	{
 		fprintf(stderr, "Nie mo¿na zainicjowaæ GLFW.\n");
 		exit(EXIT_FAILURE);
@@ -230,26 +230,25 @@ int main(void)
 	glfwMakeContextCurrent(window);
 	glfwSwapInterval(1);
 
-	if (glewInit() != GLEW_OK) 
+	if (glewInit() != GLEW_OK)
 	{
 		fprintf(stderr, "Nie mo¿na zainicjowaæ GLEW.\n");
 		exit(EXIT_FAILURE);
 	}
 
 	initOpenGLProgram(window);
-	glfwSetTime(0); 
+	glfwSetTime(0);
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		camera->ProcessKeyboard(deltaTime);
 		glfwSetTime(0);
-		drawScene(window); 
-		glfwPollEvents(); 
-
-	freeOpenGLProgram(window);
-
-	glfwDestroyWindow(window);
-	glfwTerminate();
-	exit(EXIT_SUCCESS);
+		drawScene(window);
+		glfwPollEvents();
+	}
+		freeOpenGLProgram(window);
+		glfwDestroyWindow(window);
+		glfwTerminate();
+		exit(EXIT_SUCCESS);
 }
