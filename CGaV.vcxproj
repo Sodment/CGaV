@@ -116,7 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>assimp\include;glew\include;glm;glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>stb;assimp\include;glew\include;glm;glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,7 +133,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>assimp\include;glew\include;glm;glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>stb;assimp\include;glew\include;glm;glfw\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -158,16 +158,17 @@
     <ClInclude Include="myCube.h" />
     <ClInclude Include="mySkybox.h" />
     <ClInclude Include="read_textures.h" />
+    <ClInclude Include="Shader.h" />
     <ClInclude Include="shaderprogram.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="f_backpack.glsl" />
     <None Include="f_lab8.glsl" />
-    <None Include="v_backpack.glsl" />
     <None Include="v_lab8.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="f_skybox.glsl" />
+    <Text Include="v_backpack.glsl" />
     <Text Include="v_skybox.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -38,12 +38,12 @@ GLuint loadTexture(const char* filename) {
 
 const char* skyboxFaces[6] =
 {
-	"res/right.png",
-	"res/left.png",
-	"res/top.png",
-	"res/bottom.png",
-	"res/front.png",
-	"res/back.png"
+	"res/skybox/right.png",
+	"res/skybox/left.png",
+	"res/skybox/top.png",
+	"res/skybox/bottom.png",
+	"res/skybox/front.png",
+	"res/skybox/back.png"
 };
 
 GLuint loadCubemap(const char* faces[6])

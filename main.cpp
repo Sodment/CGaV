@@ -16,6 +16,8 @@
 #include "read_textures.h"
 #include "myCube.h"
 #include "mySkybox.h"
+#include "model.h"
+#include "Shader.h"
 
 float aspectRatio = 1;
 float near_clip = 0.1f;
@@ -29,6 +31,8 @@ bool firstMouse = true;
 Camera* camera;
 ShaderProgram* sp;
 ShaderProgram* spSkyBox;
+Shader* spBackpack;
+Model* ourModel;
 
 
 float* vertices = myCubeVertices;
@@ -108,11 +112,13 @@ void initOpenGLProgram(GLFWwindow* window) {
 	camera = new Camera();
 	sp = new ShaderProgram("v_lab8.glsl", NULL, "f_lab8.glsl");
 	spSkyBox = new ShaderProgram("v_skybox.glsl", NULL, "f_skybox.glsl");
-	tex0 = loadTexture("res/bricks3b_diffuse.png");
-	tex1 = loadTexture("res/bricks3b_normal.png");
-	tex2 = loadTexture("res/bricks3b_height.png");
-	tex3 = loadTexture("res/bricks3b_specular.png");
+	tex0 = loadTexture("res/bricks/bricks3b_diffuse.png");
+	tex1 = loadTexture("res/bricks/bricks3b_normal.png");
+	tex2 = loadTexture("res/bricks/bricks3b_height.png");
+	tex3 = loadTexture("res/bricks/bricks3b_specular.png");
 	skyBox = loadCubemap(skyboxFaces);
+	//spBackpack = new Shader("v_backpack.glsl", NULL, "f_backpack.glsl");
+	ourModel = new Model("res/backpack/backpack.obj");
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -130,7 +136,15 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
+	/*spBackpack->use();
+	spBackpack->setMat4("projection", P);
+	spBackpack->setMat4("view", V);
 
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	spBackpack->setMat4("model", M);
+	ourModel->Draw(*spBackpack);*/
 	sp->use();
 	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
