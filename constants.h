@@ -1,19 +1,19 @@
 /*
-Niniejszy program jest wolnym oprogramowaniem; moÅ¼esz go
-rozprowadzaÄ‡ dalej i / lub modyfikowaÄ‡ na warunkach Powszechnej
-Licencji Publicznej GNU, wydanej przez FundacjÄ™ Wolnego
-Oprogramowania - wedÅ‚ug wersji 2 tej Licencji lub(wedÅ‚ug twojego
-wyboru) ktÃ³rejÅ› z pÃ³Åºniejszych wersji.
+Niniejszy program jest wolnym oprogramowaniem; mo¿esz go
+rozprowadzaæ dalej i / lub modyfikowaæ na warunkach Powszechnej
+Licencji Publicznej GNU, wydanej przez Fundacjê Wolnego
+Oprogramowania - wed³ug wersji 2 tej Licencji lub(wed³ug twojego
+wyboru) którejœ z póŸniejszych wersji.
 
-Niniejszy program rozpowszechniany jest z nadziejÄ…, iÅ¼ bÄ™dzie on
-uÅ¼yteczny - jednak BEZ JAKIEJKOLWIEK GWARANCJI, nawet domyÅ›lnej
-gwarancji PRZYDATNOÅšCI HANDLOWEJ albo PRZYDATNOÅšCI DO OKREÅšLONYCH
-ZASTOSOWAÅƒ.W celu uzyskania bliÅ¼szych informacji siÄ™gnij do
+Niniejszy program rozpowszechniany jest z nadziej¹, i¿ bêdzie on
+u¿yteczny - jednak BEZ JAKIEJKOLWIEK GWARANCJI, nawet domyœlnej
+gwarancji PRZYDATNOŒCI HANDLOWEJ albo PRZYDATNOŒCI DO OKREŒLONYCH
+ZASTOSOWAÑ.W celu uzyskania bli¿szych informacji siêgnij do
 Powszechnej Licencji Publicznej GNU.
 
-Z pewnoÅ›ciÄ… wraz z niniejszym programem otrzymaÅ‚eÅ› teÅ¼ egzemplarz
+Z pewnoœci¹ wraz z niniejszym programem otrzyma³eœ te¿ egzemplarz
 Powszechnej Licencji Publicznej GNU(GNU General Public License);
-jeÅ›li nie - napisz do Free Software Foundation, Inc., 59 Temple
+jeœli nie - napisz do Free Software Foundation, Inc., 59 Temple
 Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 */
 

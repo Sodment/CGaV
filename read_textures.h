@@ -1,12 +1,14 @@
+#pragma once
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm.hpp>
+#include <gtc/type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
 #include "lodepng.h"
+
 GLuint loadTexture(const char* filename) {
 	GLuint tex;
 	glActiveTexture(GL_TEXTURE0);
@@ -24,7 +26,11 @@ GLuint loadTexture(const char* filename) {
 	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0,
 		GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char*)image.data());
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	return tex;
@@ -32,12 +38,12 @@ GLuint loadTexture(const char* filename) {
 
 const char* skyboxFaces[6] =
 {
-	"right.png",
-	"left.png",
-	"top.png",
-	"bottom.png",
-	"front.png",
-	"back.png"
+	"res/right.png",
+	"res/left.png",
+	"res/top.png",
+	"res/bottom.png",
+	"res/front.png",
+	"res/back.png"
 };
 
 GLuint loadCubemap(const char* faces[6])

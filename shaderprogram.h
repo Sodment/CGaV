@@ -1,19 +1,19 @@
-ï»¿/*
-Niniejszy program jest wolnym oprogramowaniem; moÅ¼esz go
-rozprowadzaÄ‡ dalej i / lub modyfikowaÄ‡ na warunkach Powszechnej
-Licencji Publicznej GNU, wydanej przez FundacjÄ™ Wolnego
-Oprogramowania - wedÅ‚ug wersji 2 tej Licencji lub(wedÅ‚ug twojego
-wyboru) ktÃ³rejÅ› z pÃ³Åºniejszych wersji.
+/*
+Niniejszy program jest wolnym oprogramowaniem; mo¿esz go
+rozprowadzaæ dalej i / lub modyfikowaæ na warunkach Powszechnej
+Licencji Publicznej GNU, wydanej przez Fundacjê Wolnego
+Oprogramowania - wed³ug wersji 2 tej Licencji lub(wed³ug twojego
+wyboru) którejœ z póŸniejszych wersji.
 
-Niniejszy program rozpowszechniany jest z nadziejÄ…, iÅ¼ bÄ™dzie on
-uÅ¼yteczny - jednak BEZ JAKIEJKOLWIEK GWARANCJI, nawet domyÅ›lnej
-gwarancji PRZYDATNOÅ›CI HANDLOWEJ albo PRZYDATNOÅ›CI DO OKREÅ›LONYCH
-ZASTOSOWAÅ„.W celu uzyskania bliÅ¼szych informacji siÄ™gnij do
+Niniejszy program rozpowszechniany jest z nadziej¹, i¿ bêdzie on
+u¿yteczny - jednak BEZ JAKIEJKOLWIEK GWARANCJI, nawet domyœlnej
+gwarancji PRZYDATNOœCI HANDLOWEJ albo PRZYDATNOœCI DO OKREœLONYCH
+ZASTOSOWAñ.W celu uzyskania bli¿szych informacji siêgnij do
 Powszechnej Licencji Publicznej GNU.
 
-Z pewnoÅ›ciÄ… wraz z niniejszym programem otrzymaÅ‚eÅ› teÅ¼ egzemplarz
+Z pewnoœci¹ wraz z niniejszym programem otrzyma³eœ te¿ egzemplarz
 Powszechnej Licencji Publicznej GNU(GNU General Public License);
-jeÅ›li nie - napisz do Free Software Foundation, Inc., 59 Temple
+jeœli nie - napisz do Free Software Foundation, Inc., 59 Temple
 Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 */
 
@@ -29,18 +29,18 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 class ShaderProgram {
 private:
-	GLuint shaderProgram; //Uchwyt reprezentujÄ…cy program cieniujacy
-	GLuint vertexShader; //Uchwyt reprezentujÄ…cy vertex shader
-	GLuint geometryShader; //Uchwyt reprezentujÄ…cy geometry shader
-	GLuint fragmentShader; //Uchwyt reprezentujÄ…cy fragment shader
-	char* readFile(const char* fileName); //metoda wczytujÄ…ca plik tekstowy do tablicy znakÃ³w
-	GLuint loadShader(GLenum shaderType,const char* fileName); //Metoda wczytuje i kompiluje shader, a nastÄ™pnie zwraca jego uchwyt
+	GLuint vertexShader; //Uchwyt reprezentuj¹cy vertex shader
+	GLuint geometryShader; //Uchwyt reprezentuj¹cy geometry shader
+	GLuint fragmentShader; //Uchwyt reprezentuj¹cy fragment shader
+	char* readFile(const char* fileName); //metoda wczytuj¹ca plik tekstowy do tablicy znaków
+	GLuint loadShader(GLenum shaderType, const char* fileName); //Metoda wczytuje i kompiluje shader, a nastêpnie zwraca jego uchwyt
 public:
-	ShaderProgram(const char* vertexShaderFile,const char* geometryShaderFile,const char* fragmentShaderFile);
+	GLuint shaderProgram;
+	ShaderProgram(const char* vertexShaderFile, const char* geometryShaderFile, const char* fragmentShaderFile);
 	~ShaderProgram();
-	void use(); //WÅ‚Ä…cza wykorzystywanie programu cieniujÄ…cego
-	GLuint u(const char* variableName); //Pobiera numer slotu zwiÄ…zanego z danÄ… zmiennÄ… jednorodnÄ…
-	GLuint a(const char* variableName); //Pobiera numer slotu zwiÄ…zanego z danym atrybutem
+	void use(); //W³¹cza wykorzystywanie programu cieniuj¹cego
+	GLuint u(const char* variableName); //Pobiera numer slotu zwi¹zanego z dan¹ zmienn¹ jednorodn¹
+	GLuint a(const char* variableName); //Pobiera numer slotu zwi¹zanego z danym atrybutem
 };
 
 

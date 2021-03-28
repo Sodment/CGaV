@@ -1,7 +1,7 @@
 #pragma once
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
+#include <glm.hpp>
+#include <gtc/type_ptr.hpp>
+#include <gtc/matrix_transform.hpp>
 
 //const float MAXFOV = 45.0f;
 //const float YAW = -90.0f;
@@ -9,7 +9,7 @@
 //const float MOUSE_SENSITIVITY = 0.1f;
 //const float CAMREA_SPEED = 5.0f;
 
-struct CAMERA_MOVEMENT_DIRECTION 
+struct CAMERA_MOVEMENT_DIRECTION
 {
 	bool Forward;
 	bool Backward;
@@ -69,7 +69,7 @@ public:
 
 	}
 
-	glm::mat4 GetViewMatrix() 
+	glm::mat4 GetViewMatrix()
 	{
 		return glm::lookAt(Position, Position + Front, Up);
 	}
@@ -81,7 +81,7 @@ public:
 
 	void ProcessMouseScroll(float yoffset)
 	{
-		if (zooming) 
+		if (zooming)
 		{
 			Zoom -= (float)yoffset;
 			if (Zoom < 1.0f)
@@ -96,7 +96,7 @@ public:
 		xoffset *= MouseSensitivity;
 		yoffset *= MouseSensitivity;
 
-		Yaw  = glm::mod(Yaw + xoffset, 360.0f);
+		Yaw = glm::mod(Yaw + xoffset, 360.0f);
 		Pitch += yoffset;
 
 		if (Pitch > 89.0f)
