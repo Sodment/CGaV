@@ -46,7 +46,7 @@ const char* skyboxFaces[6] =
 	"res/skybox/back.png"
 };
 
-GLuint loadCubemap(const char* faces[6])
+GLuint loadCubemap1(const char* faces[6])
 {
 	GLuint textureID;
 	glActiveTexture(GL_TEXTURE0);

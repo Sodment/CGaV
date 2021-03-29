@@ -6,7 +6,6 @@
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
 #include "shaderprogram.h"
-#include "Shader.h"
 
 #include <string>
 #include <vector>
@@ -26,7 +25,7 @@ struct Vertex {
 };
 
 struct Texture {
-    unsigned int id;
+    GLuint id;
     string type;
     string path;
 };
@@ -34,10 +33,10 @@ struct Texture {
 class Mesh {
 public:
     // mesh Data
-    vector<Vertex>       vertices;
-    vector<unsigned int> indices;
-    vector<Texture>      textures;
-    unsigned int VAO;
+    vector<Vertex> vertices;
+    vector<GLuint> indices;
+    vector<Texture> textures;
+    GLuint VAO;
 
     // constructor
     Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
@@ -51,7 +50,7 @@ public:
     }
 
     // render the mesh
-    void Draw(Shader& shader)
+    void Draw(ShaderProgram& shader)
     {
         // bind appropriate textures
         unsigned int diffuseNr = 1;
@@ -74,7 +73,7 @@ public:
                 number = std::to_string(heightNr++); // transfer unsigned int to stream
 
             // now set the sampler to the correct texture unit
-            glUniform1i(glGetUniformLocation(shader.ID, (name + number).c_str()), i);
+            glUniform1i(glGetUniformLocation(shader.shaderProgram, (name + number).c_str()), i);
             // and finally bind the texture
             glBindTexture(GL_TEXTURE_2D, textures[i].id);
         }
@@ -90,7 +89,7 @@ public:
 
 private:
     // render data 
-    unsigned int VBO, EBO;
+    GLuint VBO, EBO;
 
     // initializes all the buffer objects/arrays
     void setupMesh()
@@ -109,7 +108,7 @@ private:
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
 
         // set the vertex attribute pointers
         // vertex Positions

@@ -39,7 +39,7 @@ public:
     }
 
     // draws the model, and thus all its meshes
-    void Draw(Shader& shader)
+    void Draw(ShaderProgram& shader)
     {
         for (unsigned int i = 0; i < meshes.size(); i++)
             meshes[i].Draw(shader);
@@ -207,7 +207,6 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
 {
     string filename = string(path);
     filename = directory + '/' + filename;
-    printf(filename.c_str());
     unsigned int textureID;
     glGenTextures(1, &textureID);
 
@@ -231,7 +230,7 @@ unsigned int TextureFromFile(const char* path, const string& directory, bool gam
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+        std::cout << "Texture good to load at path: " << path << std::endl;
         stbi_image_free(data);
     }
     else

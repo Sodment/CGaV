@@ -15,9 +15,8 @@
 #include "camera.h"
 #include "read_textures.h"
 #include "myCube.h"
-#include "mySkybox.h"
 #include "model.h"
-#include "Shader.h"
+#include "skybox.h"
 
 float aspectRatio = 1;
 float near_clip = 0.1f;
@@ -31,8 +30,10 @@ bool firstMouse = true;
 Camera* camera;
 ShaderProgram* sp;
 ShaderProgram* spSkyBox;
-Shader* spBackpack;
+ShaderProgram* spBackpack;
 Model* ourModel;
+Model* ourModel2;
+SkyBox* skybox;
 
 
 float* vertices = myCubeVertices;
@@ -101,24 +102,25 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 
 //Procedura inicjuj¹ca
 void initOpenGLProgram(GLFWwindow* window) {
-	glClearColor(0, 0, 0, 1);
+	glClearColor(1, 0, 1, 1);
 	glEnable(GL_DEPTH_TEST);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetScrollCallback(window, scrollCallback);
-
+	//stbi_set_flip_vertically_on_load(true);
 	camera = new Camera();
 	sp = new ShaderProgram("v_lab8.glsl", NULL, "f_lab8.glsl");
 	spSkyBox = new ShaderProgram("v_skybox.glsl", NULL, "f_skybox.glsl");
-	tex0 = loadTexture("res/bricks/bricks3b_diffuse.png");
-	tex1 = loadTexture("res/bricks/bricks3b_normal.png");
-	tex2 = loadTexture("res/bricks/bricks3b_height.png");
-	tex3 = loadTexture("res/bricks/bricks3b_specular.png");
-	skyBox = loadCubemap(skyboxFaces);
-	//spBackpack = new Shader("v_backpack.glsl", NULL, "f_backpack.glsl");
+	spBackpack = new ShaderProgram("v_backpack.glsl", NULL, "f_backpack.glsl");
+	//tex0 = loadTexture("res/bricks/bricks3b_diffuse.png");
+	//tex1 = loadTexture("res/bricks/bricks3b_normal.png");
+	//tex2 = loadTexture("res/bricks/bricks3b_height.png");
+	//tex3 = loadTexture("res/bricks/bricks3b_specular.png");
 	ourModel = new Model("res/backpack/backpack.obj");
+	ourModel2 = new Model("res/cat/cat.obj");
+	skybox = new SkyBox();
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -136,84 +138,30 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	/*spBackpack->use();
-	spBackpack->setMat4("projection", P);
-	spBackpack->setMat4("view", V);
+	spBackpack->use();
+
+	glUniformMatrix4fv(spBackpack->u("projection"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spBackpack->u("view"), 1, false, glm::value_ptr(V));
 
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	spBackpack->setMat4("model", M);
-	ourModel->Draw(*spBackpack);*/
-	sp->use();
-	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
-	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spBackpack->u("model"), 1, false, glm::value_ptr(M));
+	ourModel->Draw(*spBackpack);
 
-	glEnableVertexAttribArray(sp->a("vertex"));
-	glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, vertices);
+	M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
+	M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, -1.0f));
+	M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
+	glUniformMatrix4fv(spBackpack->u("model"), 1, false, glm::value_ptr(M));
+	ourModel2->Draw(*spBackpack);
 
-	glEnableVertexAttribArray(sp->a("c1"));
-	glVertexAttribPointer(sp->a("c1"), 4, GL_FLOAT, false, 0, c1);
-
-	glEnableVertexAttribArray(sp->a("c2"));
-	glVertexAttribPointer(sp->a("c2"), 4, GL_FLOAT, false, 0, c2);
-
-	glEnableVertexAttribArray(sp->a("c3"));
-	glVertexAttribPointer(sp->a("c3"), 4, GL_FLOAT, false, 0, c3);
-
-	glEnableVertexAttribArray(sp->a("texCoord0"));
-	glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, texCoords);
-
-	glUniform1i(sp->u("textureMap0"), 0);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, tex0);
-
-	glUniform1i(sp->u("textureMap1"), 1);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, tex1);
-
-	glUniform1i(sp->u("textureMap2"), 2);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, tex2);
-
-	glUniform1i(sp->u("textureMap3"), 3);
-	glActiveTexture(GL_TEXTURE3);
-	glBindTexture(GL_TEXTURE_2D, tex3);
-
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-
-	M = glm::translate(M, glm::vec3(2.0f, 0.0f, 0.0f));
-	glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
-	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
-
-	glDrawArrays(GL_TRIANGLES, 0, vertexCount);
-
-	glDisableVertexAttribArray(sp->a("vertex"));
-	glDisableVertexAttribArray(sp->a("c1"));
-	glDisableVertexAttribArray(sp->a("c2"));
-	glDisableVertexAttribArray(sp->a("c3"));
-	glDisableVertexAttribArray(sp->a("texCoord0"));
-
-	M = glm::mat4(1.0f);
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));
-
-
-
 	spSkyBox->use();
-	glDepthMask(GL_FALSE);
 	glUniformMatrix4fv(spSkyBox->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spSkyBox->u("V"), 1, false, glm::value_ptr(V));
-
-	glEnableVertexAttribArray(spSkyBox->a("aPos"));
-	glVertexAttribPointer(spSkyBox->a("aPos"), 3, GL_FLOAT, false, 0, skyboxVertices);
-
-	glUniform1i(spSkyBox->u("skybox"), 4);
-	glActiveTexture(GL_TEXTURE4);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, skyBox);
-
-	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glDepthMask(GL_FALSE);
+	
+	skybox->Draw(*spSkyBox);
 
 	glDepthMask(GL_TRUE);
 	glfwSwapBuffers(window);
@@ -232,7 +180,7 @@ int main(void)
 		exit(EXIT_FAILURE);
 	}
 
-	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL", NULL, NULL);
+	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "EXPLOSION", NULL, NULL);
 
 	if (!window)
 	{
