@@ -64,6 +64,15 @@
     <None Include="f_backpack.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="v_funnyCat.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="g_funnyCat.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="f_funnyCat.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="v_skybox.glsl">

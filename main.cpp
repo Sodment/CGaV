@@ -31,6 +31,7 @@ Camera* camera;
 ShaderProgram* sp;
 ShaderProgram* spSkyBox;
 ShaderProgram* spBackpack;
+ShaderProgram* spFunnyCat;
 Model* ourModel;
 Model* ourModel2;
 SkyBox* skybox;
@@ -114,6 +115,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	sp = new ShaderProgram("v_lab8.glsl", NULL, "f_lab8.glsl");
 	spSkyBox = new ShaderProgram("v_skybox.glsl", NULL, "f_skybox.glsl");
 	spBackpack = new ShaderProgram("v_backpack.glsl", NULL, "f_backpack.glsl");
+	spFunnyCat = new ShaderProgram("v_funnyCat.glsl", "g_funnyCat.glsl", "f_funnyCat.glsl");
 	//tex0 = loadTexture("res/bricks/bricks3b_diffuse.png");
 	//tex1 = loadTexture("res/bricks/bricks3b_normal.png");
 	//tex2 = loadTexture("res/bricks/bricks3b_height.png");
@@ -128,6 +130,8 @@ void freeOpenGLProgram(GLFWwindow* window) {
 	delete spSkyBox;
 	delete sp;
 }
+
+float amount;
 //Procedura rysuj¹ca zawartoœæ sceny
 void drawScene(GLFWwindow* window) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -138,7 +142,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	spBackpack->use();
+	/*spBackpack->use();
 
 	glUniformMatrix4fv(spBackpack->u("projection"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spBackpack->u("view"), 1, false, glm::value_ptr(V));
@@ -147,13 +151,17 @@ void drawScene(GLFWwindow* window) {
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spBackpack->u("model"), 1, false, glm::value_ptr(M));
-	ourModel->Draw(*spBackpack);
+	ourModel->Draw(*spBackpack);*/
 
+	spFunnyCat->use();
 	M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
-	M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, -1.0f));
+	M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
-	glUniformMatrix4fv(spBackpack->u("model"), 1, false, glm::value_ptr(M));
-	ourModel2->Draw(*spBackpack);
+	glUniformMatrix4fv(spFunnyCat->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spFunnyCat->u("V"), 1, false, glm::value_ptr(V));
+	glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
+	glUniform1f(spFunnyCat->u("amount"), sin(amount) + 1);
+	ourModel2->Draw(*spFunnyCat);
 
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));
 	spSkyBox->use();
@@ -205,6 +213,7 @@ int main(void)
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		camera->ProcessKeyboard(deltaTime);
+		amount += glfwGetTime();
 		glfwSetTime(0);
 		drawScene(window);
 		glfwPollEvents();

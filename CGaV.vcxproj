@@ -162,7 +162,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="f_backpack.glsl" />
+    <None Include="f_funnyCat.glsl" />
     <None Include="f_lab8.glsl" />
+    <None Include="g_funnyCat.glsl" />
+    <None Include="v_funnyCat.glsl" />
     <None Include="v_lab8.glsl" />
   </ItemGroup>
   <ItemGroup>
