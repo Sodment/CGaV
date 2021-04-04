@@ -30,20 +30,29 @@ struct Texture {
     string path;
 };
 
+struct Material {
+    glm::vec3 Diffuse;
+    glm::vec3 Specular;
+    glm::vec3 Ambient;
+    float Shininess;
+};
+
 class Mesh {
 public:
     // mesh Data
     vector<Vertex> vertices;
     vector<GLuint> indices;
     vector<Texture> textures;
+    Material material;
     GLuint VAO;
 
     // constructor
-    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures)
+    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Material mat)
     {
         this->vertices = vertices;
         this->indices = indices;
         this->textures = textures;
+        this->material = mat;
 
         // now that we have all the required data, set the vertex buffers and its attribute pointers.
         setupMesh();

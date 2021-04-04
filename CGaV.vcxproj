@@ -164,11 +164,18 @@
     <None Include="f_backpack.glsl" />
     <None Include="f_funnyCat.glsl" />
     <None Include="f_lab8.glsl" />
+    <None Include="f_material.glsl" />
     <None Include="g_funnyCat.glsl" />
+    <None Include="g_simple_material.glsl" />
     <None Include="v_funnyCat.glsl" />
     <None Include="v_lab8.glsl" />
+    <None Include="v_material.glsl" />
+    <None Include="v_simple_lighting_material.glsl" />
+    <None Include="v_simple_material.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="f_simple_lighting_material.txt" />
+    <Text Include="f_simple_material.glsl" />
     <Text Include="f_skybox.glsl" />
     <Text Include="v_backpack.glsl" />
     <Text Include="v_skybox.glsl" />

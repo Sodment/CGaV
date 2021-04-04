@@ -32,6 +32,8 @@ ShaderProgram* sp;
 ShaderProgram* spSkyBox;
 ShaderProgram* spBackpack;
 ShaderProgram* spFunnyCat;
+ShaderProgram* spMaterial;
+ShaderProgram* spSimpleMaterial;
 Model* ourModel;
 Model* ourModel2;
 SkyBox* skybox;
@@ -45,6 +47,7 @@ float* c1 = myCubeC1;
 float* c2 = myCubeC2;
 float* c3 = myCubeC3;
 int vertexCount = myCubeVertexCount;
+int choice = 0;
 
 GLuint tex0;
 GLuint tex1;
@@ -62,6 +65,10 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		if (key == GLFW_KEY_S) direction.Backward = true;
 		if (key == GLFW_KEY_A) direction.Left = true;
 		if (key == GLFW_KEY_D) direction.Right = true;
+		if (key == GLFW_KEY_F) choice = 0;
+		if (key == GLFW_KEY_G) choice = 1;
+		if (key == GLFW_KEY_H) choice = 2;
+		if (key == GLFW_KEY_J) choice = 3;
 	}
 	if (action == GLFW_RELEASE) {
 		if (key == GLFW_KEY_W) direction.Forward = false;
@@ -116,10 +123,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	spSkyBox = new ShaderProgram("v_skybox.glsl", NULL, "f_skybox.glsl");
 	spBackpack = new ShaderProgram("v_backpack.glsl", NULL, "f_backpack.glsl");
 	spFunnyCat = new ShaderProgram("v_funnyCat.glsl", "g_funnyCat.glsl", "f_funnyCat.glsl");
-	//tex0 = loadTexture("res/bricks/bricks3b_diffuse.png");
-	//tex1 = loadTexture("res/bricks/bricks3b_normal.png");
-	//tex2 = loadTexture("res/bricks/bricks3b_height.png");
-	//tex3 = loadTexture("res/bricks/bricks3b_specular.png");
+	spMaterial = new ShaderProgram("v_material.glsl", NULL, "f_material.glsl");
+	spSimpleMaterial = new ShaderProgram("v_simple_material.glsl","g_simple_material.glsl", "f_simple_material.glsl");
 	ourModel = new Model("res/backpack/backpack.obj");
 	ourModel2 = new Model("res/cat/cat.obj");
 	skybox = new SkyBox();
@@ -153,15 +158,69 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spBackpack->u("model"), 1, false, glm::value_ptr(M));
 	ourModel->Draw(*spBackpack);*/
 
-	spFunnyCat->use();
 	M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
 	M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
-	glUniformMatrix4fv(spFunnyCat->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spFunnyCat->u("V"), 1, false, glm::value_ptr(V));
-	glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
-	glUniform1f(spFunnyCat->u("amount"), sin(amount) + 1);
-	ourModel2->Draw(*spFunnyCat);
+
+	switch (choice)
+	{
+		case 0:
+		{
+			spSimpleMaterial->use();
+			glUniformMatrix4fv(spSimpleMaterial->u("P"), 1, false, glm::value_ptr(P));
+			glUniformMatrix4fv(spSimpleMaterial->u("V"), 1, false, glm::value_ptr(V));
+			glUniformMatrix4fv(spSimpleMaterial->u("M"), 1, false, glm::value_ptr(M));
+			glUniform3fv(spSimpleMaterial->u("diffuse"), 1, &ourModel2->meshes[0].material.Diffuse[0]);
+			ourModel2->Draw(*spSimpleMaterial);
+			break;
+		}
+		case 1:
+		{
+			glm::vec3 diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f) * glm::vec3(0.5f);
+			glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+
+			spMaterial->use();
+
+			glUniform3f(spMaterial->u("light.position"), 0.0f, 7.0f, 5.0f);
+			glUniform3fv(spMaterial->u("viewPos"), 1, &camera->Position[0]);
+
+			glUniform3fv(spMaterial->u("light.ambient"), 1, &ambientColor[0]);
+			glUniform3fv(spMaterial->u("light.diffuse"), 1, &diffuseColor[0]);
+			glUniform3f(spMaterial->u("light.diffuse"), 1.0f, 1.0f, 1.0f);
+
+			glUniform3fv(spMaterial->u("material.ambient"), 1, &ourModel2->meshes[0].material.Ambient[0]);
+			glUniform3fv(spMaterial->u("material.diffuse"), 1, &ourModel2->meshes[0].material.Diffuse[0]);
+			glUniform3fv(spMaterial->u("material.specular"), 1, &ourModel2->meshes[0].material.Specular[0]);
+			glUniform1f(spMaterial->u("material.shininess"), ourModel2->meshes[0].material.Shininess);
+
+			glUniformMatrix4fv(spFunnyCat->u("P"), 1, false, glm::value_ptr(P));
+			glUniformMatrix4fv(spFunnyCat->u("V"), 1, false, glm::value_ptr(V));
+			glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
+
+			ourModel2->Draw(*spMaterial);
+			break;
+		}
+		case 2:
+		{
+			spBackpack->use();
+			glUniformMatrix4fv(spBackpack->u("P"), 1, false, glm::value_ptr(P));
+			glUniformMatrix4fv(spBackpack->u("V"), 1, false, glm::value_ptr(V));
+			glUniformMatrix4fv(spBackpack->u("M"), 1, false, glm::value_ptr(M));
+			ourModel2->Draw(*spBackpack);
+			break;
+		}
+		case 3:
+		{
+			spFunnyCat->use();
+			glUniformMatrix4fv(spFunnyCat->u("P"), 1, false, glm::value_ptr(P));
+			glUniformMatrix4fv(spFunnyCat->u("V"), 1, false, glm::value_ptr(V));
+			glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
+			glUniform1f(spFunnyCat->u("amount"), sin(amount) + 1);
+			ourModel2->Draw(*spFunnyCat);
+			break;
+		}
+	}
+
 
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));
 	spSkyBox->use();
