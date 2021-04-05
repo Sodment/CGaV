@@ -61,7 +61,7 @@
     <None Include="f_lab8.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="f_backpack.glsl">
+    <None Include="f_simple_texture.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="v_funnyCat.glsl">
@@ -96,7 +96,7 @@
     <Text Include="f_skybox.glsl">
       <Filter>Pliki zasobów</Filter>
     </Text>
-    <Text Include="v_backpack.glsl">
+    <Text Include="v_simple_texture.glsl">
       <Filter>Pliki zasobów</Filter>
     </Text>
     <Text Include="f_simple_lighting_material.txt">

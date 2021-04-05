@@ -161,7 +161,7 @@
     <ClInclude Include="skybox.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="f_backpack.glsl" />
+    <None Include="f_simple_texture.glsl" />
     <None Include="f_funnyCat.glsl" />
     <None Include="f_lab8.glsl" />
     <None Include="f_material.glsl" />
@@ -177,7 +177,7 @@
     <Text Include="f_simple_lighting_material.txt" />
     <Text Include="f_simple_material.glsl" />
     <Text Include="f_skybox.glsl" />
-    <Text Include="v_backpack.glsl" />
+    <Text Include="v_simple_texture.glsl" />
     <Text Include="v_skybox.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

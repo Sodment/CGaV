@@ -20,7 +20,7 @@
 
 float aspectRatio = 1;
 float near_clip = 0.1f;
-float far_clip = 100.0f;
+float far_clip = 1000.0f;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 float lastX = SCR_WIDTH / 2.0f;
@@ -30,7 +30,7 @@ bool firstMouse = true;
 Camera* camera;
 ShaderProgram* sp;
 ShaderProgram* spSkyBox;
-ShaderProgram* spBackpack;
+ShaderProgram* spSimpleTexture;
 ShaderProgram* spFunnyCat;
 ShaderProgram* spMaterial;
 ShaderProgram* spSimpleMaterial;
@@ -121,7 +121,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	camera = new Camera();
 	sp = new ShaderProgram("v_lab8.glsl", NULL, "f_lab8.glsl");
 	spSkyBox = new ShaderProgram("v_skybox.glsl", NULL, "f_skybox.glsl");
-	spBackpack = new ShaderProgram("v_backpack.glsl", NULL, "f_backpack.glsl");
+	spSimpleTexture = new ShaderProgram("v_simple_texture.glsl", NULL, "f_simple_texture.glsl");
 	spFunnyCat = new ShaderProgram("v_funnyCat.glsl", "g_funnyCat.glsl", "f_funnyCat.glsl");
 	spMaterial = new ShaderProgram("v_material.glsl", NULL, "f_material.glsl");
 	spSimpleMaterial = new ShaderProgram("v_simple_material.glsl","g_simple_material.glsl", "f_simple_material.glsl");
@@ -147,21 +147,6 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	/*spBackpack->use();
-
-	glUniformMatrix4fv(spBackpack->u("projection"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spBackpack->u("view"), 1, false, glm::value_ptr(V));
-
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
-	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	glUniformMatrix4fv(spBackpack->u("model"), 1, false, glm::value_ptr(M));
-	ourModel->Draw(*spBackpack);*/
-
-	M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
-	M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
-	M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
-
 	switch (choice)
 	{
 		case 0:
@@ -169,6 +154,17 @@ void drawScene(GLFWwindow* window) {
 			spSimpleMaterial->use();
 			glUniformMatrix4fv(spSimpleMaterial->u("P"), 1, false, glm::value_ptr(P));
 			glUniformMatrix4fv(spSimpleMaterial->u("V"), 1, false, glm::value_ptr(V));
+
+			M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+			M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+			glUniformMatrix4fv(spSimpleMaterial->u("M"), 1, false, glm::value_ptr(M));
+			glUniform3fv(spSimpleMaterial->u("diffuse"), 1, &ourModel->meshes[0].material.Diffuse[0]);
+			ourModel->Draw(*spSimpleMaterial);
+
+			M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
+			M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
+			M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
+
 			glUniformMatrix4fv(spSimpleMaterial->u("M"), 1, false, glm::value_ptr(M));
 			glUniform3fv(spSimpleMaterial->u("diffuse"), 1, &ourModel2->meshes[0].material.Diffuse[0]);
 			ourModel2->Draw(*spSimpleMaterial);
@@ -176,10 +172,12 @@ void drawScene(GLFWwindow* window) {
 		}
 		case 1:
 		{
+			spMaterial->use();
+			glUniformMatrix4fv(spFunnyCat->u("P"), 1, false, glm::value_ptr(P));
+			glUniformMatrix4fv(spFunnyCat->u("V"), 1, false, glm::value_ptr(V));
+
 			glm::vec3 diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f) * glm::vec3(0.5f);
 			glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
-
-			spMaterial->use();
 
 			glUniform3f(spMaterial->u("light.position"), 0.0f, 7.0f, 5.0f);
 			glUniform3fv(spMaterial->u("viewPos"), 1, &camera->Position[0]);
@@ -188,25 +186,51 @@ void drawScene(GLFWwindow* window) {
 			glUniform3fv(spMaterial->u("light.diffuse"), 1, &diffuseColor[0]);
 			glUniform3f(spMaterial->u("light.diffuse"), 1.0f, 1.0f, 1.0f);
 
+			glUniform3fv(spMaterial->u("material.ambient"), 1, &ourModel->meshes[0].material.Ambient[0]);
+			glUniform3fv(spMaterial->u("material.diffuse"), 1, &ourModel->meshes[0].material.Diffuse[0]);
+			glUniform3fv(spMaterial->u("material.specular"), 1, &ourModel->meshes[0].material.Specular[0]);
+			glUniform1f(spMaterial->u("material.shininess"), ourModel->meshes[0].material.Shininess);
+
+			M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+			M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+			glUniformMatrix4fv(spMaterial->u("M"), 1, false, glm::value_ptr(M));
+
+			ourModel->Draw(*spMaterial);
+
+			M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
+			M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
+			M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
+
 			glUniform3fv(spMaterial->u("material.ambient"), 1, &ourModel2->meshes[0].material.Ambient[0]);
 			glUniform3fv(spMaterial->u("material.diffuse"), 1, &ourModel2->meshes[0].material.Diffuse[0]);
 			glUniform3fv(spMaterial->u("material.specular"), 1, &ourModel2->meshes[0].material.Specular[0]);
 			glUniform1f(spMaterial->u("material.shininess"), ourModel2->meshes[0].material.Shininess);
 
-			glUniformMatrix4fv(spFunnyCat->u("P"), 1, false, glm::value_ptr(P));
-			glUniformMatrix4fv(spFunnyCat->u("V"), 1, false, glm::value_ptr(V));
-			glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
+			glUniformMatrix4fv(spMaterial->u("M"), 1, false, glm::value_ptr(M));
 
 			ourModel2->Draw(*spMaterial);
 			break;
 		}
 		case 2:
 		{
-			spBackpack->use();
-			glUniformMatrix4fv(spBackpack->u("P"), 1, false, glm::value_ptr(P));
-			glUniformMatrix4fv(spBackpack->u("V"), 1, false, glm::value_ptr(V));
-			glUniformMatrix4fv(spBackpack->u("M"), 1, false, glm::value_ptr(M));
-			ourModel2->Draw(*spBackpack);
+			spSimpleTexture->use();
+
+			glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
+			glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
+
+			M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+			M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+			glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+			ourModel->Draw(*spSimpleTexture);
+
+			M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
+			M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
+			M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
+
+			glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+			ourModel2->Draw(*spSimpleTexture);
 			break;
 		}
 		case 3:
@@ -214,8 +238,19 @@ void drawScene(GLFWwindow* window) {
 			spFunnyCat->use();
 			glUniformMatrix4fv(spFunnyCat->u("P"), 1, false, glm::value_ptr(P));
 			glUniformMatrix4fv(spFunnyCat->u("V"), 1, false, glm::value_ptr(V));
-			glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
 			glUniform1f(spFunnyCat->u("amount"), sin(amount) + 1);
+
+			M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+			M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+			glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
+			ourModel->Draw(*spFunnyCat);
+
+			M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
+			M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
+			M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
+
+			glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
 			ourModel2->Draw(*spFunnyCat);
 			break;
 		}
