@@ -173,12 +173,10 @@
     <None Include="v_lab8.glsl" />
     <None Include="v_material.glsl" />
     <None Include="v_pbr_light.glsl" />
-    <None Include="v_simple_lighting_material.glsl" />
     <None Include="v_simple_material.glsl" />
     <None Include="v_textured_normals.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="f_simple_lighting_material.txt" />
     <Text Include="f_simple_material.glsl" />
     <Text Include="f_skybox.glsl" />
     <Text Include="v_simple_texture.glsl" />

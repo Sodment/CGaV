@@ -79,9 +79,6 @@
     <None Include="f_material.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="v_simple_lighting_material.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
     <None Include="v_simple_material.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
@@ -109,9 +106,6 @@
       <Filter>Pliki zasobów</Filter>
     </Text>
     <Text Include="v_simple_texture.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </Text>
-    <Text Include="f_simple_lighting_material.txt">
       <Filter>Pliki zasobów</Filter>
     </Text>
     <Text Include="f_simple_material.glsl">
