@@ -121,7 +121,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>assimp\lib;glew\lib\Release\x64;glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -140,7 +140,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;assimp-vc142-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;glew32.lib;assimp-vc142-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>assimp\lib;glew\lib\Release\x64;glfw\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -161,17 +161,21 @@
     <ClInclude Include="skybox.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="f_pbr_light.glsl" />
     <None Include="f_simple_texture.glsl" />
     <None Include="f_funnyCat.glsl" />
     <None Include="f_lab8.glsl" />
     <None Include="f_material.glsl" />
+    <None Include="f_textured_normals.glsl" />
     <None Include="g_funnyCat.glsl" />
     <None Include="g_simple_material.glsl" />
     <None Include="v_funnyCat.glsl" />
     <None Include="v_lab8.glsl" />
     <None Include="v_material.glsl" />
+    <None Include="v_pbr_light.glsl" />
     <None Include="v_simple_lighting_material.glsl" />
     <None Include="v_simple_material.glsl" />
+    <None Include="v_textured_normals.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="f_simple_lighting_material.txt" />

@@ -88,6 +88,18 @@
     <None Include="g_simple_material.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="v_pbr_light.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="f_pbr_light.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="v_textured_normals.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="f_textured_normals.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="v_skybox.glsl">
