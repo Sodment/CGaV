@@ -12,7 +12,6 @@
 #include <assimp/postprocess.h>
 #include "shaderprogram.h"
 #include "mesh.h"
-
 #include <string>
 #include <fstream>
 #include <sstream>

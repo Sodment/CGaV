@@ -31,6 +31,7 @@ Camera* camera;
 ShaderProgram* sp;
 ShaderProgram* spSkyBox;
 ShaderProgram* spSimpleTexture;
+ShaderProgram* spNormalTexture;
 ShaderProgram* spFunnyCat;
 ShaderProgram* spMaterial;
 ShaderProgram* spSimpleMaterial;
@@ -112,16 +113,17 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 void initOpenGLProgram(GLFWwindow* window) {
 	glClearColor(1, 0, 1, 1);
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
 	glfwSetKeyCallback(window, keyCallback);
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetScrollCallback(window, scrollCallback);
-	//stbi_set_flip_vertically_on_load(true);
 	camera = new Camera();
 	sp = new ShaderProgram("v_lab8.glsl", NULL, "f_lab8.glsl");
 	spSkyBox = new ShaderProgram("v_skybox.glsl", NULL, "f_skybox.glsl");
 	spSimpleTexture = new ShaderProgram("v_simple_texture.glsl", NULL, "f_simple_texture.glsl");
+	spNormalTexture = new ShaderProgram("v_textured_normals.glsl", NULL, "f_textured_normals.glsl");
 	spFunnyCat = new ShaderProgram("v_funnyCat.glsl", "g_funnyCat.glsl", "f_funnyCat.glsl");
 	spMaterial = new ShaderProgram("v_material.glsl", NULL, "f_material.glsl");
 	spSimpleMaterial = new ShaderProgram("v_simple_material.glsl","g_simple_material.glsl", "f_simple_material.glsl");
@@ -214,23 +216,26 @@ void drawScene(GLFWwindow* window) {
 		}
 		case 2:
 		{
-			spSimpleTexture->use();
+			spNormalTexture->use();
 
-			glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
-			glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
+			glUniformMatrix4fv(spNormalTexture->u("P"), 1, false, glm::value_ptr(P));
+			glUniformMatrix4fv(spNormalTexture->u("V"), 1, false, glm::value_ptr(V));
 
 			M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 			M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-			glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
-			ourModel->Draw(*spSimpleTexture);
+			glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
+			//glUniform3f(spNormalTexture->u("lightPos"), 0.0f, 7.0f, 5.0f);
+			//glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
-			M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
+			ourModel->Draw(*spNormalTexture);
+
+			M = glm::translate(M, glm::vec3(5.0f, 0.0f, 0.0f));
 			M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
 			M = glm::scale(M, glm::vec3(0.1f, 0.1f, 0.1f));
 
-			glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
-			ourModel2->Draw(*spSimpleTexture);
+			glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
+			ourModel2->Draw(*spNormalTexture);
 			break;
 		}
 		case 3:
@@ -252,6 +257,10 @@ void drawScene(GLFWwindow* window) {
 
 			glUniformMatrix4fv(spFunnyCat->u("M"), 1, false, glm::value_ptr(M));
 			ourModel2->Draw(*spFunnyCat);
+			break;
+		}
+		case 4: 
+		{
 			break;
 		}
 	}
