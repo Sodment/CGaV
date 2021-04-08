@@ -226,7 +226,7 @@ void drawScene(GLFWwindow* window) {
 			M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 			glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
-			glUniform3f(spNormalTexture->u("lightPos"), 2.5f, 0.0f, 5.0f);
+			glUniform3f(spNormalTexture->u("lightPos"), 2.5f, 0.0f, 100.0f);
 			glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
 			ourModel->Draw(*spNormalTexture);
@@ -239,7 +239,7 @@ void drawScene(GLFWwindow* window) {
 			M = glm::translate(M, glm::vec3(5.0f, 0.0f, 0.0f));
 
 			glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
-			glUniform3f(spSimpleTexture->u("lightPos"), 2.5f, 0.0f, 5.0f);
+			glUniform3f(spSimpleTexture->u("lightPos"), 2.5f, 0.0f, 100.0f);
 			glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 			ourModel->Draw(*spSimpleTexture);
 			break;

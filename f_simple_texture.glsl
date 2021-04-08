@@ -2,6 +2,7 @@
 out vec4 FragColor;
 
 uniform sampler2D texture_diffuse1;
+uniform sampler2D texture_specular1;
 
 in VS_OUT {
     vec3 FragPos;
@@ -27,6 +28,6 @@ void main()
     vec3 viewDir = normalize(viewPos - fs_in.FragPos);
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
-    vec3 specular = vec3(0.3) * spec; // assuming bright white light color
+    vec3 specular = vec3(0.3) * spec * vec3(texture(texture_specular1, fs_in.TexCoords)); 
     FragColor = vec4(ambient + diffuse + specular, 1.0);
 }
