@@ -50,6 +50,11 @@ float* c3 = myCubeC3;
 int vertexCount = myCubeVertexCount;
 int choice = 0;
 
+glm::vec3 pointLightPositions[] = {
+		glm::vec3(0.0f,  0.0f,  10.0f),
+		glm::vec3(0.0f, 0.0f, -10.0f),
+};
+
 GLuint tex0;
 GLuint tex1;
 GLuint tex2;
@@ -219,6 +224,29 @@ void drawScene(GLFWwindow* window) {
 		{
 			spNormalTexture->use();
 
+			glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
+
+			glUniform3f(spNormalTexture->u("dirLight.direction"), 0.0f, 100.0f, 0.0f);
+			glUniform3f(spNormalTexture->u("dirLight.ambient"), 0.05f, 0.05f, 0.05f);
+			glUniform3f(spNormalTexture->u("dirLight.diffuse"), 0.4f, 0.4f, 0.4f);
+			glUniform3f(spNormalTexture->u("dirLight.specular"), 0.5f, 0.5f, 0.5f);
+
+			glUniform3f(spNormalTexture->u("pointLights[0].position"), pointLightPositions[0][0], pointLightPositions[0][1], pointLightPositions[0][2]);
+			glUniform3f(spNormalTexture->u("pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
+			glUniform3f(spNormalTexture->u("pointLights[0].diffuse"), 0.8f, 0.0f, 0.8f);
+			glUniform3f(spNormalTexture->u("pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
+			glUniform1f(spNormalTexture->u("pointLights[0].constant"), 1.0f);
+			glUniform1f(spNormalTexture->u("pointLights[0].linear"), 0.09);
+			glUniform1f(spNormalTexture->u("pointLights[0].quadratic"), 0.032);
+
+			glUniform3f(spNormalTexture->u("pointLights[1].position"), pointLightPositions[1][0], pointLightPositions[1][1], pointLightPositions[1][2]);
+			glUniform3f(spNormalTexture->u("pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
+			glUniform3f(spNormalTexture->u("pointLights[1].diffuse"), 0.8f, 0.8f, 0.8f);
+			glUniform3f(spNormalTexture->u("pointLights[1].specular"), 1.0f, 1.0f, 1.0f);
+			glUniform1f(spNormalTexture->u("pointLights[1].constant"), 1.0f);
+			glUniform1f(spNormalTexture->u("pointLights[1].linear"), 0.09);
+			glUniform1f(spNormalTexture->u("pointLights[1].quadratic"), 0.032);
+
 			glUniformMatrix4fv(spNormalTexture->u("P"), 1, false, glm::value_ptr(P));
 			glUniformMatrix4fv(spNormalTexture->u("V"), 1, false, glm::value_ptr(V));
 
@@ -226,8 +254,6 @@ void drawScene(GLFWwindow* window) {
 			M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 			glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
-			glUniform3f(spNormalTexture->u("lightPos"), 2.5f, 0.0f, 100.0f);
-			glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
 			ourModel->Draw(*spNormalTexture);
 
