@@ -37,6 +37,7 @@ ShaderProgram* spMaterial;
 ShaderProgram* spSimpleMaterial;
 Model* ourModel;
 Model* ourModel2;
+Model* ourModel3;
 SkyBox* skybox;
 
 
@@ -135,6 +136,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	spSimpleMaterial = new ShaderProgram("v_simple_material.glsl","g_simple_material.glsl", "f_simple_material.glsl");
 	ourModel = new Model("res/backpack/backpack.obj");
 	ourModel2 = new Model("res/cat/cat.obj");
+	ourModel3 = new Model("res/Models/test.obj");
 	skybox = new SkyBox();
 }
 
@@ -175,7 +177,7 @@ void drawScene(GLFWwindow* window) {
 
 			glUniformMatrix4fv(spSimpleMaterial->u("M"), 1, false, glm::value_ptr(M));
 			glUniform3fv(spSimpleMaterial->u("diffuse"), 1, &ourModel2->meshes[0].material.Diffuse[0]);
-			ourModel2->Draw(*spSimpleMaterial);
+			ourModel->Draw(*spSimpleMaterial);
 			break;
 		}
 		case 1:
@@ -204,7 +206,7 @@ void drawScene(GLFWwindow* window) {
 
 			glUniformMatrix4fv(spMaterial->u("M"), 1, false, glm::value_ptr(M));
 
-			ourModel->Draw(*spMaterial);
+			ourModel3->Draw(*spMaterial);
 
 			M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
 			M = glm::rotate(M, PI / 2, glm::vec3(-1.0f, 0.0f, 0.0f));
@@ -233,7 +235,7 @@ void drawScene(GLFWwindow* window) {
 
 			glUniform3f(spNormalTexture->u("pointLights[0].position"), pointLightPositions[0][0], pointLightPositions[0][1], pointLightPositions[0][2]);
 			glUniform3f(spNormalTexture->u("pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
-			glUniform3f(spNormalTexture->u("pointLights[0].diffuse"), 0.8f, 0.0f, 0.8f);
+			glUniform3f(spNormalTexture->u("pointLights[0].diffuse"), 0.8f, 0.8f, 0.8f);
 			glUniform3f(spNormalTexture->u("pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
 			glUniform1f(spNormalTexture->u("pointLights[0].constant"), 1.0f);
 			glUniform1f(spNormalTexture->u("pointLights[0].linear"), 0.09);
