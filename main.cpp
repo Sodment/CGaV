@@ -136,7 +136,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	spSimpleMaterial = new ShaderProgram("v_simple_material.glsl","g_simple_material.glsl", "f_simple_material.glsl");
 	ourModel = new Model("res/backpack/backpack.obj");
 	ourModel2 = new Model("res/cat/cat.obj");
-	ourModel3 = new Model("res/Models/test.obj");
+	ourModel3 = new Model("res/quad/quad.obj");
 	skybox = new SkyBox();
 }
 
@@ -157,7 +157,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	switch (choice)
+	/*switch (choice)
 	{
 		case 0:
 		{
@@ -297,7 +297,7 @@ void drawScene(GLFWwindow* window) {
 		{
 			break;
 		}
-	}
+	}*/
 
 
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));
