@@ -183,8 +183,8 @@ void drawScene(GLFWwindow* window) {
 		case 1:
 		{
 			spMaterial->use();
-			glUniformMatrix4fv(spFunnyCat->u("P"), 1, false, glm::value_ptr(P));
-			glUniformMatrix4fv(spFunnyCat->u("V"), 1, false, glm::value_ptr(V));
+			glUniformMatrix4fv(spMaterial->u("P"), 1, false, glm::value_ptr(P));
+			glUniformMatrix4fv(spMaterial->u("V"), 1, false, glm::value_ptr(V));
 
 			glm::vec3 diffuseColor = glm::vec3(1.0f, 1.0f, 1.0f) * glm::vec3(0.5f);
 			glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
@@ -196,10 +196,10 @@ void drawScene(GLFWwindow* window) {
 			glUniform3fv(spMaterial->u("light.diffuse"), 1, &diffuseColor[0]);
 			glUniform3f(spMaterial->u("light.diffuse"), 1.0f, 1.0f, 1.0f);
 
-			glUniform3fv(spMaterial->u("material.ambient"), 1, &ourModel->meshes[0].material.Ambient[0]);
-			glUniform3fv(spMaterial->u("material.diffuse"), 1, &ourModel->meshes[0].material.Diffuse[0]);
-			glUniform3fv(spMaterial->u("material.specular"), 1, &ourModel->meshes[0].material.Specular[0]);
-			glUniform1f(spMaterial->u("material.shininess"), ourModel->meshes[0].material.Shininess);
+			glUniform3fv(spMaterial->u("material.ambient"), 1, &ourModel3->meshes[0].material.Ambient[0]);
+			glUniform3fv(spMaterial->u("material.diffuse"), 1, &ourModel3->meshes[0].material.Diffuse[0]);
+			glUniform3fv(spMaterial->u("material.specular"), 1, &ourModel3->meshes[0].material.Specular[0]);
+			glUniform1f(spMaterial->u("material.shininess"), ourModel3->meshes[0].material.Shininess);
 
 			M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 			M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
