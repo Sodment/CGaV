@@ -163,6 +163,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="f_pbr_light.glsl" />
+    <None Include="f_post_processing.glsl" />
     <None Include="f_simple_texture.glsl" />
     <None Include="f_funnyCat.glsl" />
     <None Include="f_lab8.glsl" />
@@ -174,6 +175,7 @@
     <None Include="v_lab8.glsl" />
     <None Include="v_material.glsl" />
     <None Include="v_pbr_light.glsl" />
+    <None Include="v_post_processing.glsl" />
     <None Include="v_simple_material.glsl" />
     <None Include="v_textured_normals.glsl" />
   </ItemGroup>

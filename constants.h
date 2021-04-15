@@ -21,7 +21,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #define CONSTANTS_H
 
 const float PI = 3.141592653589793f;
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+unsigned int SCR_WIDTH = 1024;
+unsigned int SCR_HEIGHT = 768;
 
 #endif

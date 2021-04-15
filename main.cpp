@@ -17,6 +17,7 @@
 #include "myCube.h"
 #include "model.h"
 #include "skybox.h"
+#include "post_proccesing.h"
 
 float aspectRatio = 1;
 float near_clip = 0.1f;
@@ -35,10 +36,12 @@ ShaderProgram* spNormalTexture;
 ShaderProgram* spFunnyCat;
 ShaderProgram* spMaterial;
 ShaderProgram* spSimpleMaterial;
+ShaderProgram* spScreenShader;
 Model* ourModel;
 Model* ourModel2;
 Model* ourModel3;
 SkyBox* skybox;
+PostQuad* postQuad;
 
 
 float* vertices = myCubeVertices;
@@ -111,6 +114,8 @@ void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 void windowResizeCallback(GLFWwindow* window, int width, int height) {
 	if (height == 0) return;
 	aspectRatio = (float)width / (float)height;
+	SCR_WIDTH = width;
+	SCR_HEIGHT = height;
 	glViewport(0, 0, width, height);
 }
 
@@ -118,7 +123,6 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 //Procedura inicjuj¹ca
 void initOpenGLProgram(GLFWwindow* window) {
 	glClearColor(1, 0, 1, 1);
-	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glEnable(GL_FRAMEBUFFER_SRGB);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -134,10 +138,13 @@ void initOpenGLProgram(GLFWwindow* window) {
 	spFunnyCat = new ShaderProgram("v_funnyCat.glsl", "g_funnyCat.glsl", "f_funnyCat.glsl");
 	spMaterial = new ShaderProgram("v_material.glsl", NULL, "f_material.glsl");
 	spSimpleMaterial = new ShaderProgram("v_simple_material.glsl","g_simple_material.glsl", "f_simple_material.glsl");
+	spScreenShader = new ShaderProgram("v_post_processing.glsl", NULL, "f_post_processing.glsl");
 	ourModel = new Model("res/backpack/backpack.obj");
 	ourModel2 = new Model("res/cat/cat.obj");
 	ourModel3 = new Model("res/quad/quad.obj");
 	skybox = new SkyBox();
+	postQuad = new PostQuad(SCR_WIDTH, SCR_HEIGHT);
+
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -149,6 +156,8 @@ void freeOpenGLProgram(GLFWwindow* window) {
 float amount;
 //Procedura rysuj¹ca zawartoœæ sceny
 void drawScene(GLFWwindow* window) {
+	glBindFramebuffer(GL_FRAMEBUFFER, postQuad->framebuffer);
+	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V = camera->GetViewMatrix();
@@ -299,6 +308,53 @@ void drawScene(GLFWwindow* window) {
 		}
 	}*/
 
+	spNormalTexture->use();
+
+	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
+
+	glUniform3f(spNormalTexture->u("dirLight.direction"), 0.0f, 100.0f, 0.0f);
+	glUniform3f(spNormalTexture->u("dirLight.ambient"), 0.05f, 0.05f, 0.05f);
+	glUniform3f(spNormalTexture->u("dirLight.diffuse"), 0.4f, 0.4f, 0.4f);
+	glUniform3f(spNormalTexture->u("dirLight.specular"), 0.5f, 0.5f, 0.5f);
+
+	glUniform3f(spNormalTexture->u("pointLights[0].position"), pointLightPositions[0][0], pointLightPositions[0][1], pointLightPositions[0][2]);
+	glUniform3f(spNormalTexture->u("pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
+	glUniform3f(spNormalTexture->u("pointLights[0].diffuse"), 0.8f, 0.8f, 0.8f);
+	glUniform3f(spNormalTexture->u("pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
+	glUniform1f(spNormalTexture->u("pointLights[0].constant"), 1.0f);
+	glUniform1f(spNormalTexture->u("pointLights[0].linear"), 0.09);
+	glUniform1f(spNormalTexture->u("pointLights[0].quadratic"), 0.032);
+
+	glUniform3f(spNormalTexture->u("pointLights[1].position"), pointLightPositions[1][0], pointLightPositions[1][1], pointLightPositions[1][2]);
+	glUniform3f(spNormalTexture->u("pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
+	glUniform3f(spNormalTexture->u("pointLights[1].diffuse"), 0.8f, 0.8f, 0.8f);
+	glUniform3f(spNormalTexture->u("pointLights[1].specular"), 1.0f, 1.0f, 1.0f);
+	glUniform1f(spNormalTexture->u("pointLights[1].constant"), 1.0f);
+	glUniform1f(spNormalTexture->u("pointLights[1].linear"), 0.09);
+	glUniform1f(spNormalTexture->u("pointLights[1].quadratic"), 0.032);
+
+	glUniformMatrix4fv(spNormalTexture->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spNormalTexture->u("V"), 1, false, glm::value_ptr(V));
+
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
+
+	ourModel->Draw(*spNormalTexture);
+
+	spSimpleTexture->use();
+
+	glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
+
+	M = glm::translate(M, glm::vec3(5.0f, 0.0f, 0.0f));
+
+	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniform3f(spSimpleTexture->u("lightPos"), 2.5f, 0.0f, 100.0f);
+	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
+	ourModel->Draw(*spSimpleTexture);
+
 
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));
 	spSkyBox->use();
@@ -309,6 +365,15 @@ void drawScene(GLFWwindow* window) {
 	skybox->Draw(*spSkyBox);
 
 	glDepthMask(GL_TRUE);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
+	// clear all relevant buffers
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	spScreenShader->use();
+	postQuad->Draw(*spScreenShader);
 	glfwSwapBuffers(window);
 }
 
