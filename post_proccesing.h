@@ -8,8 +8,8 @@
 #include <iostream>
 #include "shaderprogram.h"
 
-float quadVertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
-       // positions   // texCoords
+float quadVertices[] = 
+{
        -1.0f,  1.0f,  0.0f, 1.0f,
        -1.0f, -1.0f,  0.0f, 0.0f,
         1.0f, -1.0f,  1.0f, 0.0f,
@@ -33,6 +33,12 @@ public:
         SetupRBO(width, height);
         printf("DUPA1\n");
     };
+
+    void UpdateResolution(int width, int height)
+    {
+        SetupTCB(width, height);
+        SetupRBO(width, height);
+    }
 
     void SetupFBO()
     {

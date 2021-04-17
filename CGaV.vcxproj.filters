@@ -41,9 +41,6 @@
     <ClInclude Include="camera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
-    <ClInclude Include="read_textures.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
     <ClInclude Include="mesh.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
@@ -58,12 +55,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="v_lab8.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
-    <None Include="f_lab8.glsl">
-      <Filter>Pliki zasobów</Filter>
-    </None>
     <None Include="f_simple_texture.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>

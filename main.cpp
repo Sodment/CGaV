@@ -13,7 +13,6 @@
 #include "lodepng.h"
 #include "shaderprogram.h"
 #include "camera.h"
-#include "read_textures.h"
 #include "myCube.h"
 #include "model.h"
 #include "skybox.h"
@@ -29,7 +28,6 @@ float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 
 Camera* camera;
-ShaderProgram* sp;
 ShaderProgram* spSkyBox;
 ShaderProgram* spSimpleTexture;
 ShaderProgram* spNormalTexture;
@@ -58,12 +56,6 @@ glm::vec3 pointLightPositions[] = {
 		glm::vec3(0.0f,  0.0f,  10.0f),
 		glm::vec3(0.0f, 0.0f, -10.0f),
 };
-
-GLuint tex0;
-GLuint tex1;
-GLuint tex2;
-GLuint tex3;
-GLuint skyBox;
 
 void error_callback(int error, const char* description) {
 	fputs(description, stderr);
@@ -131,7 +123,6 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetScrollCallback(window, scrollCallback);
 	camera = new Camera();
-	sp = new ShaderProgram("v_lab8.glsl", NULL, "f_lab8.glsl");
 	spSkyBox = new ShaderProgram("v_skybox.glsl", NULL, "f_skybox.glsl");
 	spSimpleTexture = new ShaderProgram("v_simple_texture.glsl", NULL, "f_simple_texture.glsl");
 	spNormalTexture = new ShaderProgram("v_textured_normals.glsl", NULL, "f_textured_normals.glsl");
@@ -150,12 +141,13 @@ void initOpenGLProgram(GLFWwindow* window) {
 void freeOpenGLProgram(GLFWwindow* window) {
 	delete camera;
 	delete spSkyBox;
-	delete sp;
+	delete spScreenShader,spFunnyCat,spFunnyCat;
 }
 
 float amount;
 //Procedura rysuj¹ca zawartoœæ sceny
 void drawScene(GLFWwindow* window) {
+	//Binding post processing framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, postQuad->framebuffer);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -319,7 +311,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniform3f(spNormalTexture->u("pointLights[0].position"), pointLightPositions[0][0], pointLightPositions[0][1], pointLightPositions[0][2]);
 	glUniform3f(spNormalTexture->u("pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
-	glUniform3f(spNormalTexture->u("pointLights[0].diffuse"), 0.8f, 0.8f, 0.8f);
+	glUniform3f(spNormalTexture->u("pointLights[0].diffuse"), 0.0f, 0.8f, 0.8f);
 	glUniform3f(spNormalTexture->u("pointLights[0].specular"), 1.0f, 1.0f, 1.0f);
 	glUniform1f(spNormalTexture->u("pointLights[0].constant"), 1.0f);
 	glUniform1f(spNormalTexture->u("pointLights[0].linear"), 0.09);
@@ -327,7 +319,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniform3f(spNormalTexture->u("pointLights[1].position"), pointLightPositions[1][0], pointLightPositions[1][1], pointLightPositions[1][2]);
 	glUniform3f(spNormalTexture->u("pointLights[1].ambient"), 0.05f, 0.05f, 0.05f);
-	glUniform3f(spNormalTexture->u("pointLights[1].diffuse"), 0.8f, 0.8f, 0.8f);
+	glUniform3f(spNormalTexture->u("pointLights[1].diffuse"), 0.8f, 0.0f, 0.8f);
 	glUniform3f(spNormalTexture->u("pointLights[1].specular"), 1.0f, 1.0f, 1.0f);
 	glUniform1f(spNormalTexture->u("pointLights[1].constant"), 1.0f);
 	glUniform1f(spNormalTexture->u("pointLights[1].linear"), 0.09);
@@ -343,19 +335,8 @@ void drawScene(GLFWwindow* window) {
 
 	ourModel->Draw(*spNormalTexture);
 
-	spSimpleTexture->use();
 
-	glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
-
-	M = glm::translate(M, glm::vec3(5.0f, 0.0f, 0.0f));
-
-	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
-	glUniform3f(spSimpleTexture->u("lightPos"), 2.5f, 0.0f, 100.0f);
-	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
-	ourModel->Draw(*spSimpleTexture);
-
-
+	//Skybox drawing
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));
 	spSkyBox->use();
 	glUniformMatrix4fv(spSkyBox->u("P"), 1, false, glm::value_ptr(P));
@@ -366,14 +347,17 @@ void drawScene(GLFWwindow* window) {
 
 	glDepthMask(GL_TRUE);
 
+
+	//Post-processing
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
-	// clear all relevant buffers
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
+	glDisable(GL_DEPTH_TEST);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	spScreenShader->use();
 	postQuad->Draw(*spScreenShader);
+
+
 	glfwSwapBuffers(window);
 }
 
