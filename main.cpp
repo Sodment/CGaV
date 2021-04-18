@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include <vector>
 #include "constants.h"
-#include "lodepng.h"
 #include "shaderprogram.h"
 #include "camera.h"
 #include "myCube.h"
@@ -18,7 +17,10 @@
 #include "skybox.h"
 #include "post_proccesing.h"
 
-float aspectRatio = 1;
+unsigned int SCR_WIDTH = 1280;
+unsigned int SCR_HEIGHT = 1024;
+
+float aspectRatio = 1280/1024;
 float near_clip = 0.1f;
 float far_clip = 1000.0f;
 float deltaTime = 0.0f;
@@ -26,6 +28,7 @@ float lastFrame = 0.0f;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+int choice = 0;
 
 Camera* camera;
 ShaderProgram* spSkyBox;
@@ -37,20 +40,10 @@ ShaderProgram* spSimpleMaterial;
 ShaderProgram* spScreenShader;
 Model* ourModel;
 Model* ourModel2;
-Model* ourModel3;
 SkyBox* skybox;
 PostQuad* postQuad;
-
-
-float* vertices = myCubeVertices;
-float* normals = myCubeNormals;
-float* texCoords = myCubeTexCoords;
-float* colors = myCubeColors;
-float* c1 = myCubeC1;
-float* c2 = myCubeC2;
-float* c3 = myCubeC3;
-int vertexCount = myCubeVertexCount;
-int choice = 0;
+Model* modelBackpack;
+Model* modelCat;
 
 glm::vec3 pointLightPositions[] = {
 		glm::vec3(0.0f,  0.0f,  10.0f),
@@ -130,18 +123,16 @@ void initOpenGLProgram(GLFWwindow* window) {
 	spMaterial = new ShaderProgram("v_material.glsl", NULL, "f_material.glsl");
 	spSimpleMaterial = new ShaderProgram("v_simple_material.glsl","g_simple_material.glsl", "f_simple_material.glsl");
 	spScreenShader = new ShaderProgram("v_post_processing.glsl", NULL, "f_post_processing.glsl");
-	ourModel = new Model("res/backpack/backpack.obj");
-	ourModel2 = new Model("res/cat/cat.obj");
-	ourModel3 = new Model("res/quad/quad.obj");
+	modelBackpack = new Model("res/backpack/backpack.obj");
+	modelCat = new Model("res/cat/cat.obj");
 	skybox = new SkyBox();
 	postQuad = new PostQuad(SCR_WIDTH, SCR_HEIGHT);
 
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
-	delete camera;
-	delete spSkyBox;
-	delete spScreenShader,spFunnyCat,spFunnyCat;
+	delete camera, postQuad, modelBackpack, modelCat;
+	delete spSkyBox,spScreenShader,spFunnyCat,spFunnyCat;
 }
 
 float amount;
@@ -333,7 +324,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	ourModel->Draw(*spNormalTexture);
+	modelBackpack->Draw(*spNormalTexture);
 
 
 	//Skybox drawing

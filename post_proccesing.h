@@ -31,7 +31,6 @@ public:
         SetupFBO();
         SetupTCB(width, height);
         SetupRBO(width, height);
-        printf("DUPA1\n");
     };
 
     void UpdateResolution(int width, int height)

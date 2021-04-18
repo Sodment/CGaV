@@ -1,15 +1,13 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <Gl/glew.h> // holds all OpenGL type declarations
+#include <Gl/glew.h>
 
 #include <glm.hpp>
 #include <gtc/matrix_transform.hpp>
-#include "shaderprogram.h"
-
 #include <string>
 #include <vector>
-using namespace std;
+#include "shaderprogram.h"
 
 struct Vertex {
     // position
@@ -26,8 +24,8 @@ struct Vertex {
 
 struct Texture {
     GLuint id;
-    string type;
-    string path;
+    std::string type;
+    std::string path;
 };
 
 struct Material {
@@ -40,14 +38,14 @@ struct Material {
 class Mesh {
 public:
     // mesh Data
-    vector<Vertex> vertices;
-    vector<GLuint> indices;
-    vector<Texture> textures;
+    std::vector<Vertex> vertices;
+    std::vector<GLuint> indices;
+    std::vector<Texture> textures;
     Material material;
     GLuint VAO;
 
     // constructor
-    Mesh(vector<Vertex> vertices, vector<unsigned int> indices, vector<Texture> textures, Material mat)
+    Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat)
     {
         this->vertices = vertices;
         this->indices = indices;
@@ -70,8 +68,8 @@ public:
         {
             glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
             // retrieve texture number (the N in diffuse_textureN)
-            string number;
-            string name = textures[i].type;
+            std::string number;
+            std::string name = textures[i].type;
             if (name == "texture_diffuse")
                 number = std::to_string(diffuseNr++);
             else if (name == "texture_specular")

@@ -3,12 +3,6 @@
 #include <gtc/type_ptr.hpp>
 #include <gtc/matrix_transform.hpp>
 
-//const float MAXFOV = 45.0f;
-//const float YAW = -90.0f;
-//const float PITCH = 0.0f;
-//const float MOUSE_SENSITIVITY = 0.1f;
-//const float CAMREA_SPEED = 5.0f;
-
 struct CAMERA_MOVEMENT_DIRECTION
 {
 	bool Forward;
