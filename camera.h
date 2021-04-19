@@ -9,7 +9,9 @@ struct CAMERA_MOVEMENT_DIRECTION
 	bool Backward;
 	bool Left;
 	bool Right;
-} direction = { false, false, false, false };
+	bool Up;
+	bool Down;
+} direction = { false, false, false, false, false, false };
 
 class Camera
 {
@@ -110,6 +112,8 @@ public:
 		if (direction.Backward) Position -= velocity * Front;
 		if (direction.Left) Position -= velocity * Right;
 		if (direction.Right) Position += velocity * Right;
+		if (direction.Up) Position += velocity * glm::vec3(0.0f, 1.0f, 0.0f);
+		if (direction.Down) Position -= velocity * glm::vec3(0.0f, 1.0f, 0.0f);
 	}
 
 
