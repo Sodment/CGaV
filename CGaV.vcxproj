@@ -159,26 +159,26 @@
     <ClInclude Include="skybox.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="f_pbr_light.glsl" />
-    <None Include="f_post_processing.glsl" />
-    <None Include="f_simple_texture.glsl" />
-    <None Include="f_funnyCat.glsl" />
-    <None Include="f_material.glsl" />
-    <None Include="f_textured_normals.glsl" />
-    <None Include="g_funnyCat.glsl" />
-    <None Include="g_simple_material.glsl" />
-    <None Include="v_funnyCat.glsl" />
-    <None Include="v_material.glsl" />
-    <None Include="v_pbr_light.glsl" />
-    <None Include="v_post_processing.glsl" />
-    <None Include="v_simple_material.glsl" />
-    <None Include="v_textured_normals.glsl" />
+    <None Include="pbr_light.frag" />
+    <None Include="post_processing.frag" />
+    <None Include="diffuse_specular.frag" />
+    <None Include="funnyCat.frag" />
+    <None Include="material.frag" />
+    <None Include="diff_spec_norm.frag" />
+    <None Include="funnyCat.geom" />
+    <None Include="simple_material.geom" />
+    <None Include="funnyCat.vert" />
+    <None Include="material.vert" />
+    <None Include="pbr_light.vert" />
+    <None Include="post_processing.vert" />
+    <None Include="simple_material.vert" />
+    <None Include="diff_spec_norm.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="f_simple_material.glsl" />
-    <Text Include="f_skybox.glsl" />
-    <Text Include="v_simple_texture.glsl" />
-    <Text Include="v_skybox.glsl" />
+    <Text Include="simple_material.frag" />
+    <Text Include="skybox.frag" />
+    <Text Include="diffuse_specular.vert" />
+    <Text Include="skybox.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

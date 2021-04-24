@@ -109,13 +109,21 @@ void windowResizeCallback(GLFWwindow* window, int width, int height) {
 
 void initShaderPrograms()
 {
-	spSkyBox = new ShaderProgram("v_skybox.glsl", NULL, "f_skybox.glsl");
-	spSimpleTexture = new ShaderProgram("v_simple_texture.glsl", NULL, "f_simple_texture.glsl");
-	spNormalTexture = new ShaderProgram("v_textured_normals.glsl", NULL, "f_textured_normals.glsl");
-	spFunnyCat = new ShaderProgram("v_funnyCat.glsl", "g_funnyCat.glsl", "f_funnyCat.glsl");
-	spMaterial = new ShaderProgram("v_material.glsl", NULL, "f_material.glsl");
-	spSimpleMaterial = new ShaderProgram("v_simple_material.glsl", "g_simple_material.glsl", "f_simple_material.glsl");
-	spScreenShader = new ShaderProgram("v_post_processing.glsl", NULL, "f_post_processing.glsl");
+	//Skybox
+	spSkyBox = new ShaderProgram("skybox.vert", NULL, "skybox.frag");
+	//Post processing
+	spScreenShader = new ShaderProgram("post_processing.vert", NULL, "post_processing.frag");
+
+	//With multiple lights
+	spSimpleTexture = new ShaderProgram("diffuse_specular.vert", NULL, "diffuse_specular.frag");
+	spNormalTexture = new ShaderProgram("diff_spec_norm.vert", NULL, "diff_spec_norm.frag");
+
+	//For materials
+	spMaterial = new ShaderProgram("material.vert", NULL, "material.frag");
+	spSimpleMaterial = new ShaderProgram("simple_material.vert", "simple_material.geom", "simple_material.frag");
+
+	//Thrash
+	spFunnyCat = new ShaderProgram("funnyCat.vert", "funnyCat.geom", "funnyCat.frag");
 }
 
 void initModels()

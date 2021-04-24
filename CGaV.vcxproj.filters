@@ -49,60 +49,60 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="f_simple_texture.glsl">
+    <None Include="diffuse_specular.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="v_funnyCat.glsl">
+    <None Include="funnyCat.vert">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="g_funnyCat.glsl">
+    <None Include="funnyCat.geom">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="f_funnyCat.glsl">
+    <None Include="funnyCat.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="v_material.glsl">
+    <None Include="material.vert">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="f_material.glsl">
+    <None Include="material.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="v_simple_material.glsl">
+    <None Include="simple_material.vert">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="g_simple_material.glsl">
+    <None Include="simple_material.geom">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="v_pbr_light.glsl">
+    <None Include="pbr_light.vert">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="f_pbr_light.glsl">
+    <None Include="pbr_light.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="v_textured_normals.glsl">
+    <None Include="diff_spec_norm.vert">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="f_textured_normals.glsl">
+    <None Include="diff_spec_norm.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="v_post_processing.glsl">
+    <None Include="post_processing.vert">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="f_post_processing.glsl">
+    <None Include="post_processing.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="v_skybox.glsl">
+    <Text Include="skybox.vert">
       <Filter>Pliki zasobów</Filter>
     </Text>
-    <Text Include="f_skybox.glsl">
+    <Text Include="skybox.frag">
       <Filter>Pliki zasobów</Filter>
     </Text>
-    <Text Include="v_simple_texture.glsl">
+    <Text Include="diffuse_specular.vert">
       <Filter>Pliki zasobów</Filter>
     </Text>
-    <Text Include="f_simple_material.glsl">
+    <Text Include="simple_material.frag">
       <Filter>Pliki zasobów</Filter>
     </Text>
   </ItemGroup>
