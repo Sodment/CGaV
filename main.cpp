@@ -16,6 +16,7 @@
 #include "model.h"
 #include "skybox.h"
 #include "post_proccesing.h"
+#include "lights.h"
 
 unsigned int SCR_WIDTH = 1280;
 unsigned int SCR_HEIGHT = 1024;
@@ -170,11 +171,7 @@ void drawScene(GLFWwindow* window) {
 	spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
-
-	glUniform3f(spNormalTexture->u("dirLight.direction"), 0.0f, 100.0f, 0.0f);
-	glUniform3f(spNormalTexture->u("dirLight.ambient"), 0.05f, 0.05f, 0.05f);
-	glUniform3f(spNormalTexture->u("dirLight.diffuse"), 0.4f, 0.4f, 0.4f);
-	glUniform3f(spNormalTexture->u("dirLight.specular"), 0.5f, 0.5f, 0.5f);
+	SetDirLight(*spNormalTexture, dirLight);
 
 	glUniform3f(spNormalTexture->u("pointLights[0].position"), pointLightPositions[0][0], pointLightPositions[0][1], pointLightPositions[0][2]);
 	glUniform3f(spNormalTexture->u("pointLights[0].ambient"), 0.05f, 0.05f, 0.05f);
