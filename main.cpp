@@ -45,9 +45,11 @@ PostQuad* postQuad;
 Model* modelBackpack;
 Model* modelCat;
 
-glm::vec3 pointLightPositions[] = {
-		glm::vec3(0.0f,  0.0f,  10.0f),
-		glm::vec3(0.0f, 0.0f, -10.0f),
+float kernel[9] = 
+{
+	-1.0f, -1.0f, -1.0f,
+	-1.0f, 9.0f, -1.0f,
+	-1.0f, -1.0f, -1.0f
 };
 
 void error_callback(int error, const char* description) {
@@ -207,6 +209,7 @@ void drawScene(GLFWwindow* window) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	spScreenShader->use();
+	SetPostPRoccesingKernel(*spScreenShader, kernel);
 	postQuad->Draw(*spScreenShader);
 
 	glfwSwapBuffers(window);
