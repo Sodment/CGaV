@@ -160,6 +160,8 @@
     <ClInclude Include="skybox.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="diffuse_only.frag" />
+    <None Include="diffuse_only.vert" />
     <None Include="pbr_light.frag" />
     <None Include="post_processing.frag" />
     <None Include="diffuse_specular.frag" />

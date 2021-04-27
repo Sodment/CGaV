@@ -47,9 +47,9 @@ Model* modelCat;
 
 float kernel[9] = 
 {
-	-1.0f, -1.0f, -1.0f,
-	-1.0f, 9.0f, -1.0f,
-	-1.0f, -1.0f, -1.0f
+	0.0f, 0.0f, 0.0f,
+	0.0f, 1.0f, 0.0f,
+	0.0f, 0.0f, 0.0f
 };
 
 void error_callback(int error, const char* description) {
@@ -175,8 +175,6 @@ void drawScene(GLFWwindow* window) {
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
 	SetDirLight(*spNormalTexture, dirLight);
-	//SetPointLight(*spNormalTexture, pointLights[0], 0);
-	//SetPointLight(*spNormalTexture, pointLights[1], 1);
 	SetMulPointLight(*spNormalTexture, pointLights, 2);
 
 	glUniformMatrix4fv(spNormalTexture->u("P"), 1, false, glm::value_ptr(P));

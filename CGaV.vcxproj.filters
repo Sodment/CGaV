@@ -94,6 +94,12 @@
     <None Include="post_processing.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="diffuse_only.vert">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="diffuse_only.frag">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="skybox.vert">
