@@ -172,7 +172,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	/*spNormalTexture->use();
+	spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
@@ -187,9 +187,9 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spNormalTexture);*/
+	modelBackpack->Draw(*spNormalTexture);
 
-	spSimpleTexture->use();
+	/*spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 
 	SetDirLight(*spSimpleTexture, dirLight);
@@ -203,7 +203,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spSimpleTexture);
+	modelBackpack->Draw(*spSimpleTexture);*/
 
 
 	//Skybox drawing

@@ -54,8 +54,8 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 lightDir = normalize(-light.direction);
     float diff = max(dot(normal, lightDir), 0.0);
 
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
+    vec3 halfwayDir = normalize(lightDir + viewDir);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), 16.0);
 
     vec3 ambient  = light.ambient  * color;
     vec3 diffuse  = light.diffuse  * diff * color;;
@@ -70,8 +70,8 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     vec3 color = texture(texture_diffuse1, fs_in.TexCoords).rgb;
     float diff = max(dot(normal, lightDir), 0.0);
     // specular shading
-    vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
+    vec3 halfwayDir = normalize(lightDir + viewDir);
+    float spec = pow(max(dot(normal, halfwayDir), 0.0), 16.0);
     // attenuation
     float dist  = length(light.position - fragPos);
     float attenuation = 1.0 / (light.constant + light.linear * dist + 
