@@ -118,7 +118,7 @@ void initShaderPrograms()
 	spScreenShader = new ShaderProgram("post_processing.vert", NULL, "post_processing.frag");
 
 	//With multiple lights
-	spSimpleTexture = new ShaderProgram("diffuse_specular.vert", NULL, "diffuse_specular.frag");
+	spSimpleTexture = new ShaderProgram("diffuse_only.vert", NULL, "diffuse_only.frag");
 	spNormalTexture = new ShaderProgram("diff_spec_norm.vert", NULL, "diff_spec_norm.frag");
 
 	//For materials
@@ -170,7 +170,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	spNormalTexture->use();
+	/*spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
@@ -185,7 +185,23 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spNormalTexture);
+	modelBackpack->Draw(*spNormalTexture);*/
+
+	spSimpleTexture->use();
+	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
+
+	SetDirLight(*spSimpleTexture, dirLight);
+	SetMulPointLight(*spSimpleTexture, pointLights, 2);
+
+	glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
+
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelBackpack->Draw(*spSimpleTexture);
 
 
 	//Skybox drawing
