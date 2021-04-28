@@ -38,7 +38,6 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir);
 void main()
 {    
     vec3 norm = normalize(fs_in.Normal);
-    norm = normalize(norm * 2.0 - 1.0);
     vec3 viewDir = normalize(viewPos - fs_in.FragPos);
    
    vec3 result = CalcDirLight(dirLight, norm, viewDir);

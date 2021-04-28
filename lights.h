@@ -46,12 +46,12 @@ PointLight pointLights[2] =
     0.09f,
     0.032f,
     glm::vec3(0.05f, 0.05f, 0.05f),
-    glm::vec3(0.0f, 0.0f, 1.0f),
+    glm::vec3(1.0f, 0.0f, 1.0f),
     glm::vec3(1.0f, 1.0f, 1.0f),
 
     //2
     glm::vec3(0.0f,  0.0f,  -10.0f),
-     1.0f,
+    1.0f,
     0.09f,
     0.032f,
     glm::vec3(0.05f, 0.05f, 0.05f),

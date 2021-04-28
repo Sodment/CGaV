@@ -32,6 +32,7 @@ bool firstMouse = true;
 
 Camera* camera;
 ShaderProgram* spSkyBox;
+ShaderProgram* spDiffuseOnly;
 ShaderProgram* spSimpleTexture;
 ShaderProgram* spNormalTexture;
 ShaderProgram* spFunnyCat;
@@ -118,7 +119,8 @@ void initShaderPrograms()
 	spScreenShader = new ShaderProgram("post_processing.vert", NULL, "post_processing.frag");
 
 	//With multiple lights
-	spSimpleTexture = new ShaderProgram("diffuse_only.vert", NULL, "diffuse_only.frag");
+	spDiffuseOnly = new ShaderProgram("diffuse_only.vert", NULL, "diffuse_only.frag");
+	spSimpleTexture = new ShaderProgram("diffuse_specular.vert", NULL, "diffuse_specular.frag");
 	spNormalTexture = new ShaderProgram("diff_spec_norm.vert", NULL, "diff_spec_norm.frag");
 
 	//For materials
