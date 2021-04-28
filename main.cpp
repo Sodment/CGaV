@@ -44,7 +44,7 @@ Model* ourModel2;
 SkyBox* skybox;
 PostQuad* postQuad;
 Model* modelBackpack;
-Model* modelCat;
+Model* modelShield;
 
 float kernel[9] = 
 {
@@ -134,7 +134,7 @@ void initShaderPrograms()
 void initModels()
 {
 	modelBackpack = new Model("res/backpack/backpack.obj");
-	modelCat = new Model("res/cat/cat.obj");
+	modelShield = new Model("res/shield/shield.obj");
 }
 
 
@@ -156,7 +156,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
-	delete camera, postQuad, modelBackpack, modelCat;
+	delete camera, postQuad, modelBackpack;
 	delete spSkyBox,spScreenShader,spFunnyCat,spFunnyCat;
 }
 
@@ -172,7 +172,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	spNormalTexture->use();
+	/*spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
@@ -187,7 +187,24 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spNormalTexture);
+	modelBackpack->Draw(*spNormalTexture);*/
+
+	spDiffuseOnly->use();
+
+	glUniform3fv(spDiffuseOnly->u("viewPos"), 1, &camera->Position[0]);
+
+	SetDirLight(*spDiffuseOnly, dirLight);
+	SetMulPointLight(*spDiffuseOnly, pointLights, 2);
+
+	glUniformMatrix4fv(spDiffuseOnly->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spDiffuseOnly->u("V"), 1, false, glm::value_ptr(V));
+
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelShield->Draw(*spNormalTexture);
 
 	/*spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
