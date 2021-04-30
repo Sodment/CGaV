@@ -1,3 +1,6 @@
+#ifndef POST_PROCESSING_H
+#define POST_PROCESSING_H
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
@@ -101,3 +104,4 @@ public:
         glDrawArrays(GL_TRIANGLES, 0, 6);
     }
 };
+#endif

@@ -19,8 +19,4 @@ public:
 	GLuint u(const char* variableName);
 	GLuint a(const char* variableName);
 };
-
-
-
-
 #endif

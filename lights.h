@@ -1,4 +1,6 @@
-#pragma once
+#ifndef LIGHTS_H
+#define LIGHTS_H
+
 #pragma warning(disable: 4996)
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -32,7 +34,7 @@ typedef struct dirlight
 
 DirLight dirLight =
 {
-    glm::vec3(0.0f, 100.0f, 0.0f),
+    glm::vec3(0.0f, 0.0f, 0.0f),
     glm::vec3(0.05f, 0.05f, 0.05f),
     glm::vec3(0.4f, 0.4f, 0.4f),
     glm::vec3(0.5f, 0.5f, 0.5f),
@@ -107,3 +109,5 @@ void SetDirLight(ShaderProgram& sp, DirLight light)
     glUniform3fv(glGetUniformLocation(sp.shaderProgram, "dirLight.diffuse"), 1, &light.diffuse[0]);
     glUniform3fv(glGetUniformLocation(sp.shaderProgram, "dirLight.specular"), 1, &light.specular[0]);
 }
+
+#endif

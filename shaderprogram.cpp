@@ -25,7 +25,7 @@ char* ShaderProgram::readFile(const char* fileName) {
 }
 
 GLuint ShaderProgram::loadShader(GLenum shaderType, const char* fileName) {
-	GLuint shader = glCreateShader(shaderType);// GL_VERTEX_SHADER, GL_GEOMETRY_SHADER  GL_FRAGMENT_SHADER
+	GLuint shader = glCreateShader(shaderType); //GL_VERTEX_SHADER, GL_GEOMETRY_SHADER  GL_FRAGMENT_SHADER
 	const GLchar* shaderSource = readFile(fileName);
 	glShaderSource(shader, 1, &shaderSource, NULL);
 	glCompileShader(shader);
@@ -84,7 +84,7 @@ ShaderProgram::ShaderProgram(const char* vertexShaderFile, const char* geometryS
 		delete[]infoLog;
 	}
 
-	printf("Shader program created \n");
+	printf("Shader program created from : %s  %s \n", vertexShaderFile, fragmentShaderFile);
 }
 
 ShaderProgram::~ShaderProgram() {
