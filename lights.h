@@ -46,7 +46,7 @@ PointLight pointLights[2] =
     0.35f,
     0.44f,
     glm::vec3(0.05f, 0.05f, 0.05f),
-    glm::vec3(1.0f, 1.0f, 1.0f),
+    glm::vec3(0.0f, 1.0f, 1.0f),
     glm::vec3(1.0f, 1.0f, 1.0f),
 
     //2
@@ -55,7 +55,7 @@ PointLight pointLights[2] =
     0.35f,
     0.44f,
     glm::vec3(0.05f, 0.05f, 0.05f),
-    glm::vec3(1.0f, 1.0f, 1.0f),
+    glm::vec3(1.0f, 0.0f, 1.0f),
     glm::vec3(1.0f, 1.0f, 1.0f),
 };
 

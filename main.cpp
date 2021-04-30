@@ -189,7 +189,7 @@ void drawScene(GLFWwindow* window) {
 
 	modelBackpack->Draw(*spNormalTexture);*/
 
-	spDiffuseOnly->use();
+	/*spDiffuseOnly->use();
 
 	glUniform3fv(spDiffuseOnly->u("viewPos"), 1, &camera->Position[0]);
 
@@ -202,9 +202,26 @@ void drawScene(GLFWwindow* window) {
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spDiffuseOnly->u("M"), 1, false, glm::value_ptr(M));
 
-	modelShield->Draw(*spNormalTexture);
+	modelShield->Draw(*spDiffuseOnly);*/
+
+	spMaterial->use();
+
+	glUniform3fv(spMaterial->u("viewPos"), 1, &camera->Position[0]);
+
+	SetDirLight(*spMaterial, dirLight);
+	SetMulPointLight(*spMaterial, pointLights, 2);
+
+	glUniformMatrix4fv(spMaterial->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spMaterial->u("V"), 1, false, glm::value_ptr(V));
+
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spMaterial->u("M"), 1, false, glm::value_ptr(M));
+
+	modelBackpack->DrawMaterial(*spMaterial);
 
 	/*spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);

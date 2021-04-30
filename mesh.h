@@ -94,6 +94,24 @@ public:
         glActiveTexture(GL_TEXTURE0);
     }
 
+    void DrawMaterial(ShaderProgram& shader) 
+    {
+
+        glUniform3fv(glGetUniformLocation(shader.shaderProgram, "material.ambient"), 1, &this->material.Ambient[0]);
+        glUniform3fv(glGetUniformLocation(shader.shaderProgram, "material.diffuse"), 1, &this->material.Diffuse[0]);
+        glUniform3fv(glGetUniformLocation(shader.shaderProgram, "material.specular"), 1, &this->material.Specular[0]);
+        glUniform1f(glGetUniformLocation(shader.shaderProgram, "material.shininess"), this->material.Shininess);
+
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+
+        // always good practice to set everything back to defaults once configured.
+        glActiveTexture(GL_TEXTURE0);
+    }
+
+
+
 private:
     // render data 
     GLuint VBO, EBO;
