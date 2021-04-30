@@ -67,17 +67,16 @@ public:
         for (unsigned int i = 0; i < textures.size(); i++)
         {
             glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
-            // retrieve texture number (the N in diffuse_textureN)
             std::string number;
             std::string name = textures[i].type;
             if (name == "texture_diffuse")
                 number = std::to_string(diffuseNr++);
             else if (name == "texture_specular")
-                number = std::to_string(specularNr++); // transfer unsigned int to stream
+                number = std::to_string(specularNr++);
             else if (name == "texture_normal")
-                number = std::to_string(normalNr++); // transfer unsigned int to stream
+                number = std::to_string(normalNr++);
             else if (name == "texture_height")
-                number = std::to_string(heightNr++); // transfer unsigned int to stream
+                number = std::to_string(heightNr++);
 
             // now set the sampler to the correct texture unit
             glUniform1i(glGetUniformLocation(shader.shaderProgram, (name + number).c_str()), i);
@@ -106,7 +105,7 @@ public:
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
         glBindVertexArray(0);
 
-        // always good practice to set everything back to defaults once configured.
+        //Clean for the sake of cleaning
         glActiveTexture(GL_TEXTURE0);
     }
 

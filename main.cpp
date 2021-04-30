@@ -45,6 +45,7 @@ SkyBox* skybox;
 PostQuad* postQuad;
 Model* modelBackpack;
 Model* modelShield;
+Model* modelTestCube;
 
 float kernel[9] = 
 {
@@ -124,8 +125,8 @@ void initShaderPrograms()
 	spNormalTexture = new ShaderProgram("diff_spec_norm.vert", NULL, "diff_spec_norm.frag");
 
 	//For materials
-	spMaterial = new ShaderProgram("material.vert", NULL, "material.frag");
-	spSimpleMaterial = new ShaderProgram("simple_material.vert", "simple_material.geom", "simple_material.frag");
+	spMaterial = new ShaderProgram("material.vert", NULL, "material.frag"); //Has multiple lights
+	spSimpleMaterial = new ShaderProgram("simple_material.vert", "simple_material.geom", "simple_material.frag"); //Is only for seeing the model drawn with diffuse
 
 	//Thrash
 	spFunnyCat = new ShaderProgram("funnyCat.vert", "funnyCat.geom", "funnyCat.frag");
@@ -135,6 +136,7 @@ void initModels()
 {
 	modelBackpack = new Model("res/backpack/backpack.obj");
 	modelShield = new Model("res/shield/shield.obj");
+	modelTestCube = new Model("res/test_cube/cube.obj");
 }
 
 
@@ -221,7 +223,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spMaterial->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->DrawMaterial(*spMaterial);
+	modelTestCube->DrawMaterial(*spMaterial);
 
 	/*spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
