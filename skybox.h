@@ -77,8 +77,10 @@ public:
     void Draw(ShaderProgram& shader) 
     {
         glActiveTexture(GL_TEXTURE0);
+
         glUniform1i(glGetUniformLocation(shader.shaderProgram, "skybox"), 0);
         glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
+
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
@@ -101,7 +103,7 @@ private:
             if (data)
             {
                 glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-                std::cout << "Cubemap texture good to load at path: " << faces[i] << std::endl;
+                std::cout << "Cubemap texture loaded at path: " << faces[i] << std::endl;
                 stbi_image_free(data);
             }
             else

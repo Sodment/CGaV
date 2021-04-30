@@ -275,15 +275,15 @@ int main(void)
 
 	if (!glfwInit())
 	{
-		fprintf(stderr, "Nie mo¿na zainicjowaæ GLFW.\n");
+		fprintf(stderr, "Cant initialize GLFW\n");
 		exit(EXIT_FAILURE);
 	}
 
-	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "EXPLOSION", NULL, NULL);
+	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "CGaV", NULL, NULL);
 
 	if (!window)
 	{
-		fprintf(stderr, "Nie mo¿na utworzyæ okna.\n");
+		fprintf(stderr, "Error eh ncreating the window.\n");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
@@ -293,7 +293,7 @@ int main(void)
 
 	if (glewInit() != GLEW_OK)
 	{
-		fprintf(stderr, "Nie mo¿na zainicjowaæ GLEW.\n");
+		fprintf(stderr, "Cant initialize GLEW.\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -301,11 +301,11 @@ int main(void)
 	initShaderPrograms();
 	initModels();
 	glfwSetTime(0);
+	printf("LOOP START");
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
-		camera->ProcessKeyboard(deltaTime);
 		glfwSetTime(0);
 		drawScene(window);
 		glfwPollEvents();

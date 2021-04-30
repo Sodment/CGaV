@@ -1,11 +1,11 @@
 #include "shaderprogram.h"
+#pragma warning(disable : 4996)
 
 char* ShaderProgram::readFile(const char* fileName) {
 	int filesize;
 	FILE* plik;
 	char* result;
 
-#pragma warning(disable : 4996)
 	plik = fopen(fileName, "rb");
 	if (plik != NULL) {
 		fseek(plik, 0, SEEK_END);
@@ -48,18 +48,18 @@ GLuint ShaderProgram::loadShader(GLenum shaderType, const char* fileName) {
 }
 
 ShaderProgram::ShaderProgram(const char* vertexShaderFile, const char* geometryShaderFile, const char* fragmentShaderFile) {
-	printf("Loading vertex shader...\n");
+	printf("Loading vertex shader from: %s\n", vertexShaderFile);
 	vertexShader = loadShader(GL_VERTEX_SHADER, vertexShaderFile);
 
 	if (geometryShaderFile != NULL) {
-		printf("Loading geometry shader...\n");
+		printf("Loading geometry shader from: %s\n", geometryShaderFile);
 		geometryShader = loadShader(GL_GEOMETRY_SHADER, geometryShaderFile);
 	}
 	else {
 		geometryShader = 0;
 	}
 
-	printf("Loading fragment shader...\n");
+	printf("Loading fragment shader from: %s\n", fragmentShaderFile);
 	fragmentShader = loadShader(GL_FRAGMENT_SHADER, fragmentShaderFile);
 
 
@@ -84,7 +84,7 @@ ShaderProgram::ShaderProgram(const char* vertexShaderFile, const char* geometryS
 		delete[]infoLog;
 	}
 
-	printf("Shader program created from : %s  %s \n", vertexShaderFile, fragmentShaderFile);
+	printf("Shader program created\n");
 }
 
 ShaderProgram::~ShaderProgram() {
