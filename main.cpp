@@ -61,23 +61,23 @@ void error_callback(int error, const char* description) {
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (action == GLFW_PRESS) 
 	{
-		if (key == GLFW_KEY_W) direction.Forward = true;
-		if (key == GLFW_KEY_S) direction.Backward = true;
-		if (key == GLFW_KEY_A) direction.Left = true;
-		if (key == GLFW_KEY_D) direction.Right = true;
-		if (key == GLFW_KEY_SPACE) direction.Up = true;
-		if (key == GLFW_KEY_LEFT_SHIFT) direction.Down = true;
+		if (key == GLFW_KEY_W) { direction.Forward = true; printf("W\n"); }
+		if (key == GLFW_KEY_S) { direction.Backward = true; }
+		if (key == GLFW_KEY_A) { direction.Left = true; }
+		if (key == GLFW_KEY_D) { direction.Right = true; }
+		if (key == GLFW_KEY_SPACE) { direction.Up = true; }
+		if (key == GLFW_KEY_LEFT_SHIFT) { direction.Down = true; }
 
 	}
 
 	if (action == GLFW_RELEASE) 
 	{
-		if (key == GLFW_KEY_W) direction.Forward = false;
-		if (key == GLFW_KEY_S) direction.Backward = false;
-		if (key == GLFW_KEY_A) direction.Left = false;
-		if (key == GLFW_KEY_D) direction.Right = false;
-		if (key == GLFW_KEY_SPACE) direction.Up = false;
-		if (key == GLFW_KEY_LEFT_SHIFT) direction.Down = false;
+		if (key == GLFW_KEY_W) { direction.Forward = false; }
+		if (key == GLFW_KEY_S) { direction.Backward = false; }
+		if (key == GLFW_KEY_A) { direction.Left = false; }
+		if (key == GLFW_KEY_D) { direction.Right = false; }
+		if (key == GLFW_KEY_SPACE) { direction.Up = false; }
+		if (key == GLFW_KEY_LEFT_SHIFT) { direction.Down = false; }
 	}
 }
 
@@ -208,7 +208,7 @@ void drawScene(GLFWwindow* window) {
 
 	modelShield->Draw(*spDiffuseOnly);*/
 
-	spMaterial->use();
+	/*spMaterial->use();
 
 	glUniform3fv(spMaterial->u("viewPos"), 1, &camera->Position[0]);
 
@@ -223,9 +223,9 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spMaterial->u("M"), 1, false, glm::value_ptr(M));
 
-	modelTestCube->DrawMaterial(*spMaterial);
+	modelTestCube->DrawMaterial(*spMaterial);*/
 
-	/*spSimpleTexture->use();
+	spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 
 	SetDirLight(*spSimpleTexture, dirLight);
@@ -239,7 +239,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spSimpleTexture);*/
+	modelBackpack->Draw(*spSimpleTexture);
 
 
 	//Skybox drawing
@@ -306,6 +306,7 @@ int main(void)
 	{
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
+		camera->ProcessKeyboard(deltaTime);
 		glfwSetTime(0);
 		drawScene(window);
 		glfwPollEvents();
