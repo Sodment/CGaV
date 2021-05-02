@@ -149,6 +149,7 @@
     <ClCompile Include="lights.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mesh.cpp" />
+    <ClCompile Include="post_processing.cpp" />
     <ClCompile Include="shaderprogram.cpp" />
     <ClCompile Include="skybox.cpp" />
   </ItemGroup>

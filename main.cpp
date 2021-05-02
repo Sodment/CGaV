@@ -42,7 +42,7 @@ ShaderProgram* spScreenShader;
 Model* ourModel;
 Model* ourModel2;
 SkyBox* skybox;
-PostQuad* postQuad;
+PostProcessingQuad* postProcessingQuad;
 Model* modelBackpack;
 Model* modelShield;
 Model* modelTestCube;
@@ -153,18 +153,18 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetScrollCallback(window, scrollCallback);
 	camera = new Camera();
 	skybox = new SkyBox();
-	postQuad = new PostQuad(SCR_WIDTH, SCR_HEIGHT);
+	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
 
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
-	delete camera, postQuad, modelBackpack;
+	delete camera, postProcessingQuad, modelBackpack;
 	delete spSkyBox,spScreenShader,spFunnyCat,spFunnyCat;
 }
 
 void drawScene(GLFWwindow* window) {
 	//Binding post processing framebuffer
-	glBindFramebuffer(GL_FRAMEBUFFER, postQuad->framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingQuad->framebuffer);
 	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -262,7 +262,7 @@ void drawScene(GLFWwindow* window) {
 
 	spScreenShader->use();
 	SetPostProccesingKernel(*spScreenShader, kernel);
-	postQuad->Draw(*spScreenShader);
+	postProcessingQuad->Draw(*spScreenShader);
 
 	glfwSwapBuffers(window);
 }
