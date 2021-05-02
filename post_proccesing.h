@@ -22,7 +22,7 @@ float quadVertices[] =
         1.0f,  1.0f,  1.0f, 1.0f
 };
 
-void SetPostPRoccesingKernel(ShaderProgram& sp, float k[9])
+void SetPostProccesingKernel(ShaderProgram& sp, float k[9])
 {
     glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[0]"), k[0]);
     glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[1]"), k[1]);

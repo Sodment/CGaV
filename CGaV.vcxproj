@@ -148,7 +148,9 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="lights.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="mesh.cpp" />
     <ClCompile Include="shaderprogram.cpp" />
+    <ClCompile Include="skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
@@ -156,7 +158,6 @@
     <ClInclude Include="lights.h" />
     <ClInclude Include="mesh.h" />
     <ClInclude Include="model.h" />
-    <ClInclude Include="myCube.h" />
     <ClInclude Include="post_proccesing.h" />
     <ClInclude Include="shaderprogram.h" />
     <ClInclude Include="skybox.h" />

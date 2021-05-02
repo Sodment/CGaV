@@ -1,5 +1,6 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_SWIZZLE
+#define STB_IMAGE_IMPLEMENTATION
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -12,7 +13,6 @@
 #include "constants.h"
 #include "shaderprogram.h"
 #include "camera.h"
-#include "myCube.h"
 #include "model.h"
 #include "skybox.h"
 #include "post_proccesing.h"
@@ -261,7 +261,7 @@ void drawScene(GLFWwindow* window) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	spScreenShader->use();
-	SetPostPRoccesingKernel(*spScreenShader, kernel);
+	SetPostProccesingKernel(*spScreenShader, kernel);
 	postQuad->Draw(*spScreenShader);
 
 	glfwSwapBuffers(window);
