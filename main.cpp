@@ -39,6 +39,8 @@ ShaderProgram* spFunnyCat;
 ShaderProgram* spMaterial;
 ShaderProgram* spSimpleMaterial;
 ShaderProgram* spScreenShader;
+ShaderProgram* spPBRmaterial;
+ShaderProgram* spPBRtexture;
 Model* ourModel;
 Model* ourModel2;
 SkyBox* skybox;
@@ -123,10 +125,12 @@ void initShaderPrograms()
 	spDiffuseOnly = new ShaderProgram("diffuse_only.vert", NULL, "diffuse_only.frag");
 	spSimpleTexture = new ShaderProgram("diffuse_specular.vert", NULL, "diffuse_specular.frag");
 	spNormalTexture = new ShaderProgram("diff_spec_norm.vert", NULL, "diff_spec_norm.frag");
+	spPBRtexture = new ShaderProgram("pbr_texture.vert", NULL, "pbr_texture.frag");
 
 	//For materials
-	spMaterial = new ShaderProgram("material.vert", NULL, "material.frag"); //Has multiple lights
-	spSimpleMaterial = new ShaderProgram("simple_material.vert", "simple_material.geom", "simple_material.frag"); //Is only for seeing the model drawn with diffuse
+	spMaterial = new ShaderProgram("material.vert", NULL, "material.frag"); //has multiple lights
+	spSimpleMaterial = new ShaderProgram("simple_material.vert", "simple_material.geom", "simple_material.frag"); //is only for seeing the model drawn with diffuse
+	spPBRmaterial = new ShaderProgram("pbr_material.vert", NULL, "pbr_material.frag");
 
 	//Thrash
 	spFunnyCat = new ShaderProgram("funnyCat.vert", "funnyCat.geom", "funnyCat.frag");
@@ -301,7 +305,6 @@ int main(void)
 	initShaderPrograms();
 	initModels();
 	glfwSetTime(0);
-	printf("LOOP START");
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();

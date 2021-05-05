@@ -91,10 +91,10 @@
     <None Include="simple_material.geom">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="pbr_light.vert">
+    <None Include="pbr_texture.vert">
       <Filter>Pliki zasobów</Filter>
     </None>
-    <None Include="pbr_light.frag">
+    <None Include="pbr_texture.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="diff_spec_norm.vert">
@@ -113,6 +113,12 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="diffuse_only.frag">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="pbr_material.vert">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="pbr_material.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>

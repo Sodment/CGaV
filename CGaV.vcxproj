@@ -167,7 +167,9 @@
   <ItemGroup>
     <None Include="diffuse_only.frag" />
     <None Include="diffuse_only.vert" />
-    <None Include="pbr_light.frag" />
+    <None Include="pbr_material.frag" />
+    <None Include="pbr_material.vert" />
+    <None Include="pbr_texture.frag" />
     <None Include="post_processing.frag" />
     <None Include="diffuse_specular.frag" />
     <None Include="funnyCat.frag" />
@@ -177,7 +179,7 @@
     <None Include="simple_material.geom" />
     <None Include="funnyCat.vert" />
     <None Include="material.vert" />
-    <None Include="pbr_light.vert" />
+    <None Include="pbr_texture.vert" />
     <None Include="post_processing.vert" />
     <None Include="simple_material.vert" />
     <None Include="diff_spec_norm.vert" />

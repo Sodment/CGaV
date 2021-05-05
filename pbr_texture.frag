@@ -1,8 +1,6 @@
 #version 330
+#define LIGHT_COUNT 2
 out vec4 FragColor;
-in vec2 TexCoords;
-in vec3 WorldPos;
-in vec3 Normal;
 
 // material parameters
 uniform sampler2D texture_diffuse1;
@@ -17,28 +15,26 @@ in VS_OUT {
     vec2 TexCoords;
 } fs_in;
 
-// lights
-uniform vec3 lightPositions[2];
-uniform vec3 lightColors[2];
+struct Light{
+    vec3 position;
+    vec3 color;
+};
 
-uniform vec3 camPos;
+uniform Light lights[LIGHT_COUNT];
+uniform vec3 viewPos;
 
 const float PI = 3.14159265359;
-// ----------------------------------------------------------------------------
-// Easy trick to get tangent-normals to world-space to keep PBR code simplified.
-// Don't worry if you don't get what's going on; you generally want to do normal 
-// mapping the usual way for performance anways; I do plan make a note of this 
-// technique somewhere later in the normal mapping tutorial.
+
 vec3 getNormalFromMap()
 {
-    vec3 tangentNormal = texture(texture_normal1, TexCoords).xyz * 2.0 - 1.0;
+    vec3 tangentNormal = texture(texture_normal1, fs_in.TexCoords).xyz * 2.0 - 1.0;
 
-    vec3 Q1  = dFdx(WorldPos);
-    vec3 Q2  = dFdy(WorldPos);
-    vec2 st1 = dFdx(TexCoords);
-    vec2 st2 = dFdy(TexCoords);
+    vec3 Q1  = dFdx(fs_in.WorldPos);
+    vec3 Q2  = dFdy(fs_in.WorldPos);
+    vec2 st1 = dFdx(fs_in.TexCoords);
+    vec2 st2 = dFdy(fs_in.TexCoords);
 
-    vec3 N   = normalize(Normal);
+    vec3 N   = normalize(fs_in.Normal);
     vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
     vec3 B  = -normalize(cross(N, T));
     mat3 TBN = mat3(T, B, N);
@@ -88,13 +84,13 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 // ----------------------------------------------------------------------------
 void main()
 {		
-    vec3 albedo     = pow(texture(texture_diffuse1, TexCoords).rgb, vec3(2.2));
-    float metallic  = texture(texture_metallic1, TexCoords).r;
-    float roughness = texture(texture_roughness1, TexCoords).r;
-    float ao        = texture(texture_ao1, TexCoords).r;
+    vec3 albedo     = pow(texture(texture_diffuse1, fs_in.TexCoords).rgb, vec3(2.2));
+    float metallic  = texture(texture_metallic1, fs_in.TexCoords).r;
+    float roughness = texture(texture_roughness1, fs_in.TexCoords).r;
+    float ao        = texture(texture_ao1, fs_in.TexCoords).r;
 
     vec3 N = getNormalFromMap();
-    vec3 V = normalize(camPos - WorldPos);
+    vec3 V = normalize(viewPos - fs_in.WorldPos);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
@@ -103,14 +99,14 @@ void main()
 
     // reflectance equation
     vec3 Lo = vec3(0.0);
-    for(int i = 0; i < 4; ++i) 
+    for(int i = 0; i < LIGHT_COUNT; ++i) 
     {
         // calculate per-light radiance
-        vec3 L = normalize(lightPositions[i] - WorldPos);
+        vec3 L = normalize(lights[i].position - fs_in.WorldPos);
         vec3 H = normalize(V + L);
-        float distance = length(lightPositions[i] - WorldPos);
+        float distance = length(lights[i].position - fs_in.WorldPos);
         float attenuation = 1.0 / (distance * distance);
-        vec3 radiance = lightColors[i] * attenuation;
+        vec3 radiance = lights[i].color * attenuation;
 
         // Cook-Torrance BRDF
         float NDF = DistributionGGX(N, H, roughness);   
