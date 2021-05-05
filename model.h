@@ -34,7 +34,6 @@ public:
 
     // draws the model, and thus all its meshes
     void Draw(ShaderProgram& shader);
-
     void DrawMaterial(ShaderProgram& shader);
 
 private:
