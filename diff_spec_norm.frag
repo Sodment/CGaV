@@ -1,4 +1,5 @@
 #version 330 
+#define LIGHT_COUNT 2
 out vec4 FragColor;
 
 struct DirLight{
@@ -23,7 +24,7 @@ struct PointLight {
 in VS_OUT {
     vec3 FragPos;
     vec2 TexCoords;
-    PointLight TangentPointLight[2];
+    PointLight TangentPointLight[LIGHT_COUNT];
     DirLight TangentDirLight;
     vec3 TangentViewPos;
     vec3 TangentFragPos;
@@ -43,7 +44,7 @@ void main()
     vec3 viewDir = normalize(fs_in.TangentViewPos - fs_in.TangentFragPos);
    
    vec3 result = CalcDirLight(fs_in.TangentDirLight, norm, viewDir);
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < LIGHT_COUNT; i++)
         result += CalcPointLight(fs_in.TangentPointLight[i], norm, fs_in.TangentFragPos, viewDir);
     FragColor = vec4(result, 1.0);
 }

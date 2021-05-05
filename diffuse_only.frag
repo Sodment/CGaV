@@ -1,4 +1,5 @@
 #version 330
+#define LIGHT_COUNT 2
 out vec4 FragColor;
 
 struct DirLight {
@@ -23,7 +24,7 @@ struct PointLight {
 
 uniform sampler2D texture_diffuse1;
 uniform DirLight dirLight;
-uniform PointLight pointLights[2];
+uniform PointLight pointLights[LIGHT_COUNT];
 uniform vec3 viewPos;
 
 in VS_OUT {
@@ -41,7 +42,7 @@ void main()
     vec3 viewDir = normalize(viewPos - fs_in.FragPos);
    
    vec3 result = CalcDirLight(dirLight, norm, viewDir);
-    for(int i = 0; i < 2; i++)
+    for(int i = 0; i < LIGHT_COUNT; i++)
         result += CalcPointLight(pointLights[i], norm, fs_in.FragPos, viewDir);
     FragColor = vec4(result, 1.0);
 }
