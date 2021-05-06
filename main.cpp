@@ -193,7 +193,7 @@ void drawScene(GLFWwindow* window) {
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 	backpack->Draw(*spPBRtexture);
 
 	/*spNormalTexture->use();

@@ -84,7 +84,7 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 // ----------------------------------------------------------------------------
 void main()
 {		
-    vec3 albedo     = pow(texture(texture_diffuse1, fs_in.TexCoords).rgb, vec3(2.2));
+    vec3 albedo     = texture(texture_diffuse1, fs_in.TexCoords).rgb;
     float metallic  = texture(texture_metallic1, fs_in.TexCoords).r;
     float roughness = texture(texture_roughness1, fs_in.TexCoords).r;
     float ao        = texture(texture_ao1, fs_in.TexCoords).r;
@@ -144,7 +144,6 @@ void main()
     // HDR tonemapping
     color = color / (color + vec3(1.0));
     // gamma correct
-    color = pow(color, vec3(1.0/2.2)); 
-
+    color = pow(color, vec3(1.0/2.2));
     FragColor = vec4(color, 1.0);
 }

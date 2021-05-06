@@ -1,6 +1,8 @@
 #include "image.h"
 #include <stb_image.h>
 #include <iostream>
+
+
 unsigned int TextureFromFile(const char* path, const string& directory)
 {
 	string filename = string(path);
