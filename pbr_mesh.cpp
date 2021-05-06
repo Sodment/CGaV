@@ -1,6 +1,6 @@
 #include "pbr_mesh.h"
 
-PBRMesh::PBRMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat)
+PBRMesh::PBRMesh(std::vector<PBRVertex> vertices, std::vector<unsigned int> indices, std::vector<PBRTexture> textures, PBRMaterial mat)
 {
     this->vertices = vertices;
     this->indices = indices;
@@ -16,22 +16,25 @@ void PBRMesh::Draw(ShaderProgram& shader)
 {
     // bind appropriate textures
     unsigned int diffuseNr = 1;
-    unsigned int specularNr = 1;
+    unsigned int metalnessrNr = 1;
     unsigned int normalNr = 1;
-    unsigned int heightNr = 1;
+    unsigned int roughnessNr = 1;
+    unsigned int aoNr = 1;
     for (unsigned int i = 0; i < textures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
         std::string number;
         std::string name = textures[i].type;
-        if (name == "texture_albedo")
+        if (name == "texture_diffuse")
             number = std::to_string(diffuseNr++);
         else if (name == "texture_roughness")
-            number = std::to_string(specularNr++);
+            number = std::to_string(roughnessNr++);
         else if (name == "texture_metallic")
-            number = std::to_string(normalNr++);
+            number = std::to_string(metalnessrNr++);
         else if (name == "texture_ao")
-            number = std::to_string(heightNr++);
+            number = std::to_string(aoNr++);
+        else if (name == "texture_normal")
+            number = std::to_string(normalNr++);
 
         // now set the sampler to the correct texture unit
         glUniform1i(glGetUniformLocation(shader.shaderProgram, (name + number).c_str()), i);
@@ -78,7 +81,7 @@ void PBRMesh::setupPBRMesh()
     // A great thing about structs is that their memory layout is sequential for all its items.
     // The effect is that we can simply pass a pointer to the struct and it translates perfectly to a glm::vec3/2 array which
     // again translates to 3/2 floats which translates to a byte array.
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(PBRVertex), &vertices[0], GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
@@ -86,13 +89,13 @@ void PBRMesh::setupPBRMesh()
     // set the vertex attribute pointers
     // vertex Positions
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(PBRVertex), (void*)0);
     // vertex normals
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, Normal));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(PBRVertex), (void*)offsetof(PBRVertex, Normal));
     // vertex texture coords
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, TexCoords));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(PBRVertex), (void*)offsetof(PBRVertex, TexCoords));
 
     glBindVertexArray(0);
 }

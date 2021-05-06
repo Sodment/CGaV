@@ -8,19 +8,19 @@
 #include <vector>
 #include "shaderprogram.h"
 
-struct Vertex {
+struct PBRVertex {
     glm::vec3 Position;
     glm::vec3 Normal;
     glm::vec2 TexCoords;
 };
 
-struct Texture {
+struct PBRTexture {
     GLuint id;
     std::string type;
     std::string path;
 };
 
-struct Material {
+struct PBRMaterial {
     glm::vec3 Albedo;
     float Metallic;
     float Roughness;
@@ -29,12 +29,12 @@ struct Material {
 
 class PBRMesh {
 public:
-    std::vector<Vertex> vertices;
+    std::vector<PBRVertex> vertices;
     std::vector<GLuint> indices;
-    std::vector<Texture> textures;
-    Material material;
+    std::vector<PBRTexture> textures;
+    PBRMaterial material;
     GLuint VAO;
-    PBRMesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat);
+    PBRMesh(std::vector<PBRVertex> vertices, std::vector<unsigned int> indices, std::vector<PBRTexture> textures, PBRMaterial mat);
     void Draw(ShaderProgram& shader);
     void DrawMaterial(ShaderProgram& shader);
 

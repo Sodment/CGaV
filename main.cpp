@@ -14,6 +14,7 @@
 #include "shaderprogram.h"
 #include "camera.h"
 #include "model.h"
+#include "pbr_model.h"
 #include "skybox.h"
 #include "post_proccesing.h"
 #include "lights.h"
@@ -41,13 +42,12 @@ ShaderProgram* spSimpleMaterial;
 ShaderProgram* spScreenShader;
 ShaderProgram* spPBRmaterial;
 ShaderProgram* spPBRtexture;
-Model* ourModel;
-Model* ourModel2;
 SkyBox* skybox;
 PostProcessingQuad* postProcessingQuad;
 Model* modelBackpack;
 Model* modelShield;
 Model* modelTestCube;
+PBRModel* backpack;
 
 float kernel[9] = 
 {
@@ -141,10 +141,11 @@ void initModels()
 	modelBackpack = new Model("res/backpack/backpack.obj");
 	modelShield = new Model("res/shield/shield.obj");
 	modelTestCube = new Model("res/test_cube/cube.obj");
+	backpack = new PBRModel("res/pbr_backpack/backpack.obj");
 }
 
 
-//Procedura inicjuj¹ca
+
 void initOpenGLProgram(GLFWwindow* window) {
 	glClearColor(1, 0, 1, 1);
 	glDepthFunc(GL_LEQUAL);
@@ -177,6 +178,23 @@ void drawScene(GLFWwindow* window) {
 	glm::mat4 P = camera->GetPerspectiveMatrix(aspectRatio, near_clip, far_clip);
 
 	glm::mat4 M = glm::mat4(1.0f);
+
+	spPBRtexture->use();
+	glUniform3fv(spPBRtexture->u("viewPos"), 1, &camera->Position[0]);
+
+	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
+
+	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &pointLights[0].position[0]);
+	glUniform3fv(spPBRtexture->u("lights[0].color"), 1, &pointLights[0].diffuse[0]);
+	glUniform3fv(spPBRtexture->u("lights[1].position"), 1, &pointLights[1].position[0]);
+	glUniform3fv(spPBRtexture->u("lights[1].color"), 1, &pointLights[1].diffuse[0]);
+
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
+	backpack->Draw(*spPBRtexture);
 
 	/*spNormalTexture->use();
 
@@ -229,7 +247,7 @@ void drawScene(GLFWwindow* window) {
 
 	modelTestCube->DrawMaterial(*spMaterial);*/
 
-	spSimpleTexture->use();
+	/*spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 
 	SetDirLight(*spSimpleTexture, dirLight);
@@ -243,7 +261,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spSimpleTexture);
+	modelBackpack->Draw(*spSimpleTexture);*/
 
 
 	//Skybox drawing
