@@ -68,6 +68,11 @@ void PBRMesh::DrawMaterial(ShaderProgram& shader)
     glUniform1f(glGetUniformLocation(shader.shaderProgram, "material.roughness"), this->material.Roughness);
     glUniform1f(glGetUniformLocation(shader.shaderProgram, "material.metallic"), this->material.Metallic);
     glUniform1f(glGetUniformLocation(shader.shaderProgram, "material.ao"), this->material.Ao);
+    /*glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f);
+    glUniform3fv(glGetUniformLocation(shader.shaderProgram, "material.albedo"), 1, &color[0]);
+    glUniform1f(glGetUniformLocation(shader.shaderProgram, "material.roughness"), 0.3f);
+    glUniform1f(glGetUniformLocation(shader.shaderProgram, "material.metallic"), 0.0f);
+    glUniform1f(glGetUniformLocation(shader.shaderProgram, "material.ao"), 1.0f);*/
 
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
