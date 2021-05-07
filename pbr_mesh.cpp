@@ -26,15 +26,25 @@ void PBRMesh::Draw(ShaderProgram& shader)
         std::string number;
         std::string name = textures[i].type;
         if (name == "texture_diffuse")
+        {
             number = std::to_string(diffuseNr++);
+        }
         else if (name == "texture_roughness")
+        {
             number = std::to_string(roughnessNr++);
+        }
         else if (name == "texture_metallic")
+        {
             number = std::to_string(metalnessrNr++);
+        }
         else if (name == "texture_ao")
+        {
             number = std::to_string(aoNr++);
+        }
         else if (name == "texture_normal")
+        {
             number = std::to_string(normalNr++);
+        }
 
         // now set the sampler to the correct texture unit
         glUniform1i(glGetUniformLocation(shader.shaderProgram, (name + number).c_str()), i);

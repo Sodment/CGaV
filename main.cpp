@@ -63,7 +63,7 @@ void error_callback(int error, const char* description) {
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (action == GLFW_PRESS) 
 	{
-		if (key == GLFW_KEY_W) { direction.Forward = true; printf("W\n"); }
+		if (key == GLFW_KEY_W) { direction.Forward = true; }
 		if (key == GLFW_KEY_S) { direction.Backward = true; }
 		if (key == GLFW_KEY_A) { direction.Left = true; }
 		if (key == GLFW_KEY_D) { direction.Right = true; }
@@ -196,7 +196,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 	backpack->Draw(*spPBRtexture);
 
-	/*spNormalTexture->use();
+	spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
@@ -206,12 +206,12 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spNormalTexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spNormalTexture->u("V"), 1, false, glm::value_ptr(V));
 
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(0.0f, 10.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spNormalTexture);*/
+	modelBackpack->Draw(*spNormalTexture);
 
 	/*spDiffuseOnly->use();
 

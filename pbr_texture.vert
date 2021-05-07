@@ -19,5 +19,5 @@ void main()
     vs_out.WorldPos = vec3(M * vec4(aPos, 1.0));
     vs_out.Normal = mat3(M) * aNormal;   
 
-    gl_Position =  P * V * vec4(vs_out.WorldPos, 1.0);
+    gl_Position =   P * V * M * vec4(aPos, 1.0);
 }

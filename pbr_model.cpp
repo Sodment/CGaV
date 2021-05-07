@@ -131,6 +131,8 @@ PBRMesh PBRModel::processMesh(aiMesh* mesh, const aiScene* scene)
 	return PBRMesh(vertices, indices, textures, mat);
 }
 
+
+
 PBRMaterial PBRModel::loadMaterial(aiMaterial* mat) {
 	PBRMaterial material;
 	aiColor3D color(0.f, 0.f, 0.f);
