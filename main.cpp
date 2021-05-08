@@ -30,6 +30,7 @@ float lastFrame = 0.0f;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
+bool drunk = false;
 
 Camera* camera;
 ShaderProgram* spSkyBox;
@@ -69,6 +70,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		if (key == GLFW_KEY_D) { direction.Right = true; }
 		if (key == GLFW_KEY_SPACE) { direction.Up = true; }
 		if (key == GLFW_KEY_LEFT_SHIFT) { direction.Down = true; }
+		if (key == GLFW_KEY_F) { drunk = true; }
 
 	}
 
@@ -80,6 +82,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		if (key == GLFW_KEY_D) { direction.Right = false; }
 		if (key == GLFW_KEY_SPACE) { direction.Up = false; }
 		if (key == GLFW_KEY_LEFT_SHIFT) { direction.Down = false; }
+		if (key == GLFW_KEY_F) { drunk = false; }
 	}
 }
 
@@ -274,6 +277,32 @@ void drawScene(GLFWwindow* window) {
 	skybox->Draw(*spSkyBox);
 
 	glDepthMask(GL_TRUE);
+
+	if (drunk)
+	{
+		float kernel_corners = glm::abs(glm::sin(4 * deltaTime));
+		kernel[0] = kernel_corners;
+		kernel[1] = kernel_corners;
+		kernel[2] = kernel_corners;
+		kernel[3] = kernel_corners;
+		kernel[4] = kernel_corners;
+		kernel[5] = kernel_corners;
+		kernel[6] = kernel_corners;
+		kernel[7] = kernel_corners;
+		kernel[8] = kernel_corners;
+	}
+	else
+	{
+		kernel[0] = 0;
+		kernel[1] = 0;
+		kernel[2] = 0;
+		kernel[3] = 0;
+		kernel[4] = 1;
+		kernel[5] = 0;
+		kernel[6] = 0;
+		kernel[7] = 0;
+		kernel[8] = 0;
+	}
 
 
 	//Post-processing
