@@ -10,7 +10,7 @@ uniform sampler2D texture_roughness1;
 uniform sampler2D texture_ao1;
 
 in VS_OUT {
-    vec3 WorldPos;
+    vec3 FragPos;
     vec3 Normal;
     vec2 TexCoords;
 } fs_in;
@@ -29,8 +29,8 @@ vec3 getNormalFromMap()
 {
     vec3 tangentNormal = texture(texture_normal1, fs_in.TexCoords).xyz * 2.0 - 1.0;
 
-    vec3 Q1  = dFdx(fs_in.WorldPos);
-    vec3 Q2  = dFdy(fs_in.WorldPos);
+    vec3 Q1  = dFdx(fs_in.FragPos);
+    vec3 Q2  = dFdy(fs_in.FragPos);
     vec2 st1 = dFdx(fs_in.TexCoords);
     vec2 st2 = dFdy(fs_in.TexCoords);
 
@@ -90,7 +90,7 @@ void main()
     float ao        = texture(texture_ao1, fs_in.TexCoords).r;
 
     vec3 N = getNormalFromMap();
-    vec3 V = normalize(viewPos - fs_in.WorldPos);
+    vec3 V = normalize(viewPos - fs_in.FragPos);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
@@ -102,9 +102,9 @@ void main()
     for(int i = 0; i < LIGHT_COUNT; ++i) 
     {
         // calculate per-light radiance
-        vec3 L = normalize(lights[i].position - fs_in.WorldPos);
+        vec3 L = normalize(lights[i].position - fs_in.FragPos);
         vec3 H = normalize(V + L);
-        float distance = length(lights[i].position - fs_in.WorldPos);
+        float distance = length(lights[i].position - fs_in.FragPos);
         float attenuation = 1.0 / (distance * distance);
         vec3 radiance = lights[i].color * attenuation;
 

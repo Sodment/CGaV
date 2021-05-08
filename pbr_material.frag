@@ -15,7 +15,7 @@ struct Light{
 };
 
 in VS_OUT {
-    vec3 WorldPos;
+    vec3 FragPos;
     vec3 Normal;
     vec2 TexCoords;
 } fs_in;
@@ -69,7 +69,7 @@ vec3 fresnelSchlick(float cosTheta, vec3 F0)
 void main()
 {		
     vec3 N = normalize(fs_in.Normal);
-    vec3 V = normalize(viewPos - fs_in.WorldPos);
+    vec3 V = normalize(viewPos - fs_in.FragPos);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
@@ -81,9 +81,9 @@ void main()
     for(int i = 0; i < LIGHT_COUNT; ++i) 
     {
         // calculate per-light radiance
-        vec3 L = normalize(lights[i].position - fs_in.WorldPos);
+        vec3 L = normalize(lights[i].position - fs_in.FragPos);
         vec3 H = normalize(V + L);
-        float distance = length(lights[i].position - fs_in.WorldPos);
+        float distance = length(lights[i].position - fs_in.FragPos);
         float attenuation = 1.0 / (distance * distance);
         vec3 radiance = lights[i].color * attenuation;
 

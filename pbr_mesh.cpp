@@ -6,7 +6,6 @@ PBRMesh::PBRMesh(std::vector<PBRVertex> vertices, std::vector<unsigned int> indi
     this->indices = indices;
     this->textures = textures;
     this->material = mat;
-
     // now that we have all the required data, set the vertex buffers and its attribute pointers.
     setupPBRMesh();
 }

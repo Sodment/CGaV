@@ -144,7 +144,7 @@ void initModels()
 	modelBackpack = new Model("res/backpack/backpack.obj");
 	modelShield = new Model("res/shield/shield.obj");
 	modelTestCube = new Model("res/test_cube/cube.obj");
-	backpack = new PBRModel("res/pbr_backpack/backpack.obj");
+	backpack = new PBRModel("res/pbr_backpack/sphere.obj");
 }
 
 
@@ -188,7 +188,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
 
-	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &pointLights[0].position[0]);
+	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
 	glUniform3fv(spPBRtexture->u("lights[0].color"), 1, &pointLights[0].diffuse[0]);
 	glUniform3fv(spPBRtexture->u("lights[1].position"), 1, &pointLights[1].position[0]);
 	glUniform3fv(spPBRtexture->u("lights[1].color"), 1, &pointLights[1].diffuse[0]);
@@ -210,6 +210,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spNormalTexture->u("V"), 1, false, glm::value_ptr(V));
 
 	M = glm::translate(M, glm::vec3(0.0f, 10.0f, 0.0f));
+	M = glm::rotate(M, PI, glm::vec3(0.0f, 1.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
