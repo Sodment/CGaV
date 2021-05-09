@@ -49,7 +49,7 @@ Model* modelBackpack;
 Model* modelShield;
 PBRModel* pbrmodelTestCube;
 PBRModel* pbrmodelTestSphere;
-PBRModel* pbrmodelbackpack;
+PBRModel* pbrmodelBackpack;
 
 float kernel[9] = 
 {
@@ -146,7 +146,7 @@ void initModels()
 	modelShield = new Model("res/shield/shield.obj");
 	pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
 	pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
-	pbrmodelbackpack = new PBRModel("res/pbr_backpack/backpack.obj");
+	pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
 }
 
 
@@ -190,7 +190,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
 
-	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
+	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &pointLights[0].position[0]);
 	glUniform3fv(spPBRtexture->u("lights[0].color"), 1, &pointLights[0].diffuse[0]);
 	glUniform3fv(spPBRtexture->u("lights[1].position"), 1, &pointLights[1].position[0]);
 	glUniform3fv(spPBRtexture->u("lights[1].color"), 1, &pointLights[1].diffuse[0]);
@@ -199,9 +199,9 @@ void drawScene(GLFWwindow* window) {
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-	pbrmodelTestCube->Draw(*spPBRtexture);
+	pbrmodelBackpack->Draw(*spPBRtexture);
 
-	/*spNormalTexture->use();
+	spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
@@ -211,13 +211,12 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spNormalTexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spNormalTexture->u("V"), 1, false, glm::value_ptr(V));
 
-	M = glm::translate(M, glm::vec3(0.0f, 10.0f, 0.0f));
-	M = glm::rotate(M, PI, glm::vec3(0.0f, 1.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(5.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spNormalTexture);*/
+	modelBackpack->Draw(*spNormalTexture);
 
 	/*spDiffuseOnly->use();
 
@@ -253,7 +252,7 @@ void drawScene(GLFWwindow* window) {
 
 	modelTestCube->DrawMaterial(*spMaterial);*/
 
-	/*spSimpleTexture->use();
+	spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 
 	SetDirLight(*spSimpleTexture, dirLight);
@@ -262,12 +261,12 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
 
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(-10.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spSimpleTexture);*/
+	modelBackpack->Draw(*spSimpleTexture);
 
 
 	//Skybox drawing
