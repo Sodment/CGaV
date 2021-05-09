@@ -11,8 +11,8 @@ Ni 1.450000
 d 0.000000
 illum 2
 map_Kd backpack_diffuse.jpg
-map_Bump backpack_normal.jpg
+map_Bump backpack_normal.png
 map_Ks ao.jpg
-map_Ka backpack_rougness.jpg
+map_Ka backpack_roughness.jpg
 map_d stone-block-wall_metallic.png
 

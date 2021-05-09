@@ -18,6 +18,9 @@ in VS_OUT {
 struct Light{
     vec3 position;
     vec3 color;
+    float constant;
+    float linear;
+    float quadratic;  
 };
 
 uniform Light lights[LIGHT_COUNT];
@@ -105,7 +108,9 @@ void main()
         vec3 L = normalize(lights[i].position - fs_in.FragPos);
         vec3 H = normalize(V + L);
         float distance = length(lights[i].position - fs_in.FragPos);
-        float attenuation = 1.0 / (distance * distance);
+        float attenuation = 1.0 / (lights[i].constant + lights[i].linear * distance + 
+  			     lights[i].quadratic * (distance * distance));
+        //float attenuation = 1.0 / (distance * distance);
         vec3 radiance = lights[i].color * attenuation;
 
         // Cook-Torrance BRDF

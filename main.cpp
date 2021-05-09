@@ -192,8 +192,14 @@ void drawScene(GLFWwindow* window) {
 
 	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &pointLights[0].position[0]);
 	glUniform3fv(spPBRtexture->u("lights[0].color"), 1, &pointLights[0].diffuse[0]);
+	glUniform1f(spPBRtexture->u("lights[0].constant"), pointLights[0].constant);
+	glUniform1f(spPBRtexture->u("lights[0].linear"), pointLights[0].linear);
+	glUniform1f(spPBRtexture->u("lights[0].quadratic"), pointLights[0].quadratic);
 	glUniform3fv(spPBRtexture->u("lights[1].position"), 1, &pointLights[1].position[0]);
 	glUniform3fv(spPBRtexture->u("lights[1].color"), 1, &pointLights[1].diffuse[0]);
+	glUniform1f(spPBRtexture->u("lights[1].constant"), pointLights[1].constant);
+	glUniform1f(spPBRtexture->u("lights[1].linear"), pointLights[1].linear);
+	glUniform1f(spPBRtexture->u("lights[1].quadratic"), pointLights[1].quadratic);
 
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
