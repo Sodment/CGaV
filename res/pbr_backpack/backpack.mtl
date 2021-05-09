@@ -14,5 +14,5 @@ map_Kd backpack_diffuse.jpg
 map_Bump backpack_normal.png
 map_Ks ao.jpg
 map_Ka backpack_roughness.jpg
-map_d stone-block-wall_metallic.png
+map_d backpack_specular.jpg
 

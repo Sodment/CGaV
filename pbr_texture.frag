@@ -110,7 +110,6 @@ void main()
         float distance = length(lights[i].position - fs_in.FragPos);
         float attenuation = 1.0 / (lights[i].constant + lights[i].linear * distance + 
   			     lights[i].quadratic * (distance * distance));
-        //float attenuation = 1.0 / (distance * distance);
         vec3 radiance = lights[i].color * attenuation;
 
         // Cook-Torrance BRDF
@@ -119,8 +118,8 @@ void main()
         vec3 F    = fresnelSchlick(max(dot(H, V), 0.0), F0);
            
         vec3 nominator    = NDF * G * F; 
-        float denominator = 4 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0) + 0.001; // 0.001 to prevent divide by zero.
-        vec3 specular = nominator / denominator;
+        float denominator = 4.0 * max(dot(N, V), 0.0) * max(dot(N, L), 0.0);
+        vec3 specular = nominator / max(denominator, 0.001);
         
         // kS is equal to Fresnel
         vec3 kS = F;
@@ -142,7 +141,7 @@ void main()
     
     // ambient lighting (note that the next IBL tutorial will replace 
     // this ambient lighting with environment lighting).
-    vec3 ambient = vec3(0.07) * albedo * ao;
+    vec3 ambient = vec3(0.05) * albedo * ao;
     
     vec3 color = ambient + Lo;
 
