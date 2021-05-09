@@ -154,7 +154,7 @@ void initModels()
 void initOpenGLProgram(GLFWwindow* window) {
 	glClearColor(1, 0, 1, 1);
 	glDepthFunc(GL_LEQUAL);
-	glEnable(GL_FRAMEBUFFER_SRGB);
+	//glEnable(GL_FRAMEBUFFER_SRGB);
 	glEnable(GL_MULTISAMPLE);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
@@ -190,7 +190,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
 
-	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &pointLights[0].position[0]);
+	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
 	glUniform3fv(spPBRtexture->u("lights[0].color"), 1, &pointLights[0].diffuse[0]);
 	glUniform1f(spPBRtexture->u("lights[0].constant"), pointLights[0].constant);
 	glUniform1f(spPBRtexture->u("lights[0].linear"), pointLights[0].linear);
