@@ -47,8 +47,9 @@ SkyBox* skybox;
 PostProcessingQuad* postProcessingQuad;
 Model* modelBackpack;
 Model* modelShield;
-Model* modelTestCube;
-PBRModel* backpack;
+PBRModel* pbrmodelTestCube;
+PBRModel* pbrmodelTestSphere;
+PBRModel* pbrmodelbackpack;
 
 float kernel[9] = 
 {
@@ -143,8 +144,9 @@ void initModels()
 {
 	modelBackpack = new Model("res/backpack/backpack.obj");
 	modelShield = new Model("res/shield/shield.obj");
-	modelTestCube = new Model("res/test_cube/cube.obj");
-	backpack = new PBRModel("res/pbr_backpack/sphere.obj");
+	pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
+	pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
+	pbrmodelbackpack = new PBRModel("res/pbr_backpack/backpack.obj");
 }
 
 
@@ -197,9 +199,9 @@ void drawScene(GLFWwindow* window) {
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-	backpack->Draw(*spPBRtexture);
+	pbrmodelTestCube->Draw(*spPBRtexture);
 
-	spNormalTexture->use();
+	/*spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
@@ -215,7 +217,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spNormalTexture);
+	modelBackpack->Draw(*spNormalTexture);*/
 
 	/*spDiffuseOnly->use();
 
