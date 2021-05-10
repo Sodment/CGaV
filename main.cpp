@@ -50,6 +50,7 @@ Model* modelShield;
 PBRModel* pbrmodelTestCube;
 PBRModel* pbrmodelTestSphere;
 PBRModel* pbrmodelBackpack;
+PBRModel* pbrmodelRadioStation;
 
 float kernel[9] = 
 {
@@ -147,6 +148,7 @@ void initModels()
 	pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
 	pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
 	pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
+	pbrmodelRadioStation = new PBRModel("res/radio_station/model.obj");
 }
 
 
@@ -205,9 +207,9 @@ void drawScene(GLFWwindow* window) {
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-	pbrmodelBackpack->Draw(*spPBRtexture);
+	pbrmodelRadioStation->Draw(*spPBRtexture);
 
-	spNormalTexture->use();
+	/*spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
 
@@ -222,7 +224,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spNormalTexture);
+	modelBackpack->Draw(*spNormalTexture);*/
 
 	/*spDiffuseOnly->use();
 
@@ -258,7 +260,7 @@ void drawScene(GLFWwindow* window) {
 
 	modelTestCube->DrawMaterial(*spMaterial);*/
 
-	spSimpleTexture->use();
+	/*spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 
 	SetDirLight(*spSimpleTexture, dirLight);
@@ -272,7 +274,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spSimpleTexture);
+	modelBackpack->Draw(*spSimpleTexture);*/
 
 
 	//Skybox drawing
