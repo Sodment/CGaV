@@ -133,7 +133,7 @@ void initShaderPrograms()
 	spPBRtexture = new ShaderProgram("pbr_texture.vert", NULL, "pbr_texture.frag");
 
 	//For materials
-	spMaterial = new ShaderProgram("material.vert", NULL, "material.frag"); //has multiple lights
+	spMaterial = new ShaderProgram("material.vert", NULL, "material.frag");
 	spSimpleMaterial = new ShaderProgram("simple_material.vert", "simple_material.geom", "simple_material.frag"); //is only for seeing the model drawn with diffuse
 	spPBRmaterial = new ShaderProgram("pbr_material.vert", NULL, "pbr_material.frag");
 
@@ -192,16 +192,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
 
-	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
-	glUniform3fv(spPBRtexture->u("lights[0].color"), 1, &pointLights[0].diffuse[0]);
-	glUniform1f(spPBRtexture->u("lights[0].constant"), pointLights[0].constant);
-	glUniform1f(spPBRtexture->u("lights[0].linear"), pointLights[0].linear);
-	glUniform1f(spPBRtexture->u("lights[0].quadratic"), pointLights[0].quadratic);
-	glUniform3fv(spPBRtexture->u("lights[1].position"), 1, &pointLights[1].position[0]);
-	glUniform3fv(spPBRtexture->u("lights[1].color"), 1, &pointLights[1].diffuse[0]);
-	glUniform1f(spPBRtexture->u("lights[1].constant"), pointLights[1].constant);
-	glUniform1f(spPBRtexture->u("lights[1].linear"), pointLights[1].linear);
-	glUniform1f(spPBRtexture->u("lights[1].quadratic"), pointLights[1].quadratic);
+	SetMulPBRLight(*spPBRtexture, pointLights, 2);
 
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));

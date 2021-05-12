@@ -38,5 +38,6 @@ extern PointLight pointLights[2];
 void SetPointLight(ShaderProgram& sp, PointLight light, int index);
 void SetMulPointLight(ShaderProgram& sp, PointLight lights[], int size);
 void SetDirLight(ShaderProgram& sp, DirLight light);
-
+void SetPBRLight(ShaderProgram& sp, PointLight light, int index);
+void SetMulPBRLight(ShaderProgram& sp, PointLight lights[], int size);
 #endif
