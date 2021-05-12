@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="g_buffer_specular.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="lights.cpp" />
     <ClCompile Include="main.cpp" />
@@ -160,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="g_buffer_specular.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="lights.h" />
     <ClInclude Include="mesh.h" />
