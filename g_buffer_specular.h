@@ -21,5 +21,5 @@ private:
 	void SetupPositionColorBuffer(const int SCR_WIDTH, const int SCR_HEIGHT);
 	void SetupNormalColorBuffer(const int SCR_WIDTH, const int SCR_HEIGHT);
 	void SetupColorSpecularBuffer(const int SCR_WIDTH, const int SCR_HEIGHT);
-	void SetupDepthBuffer();
+	void SetupDepthBuffer(const int SCR_WIDTH, const int SCR_HEIGHT);
 };
