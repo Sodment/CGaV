@@ -145,6 +145,15 @@
     <None Include="pbr_material.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="df_diff_spec_geom_pass.vert">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="df_diff_spec_light_pass.vert">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="df_diff_spec_light_pass.frag">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="skybox.vert">
@@ -157,6 +166,9 @@
       <Filter>Pliki zasobów</Filter>
     </Text>
     <Text Include="simple_material.frag">
+      <Filter>Pliki zasobów</Filter>
+    </Text>
+    <Text Include="df_diff_spec_geom_pass.frag">
       <Filter>Pliki zasobów</Filter>
     </Text>
   </ItemGroup>

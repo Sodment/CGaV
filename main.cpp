@@ -261,7 +261,34 @@ void drawScene(GLFWwindow* window) {
 
 	modelTestCube->DrawMaterial(*spMaterial);*/
 
-	spSimpleTexture->use();
+	spDeferredSpecularGeomPass->use();
+	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("V"), 1, false, glm::value_ptr(V));
+
+	M = glm::translate(M, glm::vec3(-10.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("M"), 1, false, glm::value_ptr(M));
+
+	modelBackpack->Draw(*spDeferredSpecularGeomPass);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+	spDeferredSpecularLightPass->use();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, gBufferSpecular->gPosition);
+	glActiveTexture(GL_TEXTURE1);
+	glBindTexture(GL_TEXTURE_2D, gBufferSpecular->gNormal);
+	glActiveTexture(GL_TEXTURE2);
+	glBindTexture(GL_TEXTURE_2D, gBufferSpecular->gAlbedoSpec);
+
+	SetMulPointLight(*spDeferredSpecularLightPass, pointLights, 2);
+
+	glUniform3fv(spDeferredSpecularLightPass->u("viewPos"), 1, &camera->Position[0]);
+
+	/*spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 
 	SetDirLight(*spSimpleTexture, dirLight);
@@ -275,7 +302,7 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
 
-	modelBackpack->Draw(*spSimpleTexture);
+	modelBackpack->Draw(*spSimpleTexture);*/
 
 
 	//Skybox drawing

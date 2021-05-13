@@ -173,6 +173,9 @@
     <ClInclude Include="skybox.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="df_diff_spec_geom_pass.vert" />
+    <None Include="df_diff_spec_light_pass.frag" />
+    <None Include="df_diff_spec_light_pass.vert" />
     <None Include="diffuse_only.frag" />
     <None Include="diffuse_only.vert" />
     <None Include="pbr_material.frag" />
@@ -193,6 +196,7 @@
     <None Include="diff_spec_norm.vert" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="df_diff_spec_geom_pass.frag" />
     <Text Include="simple_material.frag" />
     <Text Include="skybox.frag" />
     <Text Include="diffuse_specular.vert" />

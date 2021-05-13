@@ -8,11 +8,11 @@ uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
 
 struct Light {
-    vec3 Position;
-    vec3 Color;
+    vec3 position;
+    vec3 diffuse;
     
-    float Linear;
-    float Quadratic;
+    float linear;
+    float quadratic;
 };
 const int NR_LIGHTS = 2;
 uniform Light lights[NR_LIGHTS];
@@ -32,15 +32,15 @@ void main()
     for(int i = 0; i < NR_LIGHTS; ++i)
     {
         // diffuse
-        vec3 lightDir = normalize(lights[i].Position - FragPos);
-        vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * lights[i].Color;
+        vec3 lightDir = normalize(lights[i].position - FragPos);
+        vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * lights[i].diffuse;
         // specular
         vec3 halfwayDir = normalize(lightDir + viewDir);  
         float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
-        vec3 specular = lights[i].Color * spec * Specular;
+        vec3 specular = lights[i].diffuse * spec * Specular;
         // attenuation
-        float distance = length(lights[i].Position - FragPos);
-        float attenuation = 1.0 / (1.0 + lights[i].Linear * distance + lights[i].Quadratic * distance * distance);
+        float distance = length(lights[i].position - FragPos);
+        float attenuation = 1.0 / (1.0 + lights[i].linear * distance + lights[i].quadratic * distance * distance);
         diffuse *= attenuation;
         specular *= attenuation;
         lighting += diffuse + specular;        
