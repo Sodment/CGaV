@@ -152,11 +152,11 @@ void initShaderPrograms()
 void initModels()
 {
 	modelBackpack = new Model("res/backpack/backpack.obj");
-	modelShield = new Model("res/shield/shield.obj");
-	pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
-	pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
-	pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
-	pbrmodelRadioStation = new PBRModel("res/radio_station/model.obj");
+	//modelShield = new Model("res/shield/shield.obj");
+	//pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
+	//pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
+	//pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
+	//pbrmodelRadioStation = new PBRModel("res/radio_station/model.obj");
 }
 
 
@@ -186,8 +186,8 @@ void freeOpenGLProgram(GLFWwindow* window) {
 void drawScene(GLFWwindow* window) {
 	//Binding post processing framebuffer
 	//glBindFramebuffer(GL_FRAMEBUFFER, postProcessingQuad->framebuffer);
-	glBindFramebuffer(GL_FRAMEBUFFER, gBufferSpecular->gBuffer);
 	glEnable(GL_DEPTH_TEST);
+	glBindFramebuffer(GL_FRAMEBUFFER, gBufferSpecular->gBuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V = camera->GetViewMatrix();
@@ -287,6 +287,12 @@ void drawScene(GLFWwindow* window) {
 	SetMulPointLight(*spDeferredSpecularLightPass, pointLights, 2);
 
 	glUniform3fv(spDeferredSpecularLightPass->u("viewPos"), 1, &camera->Position[0]);
+	gBufferSpecular->Draw();
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBufferSpecular->gBuffer);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+	glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 
 	/*spSimpleTexture->use();
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);

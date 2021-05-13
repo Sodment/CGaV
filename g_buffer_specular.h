@@ -8,13 +8,17 @@
 #include <iostream>
 #include "shaderprogram.h"
 
+extern float dfQuadVerticies[];
+
 class GBufferSpecular
 {
 public:
 	GLuint gBuffer;
 	GLuint gPosition, gNormal, gAlbedoSpec;
 	GLuint rboDepth;
+	GLuint quadVAO, quadVBO;
 	GBufferSpecular(unsigned int width, unsigned int height);
+	void Draw();
 private:
 	GLuint attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
 	void ConfigureGBuffer();
@@ -22,4 +26,5 @@ private:
 	void SetupNormalColorBuffer(const int SCR_WIDTH, const int SCR_HEIGHT);
 	void SetupColorSpecularBuffer(const int SCR_WIDTH, const int SCR_HEIGHT);
 	void SetupDepthBuffer(const int SCR_WIDTH, const int SCR_HEIGHT);
+	void SetupQuad();
 };
