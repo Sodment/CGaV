@@ -155,7 +155,7 @@ void initModels()
 	//modelShield = new Model("res/shield/shield.obj");
 	//pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
 	//pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
-	//pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
+	pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
 	//pbrmodelRadioStation = new PBRModel("res/radio_station/model.obj");
 }
 
@@ -165,7 +165,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glClearColor(1, 0, 1, 1);
 	glDepthFunc(GL_LEQUAL);
 	//glEnable(GL_FRAMEBUFFER_SRGB);
-	glEnable(GL_MULTISAMPLE);
+	//glEnable(GL_MULTISAMPLE);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
 	glfwSetKeyCallback(window, keyCallback);
@@ -185,9 +185,9 @@ void freeOpenGLProgram(GLFWwindow* window) {
 
 void drawScene(GLFWwindow* window) {
 	//Binding post processing framebuffer
-	//glBindFramebuffer(GL_FRAMEBUFFER, postProcessingQuad->framebuffer);
-	glEnable(GL_DEPTH_TEST);
+	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingQuad->framebuffer);
 	glBindFramebuffer(GL_FRAMEBUFFER, gBufferSpecular->gBuffer);
+	glEnable(GL_DEPTH_TEST);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V = camera->GetViewMatrix();
@@ -196,7 +196,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	/*spPBRtexture->use();
+	spPBRtexture->use();
 	glUniform3fv(spPBRtexture->u("viewPos"), 1, &camera->Position[0]);
 
 
@@ -204,12 +204,13 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
 
 	SetMulPBRLight(*spPBRtexture, pointLights, 2);
+	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
 
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-	pbrmodelRadioStation->Draw(*spPBRtexture);*/
+	pbrmodelBackpack->Draw(*spPBRtexture);
 	/*spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
@@ -261,7 +262,7 @@ void drawScene(GLFWwindow* window) {
 
 	modelTestCube->DrawMaterial(*spMaterial);*/
 
-	spDeferredSpecularGeomPass->use();
+	/*spDeferredSpecularGeomPass->use();
 	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("V"), 1, false, glm::value_ptr(V));
 
@@ -291,7 +292,7 @@ void drawScene(GLFWwindow* window) {
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBufferSpecular->gBuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
 
 
 	/*spSimpleTexture->use();
@@ -322,42 +323,42 @@ void drawScene(GLFWwindow* window) {
 
 	glDepthMask(GL_TRUE);
 
-	//if (drunk)
-	//{
-	//	float kernel_corners = glm::abs(glm::sin(4 * deltaTime));
-	//	kernel[0] = kernel_corners;
-	//	kernel[1] = kernel_corners;
-	//	kernel[2] = kernel_corners;
-	//	kernel[3] = kernel_corners;
-	//	kernel[4] = kernel_corners;
-	//	kernel[5] = kernel_corners;
-	//	kernel[6] = kernel_corners;
-	//	kernel[7] = kernel_corners;
-	//	kernel[8] = kernel_corners;
-	//}
-	//else
-	//{
-	//	kernel[0] = 0;
-	//	kernel[1] = 0;
-	//	kernel[2] = 0;
-	//	kernel[3] = 0;
-	//	kernel[4] = 1;
-	//	kernel[5] = 0;
-	//	kernel[6] = 0;
-	//	kernel[7] = 0;
-	//	kernel[8] = 0;
-	//}
+	if (drunk)
+	{
+		float kernel_corners = glm::abs(glm::sin(4 * deltaTime));
+		kernel[0] = kernel_corners;
+		kernel[1] = kernel_corners;
+		kernel[2] = kernel_corners;
+		kernel[3] = kernel_corners;
+		kernel[4] = kernel_corners;
+		kernel[5] = kernel_corners;
+		kernel[6] = kernel_corners;
+		kernel[7] = kernel_corners;
+		kernel[8] = kernel_corners;
+	}
+	else
+	{
+		kernel[0] = 0;
+		kernel[1] = 0;
+		kernel[2] = 0;
+		kernel[3] = 0;
+		kernel[4] = 1;
+		kernel[5] = 0;
+		kernel[6] = 0;
+		kernel[7] = 0;
+		kernel[8] = 0;
+	}
 
 
-	////Post-processing
-	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	//glDisable(GL_DEPTH_TEST);
-	//glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-	//glClear(GL_COLOR_BUFFER_BIT);
+	//Post-processing
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glDisable(GL_DEPTH_TEST);
+	glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	//spScreenShader->use();
-	//SetPostProccesingKernel(*spScreenShader, kernel);
-	//postProcessingQuad->Draw(*spScreenShader);
+	spScreenShader->use();
+	SetPostProccesingKernel(*spScreenShader, kernel);
+	postProcessingQuad->Draw(*spScreenShader);
 
 	glfwSwapBuffers(window);
 }
