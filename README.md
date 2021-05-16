@@ -1,5 +1,5 @@
 # CGaV
-This project started as a project for my Coputer graphics and visualization classes (hence the name) but i enjoyed it so much that i started to wokr on diffrent things and mayybe someday this will be a full fledged mini game engine
+This project started as a project for my Coputer Graphics and Visualization Classes (hence the name) but I enjoyed it so much that I started to work on diffrent things and maybe someday this will be a full fledged mini game engine
 
 # Current features:
  - 3D Rendering using specular workflow (blinn-phong lighting, material/diffuse + specular + normal map handling, loading and drawing complex models)
