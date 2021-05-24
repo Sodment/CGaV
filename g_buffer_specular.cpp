@@ -12,17 +12,17 @@ float dfQuadVerticies[] =
 GBufferSpecular::GBufferSpecular(unsigned int width, unsigned int height)
 {
     SetupQuad();
-    std::cout << "QUAD SETUP COMPLETE" << std::endl;
+    //std::cout << "QUAD SETUP COMPLETE" << std::endl;
     SetupPositionColorBuffer(width, height);
-    std::cout << "POSITIONCOLOR COMPLETE" << std::endl;
+    //std::cout << "POSITIONCOLOR COMPLETE" << std::endl;
     SetupNormalColorBuffer(width, height);
-    std::cout << "NORMALCOLOR COMPLETE" << std::endl;
+    //std::cout << "NORMALCOLOR COMPLETE" << std::endl;
     SetupColorSpecularBuffer(width, height);
-    std::cout << "COLORSPECULAR BUFFER SETUP COMPLETE" << std::endl;
+    //std::cout << "COLORSPECULAR BUFFER SETUP COMPLETE" << std::endl;
     glDrawBuffers(3, attachments);
-    std::cout << "ATTACHMENTS SETUP COMPLETE" << std::endl;
+    //std::cout << "ATTACHMENTS SETUP COMPLETE" << std::endl;
     SetupDepthBuffer(width, height);
-    std::cout << "DEPTH BUFFER SETUP COMPLETE" << std::endl;
+   // std::cout << "DEPTH BUFFER SETUP COMPLETE" << std::endl;
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -86,7 +86,7 @@ void GBufferSpecular::SetupQuad()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 }
 
-void GBufferSpecular::Draw()
+void GBufferSpecular::Draw() 
 {
     glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

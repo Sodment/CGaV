@@ -154,6 +154,9 @@
     <None Include="df_diff_spec_light_pass.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="water.frag">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="skybox.vert">

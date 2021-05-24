@@ -11,19 +11,6 @@ float quadVertices[] =
         1.0f,  1.0f,  1.0f, 1.0f
 };
 
-void SetPostProccesingKernel(ShaderProgram& sp, float k[9])
-{
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[0]"), k[0]);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[1]"), k[1]);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[2]"), k[2]);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[3]"), k[3]);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[4]"), k[4]);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[5]"), k[5]);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[6]"), k[6]);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[7]"), k[7]);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, "kernel[8]"), k[8]);
-}
-
 PostProcessingQuad::PostProcessingQuad(unsigned int width, unsigned int height)
 {
     SetupQuad();

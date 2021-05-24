@@ -59,11 +59,23 @@ PBRModel* pbrmodelRadioStation;
 GBufferSpecular* gBufferSpecular;
 GLuint disortionMap;
 
-float kernel[9] = 
-{
-	0.0f, 0.0f, 0.0f,
-	0.0f, 1.0f, 0.0f,
-	0.0f, 0.0f, 0.0f
+float offset = 1.0f / 300.0f;
+float offsets[9][2] = {
+	{ -offset,  offset  },  // top-left
+	{  0.0f,    offset  },  // top-center
+	{  offset,  offset  },  // top-right
+	{ -offset,  0.0f    },  // center-left
+	{  0.0f,    0.0f    },  // center-center
+	{  offset,  0.0f    },  // center - right
+	{ -offset, -offset  },  // bottom-left
+	{  0.0f,   -offset  },  // bottom-center
+	{  offset, -offset  }   // bottom-right    
+};
+
+float blur_kernel[9] = {
+		1.0f / 16.0f, 2.0f / 16.0f, 1.0f / 16.0f,
+		2.0f / 16.0f, 4.0f / 16.0f, 2.0f / 16.0f,
+		1.0f / 16.0f, 2.0f / 16.0f, 1.0f / 16.0f
 };
 
 void error_callback(int error, const char* description) {
@@ -168,7 +180,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glClearColor(0, 0, 0, 1);
 	glDepthFunc(GL_LEQUAL);
 	//glEnable(GL_FRAMEBUFFER_SRGB);
-	//glEnable(GL_MULTISAMPLE);
+	glEnable(GL_MULTISAMPLE);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
 	glfwSetKeyCallback(window, keyCallback);
@@ -337,44 +349,20 @@ void drawScene(GLFWwindow* window) {
 
 	glDepthMask(GL_TRUE);
 
-	if (drunk)
-	{
-		kernel[0] = 0;
-		kernel[1] = 0;
-		kernel[2] = 0;
-		kernel[3] = 0;
-		kernel[4] = 1;
-		kernel[5] = 0;
-		kernel[6] = 0;
-		kernel[7] = 0;
-		kernel[8] = 0;
-	}
-	else
-	{
-		kernel[0] = 0;
-		kernel[1] = 0;
-		kernel[2] = 0;
-		kernel[3] = 0;
-		kernel[4] = 1;
-		kernel[5] = 0;
-		kernel[6] = 0;
-		kernel[7] = 0;
-		kernel[8] = 0;
-	}
-
-
 	//Post-processing
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDisable(GL_DEPTH_TEST);
 	glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
 
 	spScreenShader->use();
-	glUniform1i(spScreenShader->u("flowmap"), 0);
-	glUniform1f(spScreenShader->u("Time"), 0.0);
-	glUniform1f(spScreenShader->u("Speed"), 0.00);
-	glBindTexture(GL_TEXTURE_2D, disortionMap);
-	SetPostProccesingKernel(*spScreenShader, kernel);
+	//glUniform1i(spScreenShader->u("flowmap"), 0);
+	glUniform1f(spScreenShader->u("Time"), timeSinceStart);
+	glUniform2fv(spScreenShader->u("offsets"), 9, (float*)offsets);
+	glUniform1fv(spScreenShader->u("blur_kernel"), 9, blur_kernel);
+	camera->ProcessMouseScroll(15 * sin(timeSinceStart) * 0.1);
+	//glUniform1f(spScreenShader->u("Speed"), 0.1);
+	//glBindTexture(GL_TEXTURE_2D, disortionMap);
 	postProcessingQuad->Draw(*spScreenShader);
 
 	glfwSwapBuffers(window);
