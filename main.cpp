@@ -127,6 +127,7 @@ void mouseCallback(GLFWwindow* window, double xpos, double ypos)
 
 void scrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
+	printf("Offset: %lf \n", yoffset);
 	camera->ProcessMouseScroll(yoffset);
 }
 
@@ -360,7 +361,7 @@ void drawScene(GLFWwindow* window) {
 	glUniform1f(spScreenShader->u("Time"), timeSinceStart);
 	glUniform2fv(spScreenShader->u("offsets"), 9, (float*)offsets);
 	glUniform1fv(spScreenShader->u("blur_kernel"), 9, blur_kernel);
-	camera->ProcessMouseScroll(15 * sin(timeSinceStart) * 0.1);
+	camera->ProcessMouseScroll(0.12 * sin(timeSinceStart));
 	//glUniform1f(spScreenShader->u("Speed"), 0.1);
 	//glBindTexture(GL_TEXTURE_2D, disortionMap);
 	postProcessingQuad->Draw(*spScreenShader);

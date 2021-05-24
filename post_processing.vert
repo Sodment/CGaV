@@ -7,7 +7,7 @@ uniform float Time;
 
 void main()
 {
-    float strength = 0.1;
+    float strength = 0.05;
     vec2 pos = vec2(aTexCoords.x + sin(Time) * strength, aTexCoords.y + cos(Time) * strength);        
     TexCoords = pos;
     //TexCoords = aTexCoords;
