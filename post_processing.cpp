@@ -41,8 +41,8 @@ void PostProcessingQuad::UpdateResolution(int width, int height)
 void PostProcessingQuad::Draw(ShaderProgram& shader)
 {
     glUniform1i(glGetUniformLocation(shader.shaderProgram, "screentexture"), 0);
-    glBindVertexArray(quadVAO);
     glBindTexture(GL_TEXTURE_2D, tcb);
+    glBindVertexArray(quadVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 

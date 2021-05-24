@@ -19,6 +19,7 @@
 #include "post_proccesing.h"
 #include "lights.h"
 #include "g_buffer_specular.h"
+#include "image.h"
 
 unsigned int SCR_WIDTH = 1280;
 unsigned int SCR_HEIGHT = 1024;
@@ -28,6 +29,7 @@ float near_clip = 0.1f;
 float far_clip = 1000.0f;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+float timeSinceStart = 0.0f;
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -50,12 +52,12 @@ SkyBox* skybox;
 PostProcessingQuad* postProcessingQuad;
 Model* modelBackpack;
 Model* modelShield;
-Model* queen;
 PBRModel* pbrmodelTestCube;
 PBRModel* pbrmodelTestSphere;
 PBRModel* pbrmodelBackpack;
 PBRModel* pbrmodelRadioStation;
 GBufferSpecular* gBufferSpecular;
+GLuint disortionMap;
 
 float kernel[9] = 
 {
@@ -157,14 +159,13 @@ void initModels()
 	//pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
 	//pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
 	pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
-	queen = new Model("res/queen/queenv3.obj");
-	//pbrmodelRadioStation = new PBRModel("res/radio_station/model.obj");
+	pbrmodelRadioStation = new PBRModel("res/radio_station/model.obj");
 }
 
 
 
 void initOpenGLProgram(GLFWwindow* window) {
-	glClearColor(1, 0, 1, 1);
+	glClearColor(0, 0, 0, 1);
 	glDepthFunc(GL_LEQUAL);
 	//glEnable(GL_FRAMEBUFFER_SRGB);
 	//glEnable(GL_MULTISAMPLE);
@@ -177,6 +178,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	skybox = new SkyBox();
 	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
 	gBufferSpecular = new GBufferSpecular(SCR_WIDTH, SCR_HEIGHT);
+	disortionMap = TextureFromFile("flowmap.png", "res/post_processing");
 
 }
 
@@ -189,7 +191,7 @@ void drawScene(GLFWwindow* window) {
 	//Binding post processing framebuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, postProcessingQuad->framebuffer);
 	glEnable(GL_DEPTH_TEST);
-	//glBindFramebuffer(GL_FRAMEBUFFER, gBufferSpecular->gBuffer);
+	//glDisable(GL_BLEND);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V = camera->GetViewMatrix();
@@ -198,7 +200,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	/*spPBRtexture->use();
+	spPBRtexture->use();
 	glUniform3fv(spPBRtexture->u("viewPos"), 1, &camera->Position[0]);
 
 
@@ -212,7 +214,7 @@ void drawScene(GLFWwindow* window) {
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-	pbrmodelBackpack->Draw(*spPBRtexture);*/
+	pbrmodelRadioStation->Draw(*spPBRtexture);
 
 	/*spNormalTexture->use();
 
@@ -248,7 +250,7 @@ void drawScene(GLFWwindow* window) {
 
 	modelShield->Draw(*spDiffuseOnly);*/
 
-	spMaterial->use();
+	/*spMaterial->use();
 
 	glUniform3fv(spMaterial->u("viewPos"), 1, &camera->Position[0]);
 
@@ -263,10 +265,14 @@ void drawScene(GLFWwindow* window) {
 
 	glUniformMatrix4fv(spMaterial->u("M"), 1, false, glm::value_ptr(M));
 
-	queen->DrawMaterial(*spMaterial);
-	//modelTestCube->DrawMaterial(*spMaterial);
+	modelTestCube->DrawMaterial(*spMaterial);*/
 
-	/*spDeferredSpecularGeomPass->use();
+	/*glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glBindFramebuffer(GL_FRAMEBUFFER, gBufferSpecular->gBuffer);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	spDeferredSpecularGeomPass->use();
 	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("V"), 1, false, glm::value_ptr(V));
 
@@ -294,7 +300,9 @@ void drawScene(GLFWwindow* window) {
 	SetMulPointLight(*spDeferredSpecularLightPass, pointLights, 2);
 
 	glUniform3fv(spDeferredSpecularLightPass->u("viewPos"), 1, &camera->Position[0]);
+
 	gBufferSpecular->Draw();
+
 	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBufferSpecular->gBuffer);
 	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 	glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
@@ -331,16 +339,15 @@ void drawScene(GLFWwindow* window) {
 
 	if (drunk)
 	{
-		float kernel_corners = glm::abs(glm::sin(4 * deltaTime));
-		kernel[0] = kernel_corners;
-		kernel[1] = kernel_corners;
-		kernel[2] = kernel_corners;
-		kernel[3] = kernel_corners;
-		kernel[4] = kernel_corners;
-		kernel[5] = kernel_corners;
-		kernel[6] = kernel_corners;
-		kernel[7] = kernel_corners;
-		kernel[8] = kernel_corners;
+		kernel[0] = 0;
+		kernel[1] = 0;
+		kernel[2] = 0;
+		kernel[3] = 0;
+		kernel[4] = 1;
+		kernel[5] = 0;
+		kernel[6] = 0;
+		kernel[7] = 0;
+		kernel[8] = 0;
 	}
 	else
 	{
@@ -360,9 +367,13 @@ void drawScene(GLFWwindow* window) {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glDisable(GL_DEPTH_TEST);
 	glClearColor(1.0f, 0.0f, 1.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	spScreenShader->use();
+	glUniform1i(spScreenShader->u("flowmap"), 0);
+	glUniform1f(spScreenShader->u("Time"), 0.0);
+	glUniform1f(spScreenShader->u("Speed"), 0.00);
+	glBindTexture(GL_TEXTURE_2D, disortionMap);
 	SetPostProccesingKernel(*spScreenShader, kernel);
 	postProcessingQuad->Draw(*spScreenShader);
 
@@ -411,6 +422,7 @@ int main(void)
 		glfwSetTime(0);
 		drawScene(window);
 		glfwPollEvents();
+		timeSinceStart += deltaTime;
 	}
 		freeOpenGLProgram(window);
 		glfwDestroyWindow(window);

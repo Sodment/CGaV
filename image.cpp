@@ -3,11 +3,13 @@
 #include <iostream>
 
 
-unsigned int TextureFromFile(const char* path, const string& directory)
+GLuint TextureFromFile(const char* path, const string& directory)
 {
 	string filename = string(path);
 	filename = directory + '/' + filename;
-	unsigned int textureID;
+	//printf("path: %s\n", path);
+	//cout << "Directory format " << directory << endl;
+	GLuint textureID;
 	glGenTextures(1, &textureID);
 
 	int width, height, nrComponents;
