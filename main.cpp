@@ -56,7 +56,6 @@ PBRModel* pbrmodelTestSphere;
 PBRModel* pbrmodelBackpack;
 PBRModel* pbrmodelRadioStation;
 GBufferSpecular* gBufferSpecular;
-GLuint disortionMap;
 
 float offset = 1.0f / 300.0f;
 float offsets[9][2] = {
