@@ -1,6 +1,5 @@
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_SWIZZLE
-#define STB_IMAGE_IMPLEMENTATION
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
@@ -18,15 +17,15 @@
 #include "skybox.h"
 #include "post_proccesing.h"
 #include "lights.h"
-#include "g_buffer_specular.h"
 #include "image.h"
+#include "g_buffer_specular.h"
 
 unsigned int SCR_WIDTH = 1280;
 unsigned int SCR_HEIGHT = 1024;
 
 float aspectRatio = 1280/1024;
-float near_clip = 0.1f;
-float far_clip = 1000.0f;
+float nearClip = 0.1f;
+float farClip = 1000.0f;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 float timeSinceStart = 0.0f;
@@ -207,7 +206,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 V = camera->GetViewMatrix();
 
-	glm::mat4 P = camera->GetPerspectiveMatrix(aspectRatio, near_clip, far_clip);
+	glm::mat4 P = camera->GetPerspectiveMatrix(aspectRatio, nearClip, farClip);
 
 	glm::mat4 M = glm::mat4(1.0f);
 
@@ -355,7 +354,7 @@ void drawScene(GLFWwindow* window) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	spScreenShader->use();
-	glUniform1f(spScreenShader->u("Time"), timeSinceStart);
+	glUniform1f(spScreenShader->u("time"), timeSinceStart);
 	glUniform2fv(spScreenShader->u("offsets"), 9, (float*)offsets);
 	glUniform1fv(spScreenShader->u("blur_kernel"), 9, blur_kernel);
 	float sp = glm::clamp(sin(timeSinceStart) + 1.0f, 0.8f, 1.3f);
@@ -364,6 +363,7 @@ void drawScene(GLFWwindow* window) {
 	postProcessingQuad->Draw(*spScreenShader);
 
 	glfwSwapBuffers(window);
+	//printf("Time sice start: %f\n", timeSinceStart);
 }
 
 int main(void)

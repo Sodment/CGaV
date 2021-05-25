@@ -24,7 +24,7 @@ public:
 private:
     GLuint VBO, skyboxTexture;
 
-    unsigned int loadCubemap(const char* faces[6]);
+    GLuint loadCubemap(const char* faces[6]);
     void setupSkybox();
 };
 #endif
