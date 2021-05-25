@@ -191,8 +191,6 @@ void initOpenGLProgram(GLFWwindow* window) {
 	skybox = new SkyBox();
 	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
 	gBufferSpecular = new GBufferSpecular(SCR_WIDTH, SCR_HEIGHT);
-	disortionMap = TextureFromFile("flowmap.png", "res/post_processing");
-
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -357,13 +355,12 @@ void drawScene(GLFWwindow* window) {
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	spScreenShader->use();
-	//glUniform1i(spScreenShader->u("flowmap"), 0);
 	glUniform1f(spScreenShader->u("Time"), timeSinceStart);
 	glUniform2fv(spScreenShader->u("offsets"), 9, (float*)offsets);
 	glUniform1fv(spScreenShader->u("blur_kernel"), 9, blur_kernel);
-	camera->ProcessMouseScroll(0.12 * sin(timeSinceStart));
-	//glUniform1f(spScreenShader->u("Speed"), 0.1);
-	//glBindTexture(GL_TEXTURE_2D, disortionMap);
+	float sp = glm::clamp(sin(timeSinceStart) + 1.0f, 0.8f, 1.3f);
+	glUniform1f(spScreenShader->u("speed"), sp);
+	camera->ProcessMouseScroll(0.06 * sin(timeSinceStart));
 	postProcessingQuad->Draw(*spScreenShader);
 
 	glfwSwapBuffers(window);
