@@ -170,7 +170,7 @@ void initModels()
 	//pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
 	//pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
 	pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
-	pbrmodelRadioStation = new PBRModel("res/radio_station/model.obj");
+	pbrmodelRadioStation = new PBRModel("res/PBRModels/Fireplace/fireplace.obj");
 }
 
 

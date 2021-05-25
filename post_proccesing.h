@@ -13,8 +13,6 @@
 
 extern float quadVertices[];
 
-void SetPostProccesingKernel(ShaderProgram& sp, float k[9]);
-
 class PostProcessingQuad
 {
 public:
