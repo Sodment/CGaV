@@ -27,6 +27,7 @@ public:
 
     Quad();
     void Draw(ShaderProgram& shader);
+    void DrawPBR(ShaderProgram& shader);
     void AddTexture(std::string path, std::string type);
 
 private:

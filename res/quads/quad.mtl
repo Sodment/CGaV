@@ -8,6 +8,8 @@ Kd 0.8 0.8 0.8
 Ks 0.8 0.8 0.8
 d 1
 illum 2
-map_Kd wood.png
-map_Bump normal.jpg
-map_Ks ao_white.png
+map_Kd redbricks2b-albedo.png
+map_Bump redbricks2b-normal.png
+map_Ks redbricks2b-ao.png
+map_Ka redbricks2b-rough.png
+map_d redbricks2b-metalness.png

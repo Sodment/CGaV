@@ -33,7 +33,7 @@ typedef struct dirlight
 }DirLight;
 
 extern DirLight dirLight;
-extern PointLight pointLights[2];
+extern PointLight pointLights[4];
 
 void SetPointLight(ShaderProgram& sp, PointLight light, int index);
 void SetMulPointLight(ShaderProgram& sp, PointLight lights[], int size);

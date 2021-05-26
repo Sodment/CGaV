@@ -18,6 +18,55 @@ Quad::Quad()
 	SetupQuad();
 }
 
+void Quad::DrawPBR(ShaderProgram& shader)
+{
+    unsigned int diffuseNr = 1;
+    unsigned int metalnessrNr = 1;
+    unsigned int normalNr = 1;
+    unsigned int roughnessNr = 1;
+    unsigned int aoNr = 1;
+    for (unsigned int i = 0; i < textures.size(); i++)
+    {
+        glActiveTexture(GL_TEXTURE0 + i); // active proper texture unit before binding
+        std::string number;
+        std::string name = textures[i].type;
+        if (name == "texture_diffuse")
+        {
+            number = std::to_string(diffuseNr++);
+        }
+        else if (name == "texture_roughness")
+        {
+            number = std::to_string(roughnessNr++);
+        }
+        else if (name == "texture_metallic")
+        {
+            number = std::to_string(metalnessrNr++);
+        }
+        else if (name == "texture_ao")
+        {
+            number = std::to_string(aoNr++);
+        }
+        else if (name == "texture_normal")
+        {
+            number = std::to_string(normalNr++);
+        }
+
+        // now set the sampler to the correct texture unit
+        glUniform1i(glGetUniformLocation(shader.shaderProgram, (name + number).c_str()), i);
+        // and finally bind the texture
+        glBindTexture(GL_TEXTURE_2D, textures[i].id);
+    }
+
+    // draw mesh
+    glBindVertexArray(quadVAO);
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+    glBindVertexArray(0);
+
+
+    // always good practice to set everything back to defaults once configured.
+    glActiveTexture(GL_TEXTURE0);
+}
+
 void Quad::Draw(ShaderProgram& shader)
 {
 	// bind appropriate textures

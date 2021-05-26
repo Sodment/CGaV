@@ -9,25 +9,43 @@ DirLight dirLight =
     glm::vec3(0.5f, 0.5f, 0.5f),
 };
 
-PointLight pointLights[2] =
+PointLight pointLights[4] =
 {
 //1
-glm::vec3(0.0f, 8.4f, -2.50f),
+glm::vec3(5.0f, 8.0f, -5.50f),
 1.0f,
-0.09f,
-0.032f,
+0.07f,
+0.017f,
 glm::vec3(0.05f, 0.05f, 0.05f),
-glm::vec3(1.0f, 0.0f, 1.0f),
-glm::vec3(1.0f, 0.0f, 1.0f),
+glm::vec3(1.0f, 1.0f, 0.0f),
+glm::vec3(1.0f, 1.0f, 1.0f),
 
 //2
-glm::vec3(0.0f, 8.4f, 2.50f),
+glm::vec3(5.0f, 8.0f, 5.50f),
 1.0f,
-0.09f,
-0.032f,
+0.07f,
+0.017f,
 glm::vec3(0.05f, 0.05f, 0.05f),
-glm::vec3(0.0f, 1.0f, 1.0f),
-glm::vec3(0.0f, 1.0f, 1.0f),
+glm::vec3(1.0f, 1.0f, 0.0f),
+glm::vec3(1.0f, 1.0f, 1.0f),
+
+//3
+glm::vec3(-5.0f, 8.0f, 5.50f),
+1.0f,
+0.07f,
+0.017f,
+glm::vec3(0.05f, 0.05f, 0.05f),
+glm::vec3(1.0f, 1.0f, 0.0f),
+glm::vec3(1.0f, 1.0f, 1.0f),
+
+//4
+glm::vec3(-5.0f, 8.0f, -5.50f),
+1.0f,
+0.07f,
+0.017f,
+glm::vec3(0.05f, 0.05f, 0.05f),
+glm::vec3(1.0f, 1.0f, 0.0f),
+glm::vec3(1.0f, 1.0f, 1.0f),
 };
 
 void SetPointLight(ShaderProgram& sp, PointLight light, int index)

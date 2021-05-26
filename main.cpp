@@ -53,10 +53,9 @@ ShaderProgram* spPointLight;
 ShaderProgram* spWater;
 SkyBox* skybox;
 PostProcessingQuad* postProcessingQuad;
-Model* modelBackpack;
-Model* modelShield;
 GBufferSpecular* gBufferSpecular;
-Quad* quadTest;
+Quad* quadFloor;
+Quad* quadWalls;
 Cube* cubeTest;
 
 float offset = 1.0f / 300.0f;
@@ -179,10 +178,20 @@ void initShaderPrograms()
 
 void initModels()
 {
-	quadTest = new Quad();
+	quadFloor = new Quad();
 	cubeTest = new Cube();
-	quadTest->AddTexture("res/quads/wood.png", "texture_diffuse");
-	quadTest->AddTexture("res/quads/specular.png", "texture_specular");
+	quadFloor->AddTexture("res/quads/redbricks2b-albedo.png", "texture_diffuse");
+	quadFloor->AddTexture("res/quads/redbricks2b-metalness.png", "texture_metallic");
+	quadFloor->AddTexture("res/quads/redbricks2b-rough.png", "texture_roughness");
+	quadFloor->AddTexture("res/quads/redbricks2b-normal.png", "texture_normal");
+	quadFloor->AddTexture("res/quads/redbricks2b-ao.png", "texture_ao");
+
+	quadWalls = new Quad();
+	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-albedo.png", "texture_diffuse");
+	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-metalness.png", "texture_metallic");
+	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-roughness.png", "texture_roughness");
+	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-normal-ogl.png", "texture_normal");
+	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-ao.png", "texture_ao");
 }
 
 
@@ -204,7 +213,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
-	delete camera, postProcessingQuad, modelBackpack;
+	delete camera, postProcessingQuad,
 	delete spSkyBox,spScreenShader,spFunnyCat,spFunnyCat;
 }
 
@@ -254,71 +263,83 @@ void drawScene(GLFWwindow* window) {
 
 	modelBackpack->Draw(*spNormalTexture);*/
 
-	spSimpleTexture->use();
+	spPBRtexture->use();
+	SetMulPBRLight(*spPBRtexture, pointLights, 4);
+
+	//SetDirLight(*spPBRtexture, dirLight);
+	/*SetMulPointLight(*spPBRtexture, pointLights, 2);
+	glUniform3fv(spPBRtexture->u("viewPos"), 1, &pointLights[0].position[0]);
+	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
+	glUniform3fv(spPBRtexture->u("lights[0].color"), 1, &pointLights[0].diffuse[0]);
+	glUniform1f(spPBRtexture->u("lights[0].constant"), pointLights[0].constant);
+	glUniform1f(spPBRtexture->u("pointLights[0].linear"), pointLights[0].linear);
+	glUniform1f(spPBRtexture->u("pointLights[0].quadratic"), pointLights[0].quadratic);
+
+	glUniform3fv(spPBRtexture->u("lights[1].position"), 1, &pointLights[1].position[0]);
+	glUniform3fv(spPBRtexture->u("lights[1].color"), 1, &pointLights[1].diffuse[0]);
+	glUniform1f(spPBRtexture->u("lights[1].constant"), pointLights[1].constant);
+	glUniform1f(spPBRtexture->u("lights[1].linear"), pointLights[1].linear);
+	glUniform1f(spPBRtexture->u("lights[1].quadratic"), pointLights[1].quadratic);*/
 
 
-	SetDirLight(*spSimpleTexture, dirLight);
-	SetMulPointLight(*spSimpleTexture, pointLights, 2);
-
-	//glUniform3fv(spSimpleTexture->u("pointLights[0].position"), 1, &camera->Position[0]);
-
-	glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
+	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
 
 	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(0.0f, -9.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
-	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
-	quadTest->Draw(*spSimpleTexture);
+	quadFloor->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(0.0f, 9.0f, 0.0f));
 	M = glm::rotate(M,glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
-	quadTest->Draw(*spSimpleTexture);
+	quadWalls->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, -9.0f));
 	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
-	quadTest->Draw(*spSimpleTexture);
+	quadWalls->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 9.0f));
 	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
-	quadTest->Draw(*spSimpleTexture);
+	quadWalls->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(9.0f, 0.0f, 0.0f));
-	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
-	quadTest->Draw(*spSimpleTexture);
+	quadWalls->Draw(*spPBRtexture);
 
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(-9.0f, 0.0f, 0.0f));
-	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
-	quadTest->Draw(*spSimpleTexture);
+	quadWalls->Draw(*spPBRtexture);
 
 
 	/*spMaterial->use();
@@ -400,7 +421,7 @@ void drawScene(GLFWwindow* window) {
 	spPointLight->use();
 	glUniformMatrix4fv(spPointLight->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPointLight->u("V"), 1, false, glm::value_ptr(V));
-	for (size_t i = 0; i < 2; i++)
+	for (size_t i = 0; i < 4; i++)
 	{
 		M = glm::mat4(1.0);
 		M = glm::translate(M, pointLights[i].position);
