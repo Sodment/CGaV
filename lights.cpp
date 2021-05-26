@@ -12,22 +12,22 @@ DirLight dirLight =
 PointLight pointLights[2] =
 {
 //1
-glm::vec3(0.0f, 0.0f, 0.0f),
+glm::vec3(0.0f, 8.4f, -2.50f),
 1.0f,
 0.09f,
 0.032f,
 glm::vec3(0.05f, 0.05f, 0.05f),
-glm::vec3(1.0f, 1.0f, 1.0f),
-glm::vec3(1.0f, 1.0f, 1.0f),
+glm::vec3(1.0f, 0.0f, 1.0f),
+glm::vec3(1.0f, 0.0f, 1.0f),
 
 //2
-glm::vec3(0.0f, -3.0f, -70.0f),
+glm::vec3(0.0f, 8.4f, 2.50f),
 1.0f,
 0.09f,
 0.032f,
 glm::vec3(0.05f, 0.05f, 0.05f),
-glm::vec3(1.0f, 1.0f, 1.0f),
-glm::vec3(1.0f, 1.0f, 1.0f),
+glm::vec3(0.0f, 1.0f, 1.0f),
+glm::vec3(0.0f, 1.0f, 1.0f),
 };
 
 void SetPointLight(ShaderProgram& sp, PointLight light, int index)

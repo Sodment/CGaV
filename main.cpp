@@ -55,10 +55,6 @@ SkyBox* skybox;
 PostProcessingQuad* postProcessingQuad;
 Model* modelBackpack;
 Model* modelShield;
-PBRModel* pbrmodelTestCube;
-PBRModel* pbrmodelTestSphere;
-PBRModel* pbrmodelBackpack;
-PBRModel* pbrmodelRadioStation;
 GBufferSpecular* gBufferSpecular;
 Quad* quadTest;
 Cube* cubeTest;
@@ -187,10 +183,6 @@ void initModels()
 	cubeTest = new Cube();
 	quadTest->AddTexture("res/quads/wood.png", "texture_diffuse");
 	quadTest->AddTexture("res/quads/specular.png", "texture_specular");
-	//modelShield = new Model("res/shield/shield.obj");
-	//pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
-	//pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
-	pbrmodelRadioStation = new PBRModel("res/PBRModels/Fireplace/fireplace.obj");
 }
 
 
@@ -274,13 +266,60 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
 
 	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(0.0f, -10.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
 	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 
 	quadTest->Draw(*spSimpleTexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(0.0f, 9.0f, 0.0f));
+	M = glm::rotate(M,glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+
+	quadTest->Draw(*spSimpleTexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, -9.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+
+	quadTest->Draw(*spSimpleTexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 9.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+
+	quadTest->Draw(*spSimpleTexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(9.0f, 0.0f, 0.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+
+	quadTest->Draw(*spSimpleTexture);
+
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-9.0f, 0.0f, 0.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+
+	quadTest->Draw(*spSimpleTexture);
+
 
 	/*spMaterial->use();
 
