@@ -52,6 +52,8 @@ ShaderProgram* spDeferredSpecularLightPass;
 ShaderProgram* spPointLight;
 ShaderProgram* spWater;
 SkyBox* skybox;
+PBRModel* quadF;
+PBRModel* quadW;
 PostProcessingQuad* postProcessingQuad;
 GBufferSpecular* gBufferSpecular;
 Quad* quadFloor;
@@ -178,8 +180,8 @@ void initShaderPrograms()
 
 void initModels()
 {
-	quadFloor = new Quad();
 	cubeTest = new Cube();
+	quadFloor = new Quad();
 	quadFloor->AddTexture("res/quads/redbricks2b-albedo.png", "texture_diffuse");
 	quadFloor->AddTexture("res/quads/redbricks2b-metalness.png", "texture_metallic");
 	quadFloor->AddTexture("res/quads/redbricks2b-rough.png", "texture_roughness");
@@ -192,6 +194,10 @@ void initModels()
 	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-roughness.png", "texture_roughness");
 	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-normal-ogl.png", "texture_normal");
 	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-ao.png", "texture_ao");
+
+	/*quadF = new PBRModel("res/quads/quad.obj");
+	quadW = new PBRModel("res/quads/quad2.obj");*/
+
 }
 
 
@@ -292,6 +298,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadFloor->Draw(*spPBRtexture);
+	//quadF->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(0.0f, 9.0f, 0.0f));
@@ -301,6 +308,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
+	//quadW->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, -9.0f));
@@ -310,6 +318,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
+	//quadW->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 9.0f));
@@ -319,6 +328,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
+	//quadW->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(9.0f, 0.0f, 0.0f));
@@ -329,6 +339,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
+	//quadW->Draw(*spPBRtexture);
 
 
 	M = glm::mat4(1.0f);
@@ -340,6 +351,7 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
+	//quadW->Draw(*spPBRtexture);
 
 
 	/*spMaterial->use();

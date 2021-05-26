@@ -1,5 +1,5 @@
 #version 330
-#define LIGHT_COUNT 2
+#define LIGHT_COUNT 4
 out vec4 FragColor;
 
 // material parameters
@@ -141,7 +141,7 @@ void main()
     
     // ambient lighting (note that the next IBL tutorial will replace 
     // this ambient lighting with environment lighting).
-    vec3 ambient = vec3(0.01) * albedo * ao;
+    vec3 ambient = vec3(0.03) * albedo * ao;
     
     vec3 color = ambient + Lo;
 
