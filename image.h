@@ -12,6 +12,7 @@
 using namespace std;
 
 GLuint TextureFromFile(const char* path, const string& directory);
+GLuint TextureFromFile(std::string path);
 GLuint TextureFromFileClamp(const char* path, const string& directory);
 
 

@@ -5,11 +5,19 @@ layout (location = 1) in vec2 aTexCoords;
 out vec2 TexCoords;
 uniform float time;
 uniform  float speed;
+uniform bool drunk;
 
 void main()
 {
-    float strength = 0.05;
-    vec2 pos = vec2(aTexCoords.x + (speed * sin(time) * strength), aTexCoords.y + (speed * cos(time) * strength));        
-    TexCoords = pos;
+    if(drunk)
+    {
+        float strength = 0.05;
+        vec2 pos = vec2(aTexCoords.x + (speed * sin(time) * strength), aTexCoords.y + (speed * cos(time) * strength));        
+        TexCoords = pos;
+    }
+    else
+    {
+        TexCoords = aTexCoords;
+    }
     gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0); 
 }  

@@ -19,6 +19,7 @@
 #include "lights.h"
 #include "image.h"
 #include "g_buffer_specular.h"
+#include "quad.h"
 
 unsigned int SCR_WIDTH = 1280;
 unsigned int SCR_HEIGHT = 1024;
@@ -56,6 +57,7 @@ PBRModel* pbrmodelTestSphere;
 PBRModel* pbrmodelBackpack;
 PBRModel* pbrmodelRadioStation;
 GBufferSpecular* gBufferSpecular;
+Quad* quadTest;
 
 float offset = 1.0f / 300.0f;
 float offsets[9][2] = {
@@ -74,6 +76,12 @@ float blur_kernel[9] = {
 		1.0f / 16.0f, 2.0f / 16.0f, 1.0f / 16.0f,
 		2.0f / 16.0f, 4.0f / 16.0f, 2.0f / 16.0f,
 		1.0f / 16.0f, 2.0f / 16.0f, 1.0f / 16.0f
+};
+
+float kernel[9] = {
+		0.0f, 0.0f, 0.0f,
+		0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f
 };
 
 void error_callback(int error, const char* description) {
@@ -165,11 +173,12 @@ void initShaderPrograms()
 
 void initModels()
 {
-	modelBackpack = new Model("res/backpack/backpack.obj");
+	quadTest = new Quad();
+	quadTest->AddTexture("res/quads/wood.png", "texture_diffuse");
+	quadTest->AddTexture("res/quads/ao_white.png", "texture_specular");
 	//modelShield = new Model("res/shield/shield.obj");
 	//pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
 	//pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
-	pbrmodelBackpack = new PBRModel("res/pbr_backpack/backpack.obj");
 	pbrmodelRadioStation = new PBRModel("res/PBRModels/Fireplace/fireplace.obj");
 }
 
@@ -209,7 +218,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	spPBRtexture->use();
+	/*spPBRtexture->use();
 	glUniform3fv(spPBRtexture->u("viewPos"), 1, &camera->Position[0]);
 
 
@@ -223,7 +232,7 @@ void drawScene(GLFWwindow* window) {
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-	pbrmodelRadioStation->Draw(*spPBRtexture);
+	pbrmodelRadioStation->Draw(*spPBRtexture);*/
 
 	/*spNormalTexture->use();
 
@@ -242,22 +251,25 @@ void drawScene(GLFWwindow* window) {
 
 	modelBackpack->Draw(*spNormalTexture);*/
 
-	/*spDiffuseOnly->use();
+	spSimpleTexture->use();
 
-	glUniform3fv(spDiffuseOnly->u("viewPos"), 1, &camera->Position[0]);
 
-	SetDirLight(*spDiffuseOnly, dirLight);
-	SetMulPointLight(*spDiffuseOnly, pointLights, 2);
+	SetDirLight(*spSimpleTexture, dirLight);
+	SetMulPointLight(*spSimpleTexture, pointLights, 2);
 
-	glUniformMatrix4fv(spDiffuseOnly->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spDiffuseOnly->u("V"), 1, false, glm::value_ptr(V));
+	//glUniform3fv(spSimpleTexture->u("pointLights[0].position"), 1, &camera->Position[0]);
 
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
+	glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(0.0f, -10.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
-	glUniformMatrix4fv(spDiffuseOnly->u("M"), 1, false, glm::value_ptr(M));
+	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
+	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
 
-	modelShield->Draw(*spDiffuseOnly);*/
+	quadTest->Draw(*spSimpleTexture);
 
 	/*spMaterial->use();
 
@@ -355,10 +367,19 @@ void drawScene(GLFWwindow* window) {
 	spScreenShader->use();
 	glUniform1f(spScreenShader->u("time"), timeSinceStart);
 	glUniform2fv(spScreenShader->u("offsets"), 9, (float*)offsets);
-	glUniform1fv(spScreenShader->u("blur_kernel"), 9, blur_kernel);
-	float sp = glm::clamp(sin(timeSinceStart) + 1.0f, 0.8f, 1.3f);
-	glUniform1f(spScreenShader->u("speed"), sp);
-	camera->ProcessMouseScroll(0.06 * sin(timeSinceStart));
+	if (drunk)
+	{
+		glUniform1i(spScreenShader->u("drunk"), GL_TRUE);
+		glUniform1fv(spScreenShader->u("blur_kernel"), 9, blur_kernel);
+		float sp = glm::clamp(sin(timeSinceStart) + 1.0f, 0.8f, 1.3f);
+		glUniform1f(spScreenShader->u("speed"), sp);
+		camera->ProcessMouseScroll(0.06 * sin(timeSinceStart));
+	}
+	else
+	{
+		glUniform1i(spScreenShader->u("drunk"), GL_FALSE);
+		glUniform1fv(spScreenShader->u("blur_kernel"), 9, kernel);
+	}
 	postProcessingQuad->Draw(*spScreenShader);
 
 	glfwSwapBuffers(window);

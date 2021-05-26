@@ -155,6 +155,7 @@
     <ClCompile Include="pbr_mesh.cpp" />
     <ClCompile Include="pbr_model.cpp" />
     <ClCompile Include="post_processing.cpp" />
+    <ClCompile Include="quad.cpp" />
     <ClCompile Include="shaderprogram.cpp" />
     <ClCompile Include="skybox.cpp" />
   </ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="pbr_mesh.h" />
     <ClInclude Include="pbr_model.h" />
     <ClInclude Include="post_proccesing.h" />
+    <ClInclude Include="quad.h" />
     <ClInclude Include="shaderprogram.h" />
     <ClInclude Include="skybox.h" />
   </ItemGroup>

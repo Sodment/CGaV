@@ -20,7 +20,7 @@ Camera::Camera(bool mov, bool mos_mov, bool zoom)
 
 Camera::Camera()
 {
-	Position = glm::vec3(0.0f, 0.0f, -3.0f);
+	Position = glm::vec3(0.0f, 0.0f, 0.0f);
 	WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	Yaw = -90.0f;
 	Pitch = 0.0f;
@@ -91,7 +91,7 @@ void Camera::updateCamera()
 	currentFront.y = sin(glm::radians(Pitch));
 	currentFront.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
 	Front = glm::normalize(currentFront);
-
+	//printf("Camera Pos: %f %f %f\n", this->Position[0], this->Position[1], this->Position[2]);
 
 	Right = glm::normalize(glm::cross(Front, WorldUp));
 	Up = glm::normalize(glm::cross(Right, Front));
