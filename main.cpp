@@ -52,8 +52,7 @@ ShaderProgram* spDeferredSpecularLightPass;
 ShaderProgram* spPointLight;
 ShaderProgram* spWater;
 SkyBox* skybox;
-PBRModel* quadF;
-PBRModel* quadW;
+PBRModel* modelFireplace;
 PostProcessingQuad* postProcessingQuad;
 GBufferSpecular* gBufferSpecular;
 Quad* quadFloor;
@@ -195,8 +194,7 @@ void initModels()
 	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-normal-ogl.png", "texture_normal");
 	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-ao.png", "texture_ao");
 
-	/*quadF = new PBRModel("res/quads/quad.obj");
-	quadW = new PBRModel("res/quads/quad2.obj");*/
+	modelFireplace = new PBRModel("res/PBRModels/Fireplace/fireplace.obj");
 
 }
 
@@ -236,22 +234,6 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	/*spPBRtexture->use();
-	glUniform3fv(spPBRtexture->u("viewPos"), 1, &camera->Position[0]);
-
-
-	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
-
-	SetMulPBRLight(*spPBRtexture, pointLights, 2);
-	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
-
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
-	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-	pbrmodelRadioStation->Draw(*spPBRtexture);*/
-
 	/*spNormalTexture->use();
 
 	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
@@ -272,66 +254,69 @@ void drawScene(GLFWwindow* window) {
 	spPBRtexture->use();
 	SetMulPBRLight(*spPBRtexture, pointLights, 4);
 
-	//SetDirLight(*spPBRtexture, dirLight);
-	/*SetMulPointLight(*spPBRtexture, pointLights, 2);
-	glUniform3fv(spPBRtexture->u("viewPos"), 1, &pointLights[0].position[0]);
-	glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
-	glUniform3fv(spPBRtexture->u("lights[0].color"), 1, &pointLights[0].diffuse[0]);
-	glUniform1f(spPBRtexture->u("lights[0].constant"), pointLights[0].constant);
-	glUniform1f(spPBRtexture->u("pointLights[0].linear"), pointLights[0].linear);
-	glUniform1f(spPBRtexture->u("pointLights[0].quadratic"), pointLights[0].quadratic);
-
-	glUniform3fv(spPBRtexture->u("lights[1].position"), 1, &pointLights[1].position[0]);
-	glUniform3fv(spPBRtexture->u("lights[1].color"), 1, &pointLights[1].diffuse[0]);
-	glUniform1f(spPBRtexture->u("lights[1].constant"), pointLights[1].constant);
-	glUniform1f(spPBRtexture->u("lights[1].linear"), pointLights[1].linear);
-	glUniform1f(spPBRtexture->u("lights[1].quadratic"), pointLights[1].quadratic);*/
-
+	//glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
+	glUniform1f(spPBRtexture->u("lightRadius"), 100.0f);
 
 	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
 
 	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(0.0f, -9.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(6.0f, 0.5f, -7.0f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelFireplace->Draw(*spPBRtexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(0.0f, 1.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadFloor->Draw(*spPBRtexture);
-	//quadF->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(0.0f, 9.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(0.0f, 9.5f, 0.0f));
 	M = glm::rotate(M,glm::radians(180.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
-	//quadW->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, -9.0f));
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, -9.5f));
 	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
-	//quadW->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 9.0f));
-	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 9.5f));
+	M = glm::rotate(M, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
-	//quadW->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(9.0f, 0.0f, 0.0f));
+	M = glm::translate(M, glm::vec3(9.5f, 0.0f, 0.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	quadWalls->Draw(*spPBRtexture);
+
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-9.5f, 0.0f, 0.0f));
 	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -339,19 +324,6 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	quadWalls->Draw(*spPBRtexture);
-	//quadW->Draw(*spPBRtexture);
-
-
-	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(-9.0f, 0.0f, 0.0f));
-	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-
-	quadWalls->Draw(*spPBRtexture);
-	//quadW->Draw(*spPBRtexture);
 
 
 	/*spMaterial->use();

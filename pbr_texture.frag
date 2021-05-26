@@ -25,6 +25,7 @@ struct Light{
 
 uniform Light lights[LIGHT_COUNT];
 uniform vec3 viewPos;
+uniform float lightRadius;
 
 const float PI = 3.14159265359;
 
@@ -107,9 +108,11 @@ void main()
         // calculate per-light radiance
         vec3 L = normalize(lights[i].position - fs_in.FragPos);
         vec3 H = normalize(V + L);
-        float distance = length(lights[i].position - fs_in.FragPos);
-        float attenuation = 1.0 / (lights[i].constant + lights[i].linear * distance + 
-  			     lights[i].quadratic * (distance * distance));
+        float d = length(lights[i].position - fs_in.FragPos);
+        float attenuation = clamp(pow(1 - pow(d/lightRadius, 4), 2), 0.0, 1.0) / (pow(d, 2) + 1);
+        //float attenuation = 1.0 / (d *d);
+        //float attenuation = 1.0 / (lights[i].constant + lights[i].linear * d + 
+  		//	     lights[i].quadratic * (d * d));
         vec3 radiance = lights[i].color * attenuation;
 
         // Cook-Torrance BRDF
@@ -146,8 +149,8 @@ void main()
     vec3 color = ambient + Lo;
 
     // HDR tonemapping
-    //color = color / (color + vec3(1.0));
+    color = color / (color + vec3(1.0));
     // gamma correct
-    //color = pow(color, vec3(1.0/2.2));
+    color = pow(color, vec3(1.0/2.2));
     FragColor = vec4(color, 1.0);
 }

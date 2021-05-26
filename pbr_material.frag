@@ -102,27 +102,24 @@ void main()
         // be above 1.0 (unless the surface emits light); to preserve this
         // relationship the diffuse component (kD) should equal 1.0 - kS.
         vec3 kD = vec3(1.0) - kS;
-        // multiply kD by the inverse metalness such that only non-metals 
-        // have diffuse lighting, or a linear blend if partly metal (pure metals
-        // have no diffuse light).
+        // multiply kD by the inverse metalness
         kD *= 1.0 - material.metallic;	  
 
         // scale light by NdotL
         float NdotL = max(dot(N, L), 0.0);        
 
         // add to outgoing radiance Lo
-        Lo += (kD * material.albedo / PI + specular) * radiance * NdotL;  // note that we already multiplied the BRDF by the Fresnel (kS) so we won't multiply by kS again
+        Lo += (kD * material.albedo / PI + specular) * radiance * NdotL;  // we already multiplied the BRDF by the Fresnel (kS)
     }   
     
-    // ambient lighting (note that the next IBL tutorial will replace 
-    // this ambient lighting with environment lighting).
+    // ambient lighting
     vec3 ambient = vec3(0.03) * material.albedo * material.ao;
 
     vec3 color = ambient + Lo;
 
     // HDR tonemapping
     color = color / (color + vec3(1.0));
-//    // gamma correct
+    // gamma correct
     color = pow(color, vec3(1.0/2.2)); 
 
     FragColor = vec4(color, 1.0);
