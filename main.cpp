@@ -195,7 +195,6 @@ void initModels()
 	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-ao.png", "texture_ao");
 
 	modelFireplace = new PBRModel("res/PBRModels/Fireplace/fireplace.obj");
-
 }
 
 
@@ -325,83 +324,6 @@ void drawScene(GLFWwindow* window) {
 
 	quadWalls->Draw(*spPBRtexture);
 
-
-	/*spMaterial->use();
-
-	glUniform3fv(spMaterial->u("viewPos"), 1, &camera->Position[0]);
-
-	SetDirLight(*spMaterial, dirLight);
-	SetMulPointLight(*spMaterial, pointLights, 2);
-
-	glUniformMatrix4fv(spMaterial->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spMaterial->u("V"), 1, false, glm::value_ptr(V));
-
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, 0.0f));
-	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	glUniformMatrix4fv(spMaterial->u("M"), 1, false, glm::value_ptr(M));
-
-	modelTestCube->DrawMaterial(*spMaterial);*/
-
-	/*glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glBindFramebuffer(GL_FRAMEBUFFER, gBufferSpecular->gBuffer);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	spDeferredSpecularGeomPass->use();
-	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("V"), 1, false, glm::value_ptr(V));
-
-	M = glm::translate(M, glm::vec3(0.0f, 0.0f, -5.0f));
-	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	glUniformMatrix4fv(spDeferredSpecularGeomPass->u("M"), 1, false, glm::value_ptr(M));
-
-	modelBackpack->Draw(*spDeferredSpecularGeomPass);
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	spDeferredSpecularLightPass->use();
-	glUniform1i(spDeferredSpecularLightPass->u("gPosition"), 0);
-	glUniform1i(spDeferredSpecularLightPass->u("gNormal"), 1);
-	glUniform1i(spDeferredSpecularLightPass->u("gAlbedoSpec"), 2);
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, gBufferSpecular->gPosition);
-	glActiveTexture(GL_TEXTURE1);
-	glBindTexture(GL_TEXTURE_2D, gBufferSpecular->gNormal);
-	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, gBufferSpecular->gAlbedoSpec);
-
-	SetMulPointLight(*spDeferredSpecularLightPass, pointLights, 2);
-
-	glUniform3fv(spDeferredSpecularLightPass->u("viewPos"), 1, &camera->Position[0]);
-
-	gBufferSpecular->Draw();
-
-	glBindFramebuffer(GL_READ_FRAMEBUFFER, gBufferSpecular->gBuffer);
-	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-	glBlitFramebuffer(0, 0, SCR_WIDTH, SCR_HEIGHT, 0, 0, SCR_WIDTH, SCR_HEIGHT, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);*/
-
-
-	/*spSimpleTexture->use();
-	glUniform3fv(spSimpleTexture->u("viewPos"), 1, &camera->Position[0]);
-
-	SetDirLight(*spSimpleTexture, dirLight);
-	SetMulPointLight(*spSimpleTexture, pointLights, 2);
-
-	glUniformMatrix4fv(spSimpleTexture->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spSimpleTexture->u("V"), 1, false, glm::value_ptr(V));
-
-	M = glm::translate(M, glm::vec3(-10.0f, 0.0f, 0.0f));
-	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
-
-	modelBackpack->Draw(*spSimpleTexture);*/
-
-
 	spPointLight->use();
 	glUniformMatrix4fv(spPointLight->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPointLight->u("V"), 1, false, glm::value_ptr(V));
@@ -414,7 +336,6 @@ void drawScene(GLFWwindow* window) {
 		glUniform3fv(spPointLight->u("color"), 1, &pointLights[i].diffuse[0]);
 		cubeTest->Draw(*spPointLight);
 	}
-
 
 	//Skybox drawing
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));

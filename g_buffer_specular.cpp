@@ -22,7 +22,7 @@ GBufferSpecular::GBufferSpecular(unsigned int width, unsigned int height)
     glDrawBuffers(3, attachments);
     //std::cout << "ATTACHMENTS SETUP COMPLETE" << std::endl;
     SetupDepthBuffer(width, height);
-   // std::cout << "DEPTH BUFFER SETUP COMPLETE" << std::endl;
+    //std::cout << "DEPTH BUFFER SETUP COMPLETE" << std::endl;
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
         std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
