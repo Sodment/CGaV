@@ -20,7 +20,7 @@ Camera::Camera(bool mov, bool mos_mov, bool zoom)
 
 Camera::Camera()
 {
-	Position = glm::vec3(0.0f, 0.0f, 0.0f);
+	Position = glm::vec3(0.0f, 0.0f, -3.0f);
 	WorldUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	Yaw = -90.0f;
 	Pitch = 0.0f;

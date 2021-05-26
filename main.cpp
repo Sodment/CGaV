@@ -20,6 +20,7 @@
 #include "image.h"
 #include "g_buffer_specular.h"
 #include "quad.h"
+#include "cube.h"
 
 unsigned int SCR_WIDTH = 1280;
 unsigned int SCR_HEIGHT = 1024;
@@ -48,6 +49,7 @@ ShaderProgram* spPBRmaterial;
 ShaderProgram* spPBRtexture;
 ShaderProgram* spDeferredSpecularGeomPass;
 ShaderProgram* spDeferredSpecularLightPass;
+ShaderProgram* spPointLight;
 SkyBox* skybox;
 PostProcessingQuad* postProcessingQuad;
 Model* modelBackpack;
@@ -58,6 +60,7 @@ PBRModel* pbrmodelBackpack;
 PBRModel* pbrmodelRadioStation;
 GBufferSpecular* gBufferSpecular;
 Quad* quadTest;
+Cube* cubeTest;
 
 float offset = 1.0f / 300.0f;
 float offsets[9][2] = {
@@ -167,6 +170,9 @@ void initShaderPrograms()
 	spSimpleMaterial = new ShaderProgram("simple_material.vert", "simple_material.geom", "simple_material.frag"); //is only for seeing the model drawn with diffuse
 	spPBRmaterial = new ShaderProgram("pbr_material.vert", NULL, "pbr_material.frag");
 
+	//For light casters
+	spPointLight = new ShaderProgram("light_cube.vert", NULL, "light_cube.frag");
+
 	//Thrash
 	spFunnyCat = new ShaderProgram("funnyCat.vert", "funnyCat.geom", "funnyCat.frag");
 }
@@ -174,6 +180,7 @@ void initShaderPrograms()
 void initModels()
 {
 	quadTest = new Quad();
+	cubeTest = new Cube();
 	quadTest->AddTexture("res/quads/wood.png", "texture_diffuse");
 	quadTest->AddTexture("res/quads/ao_white.png", "texture_specular");
 	//modelShield = new Model("res/shield/shield.obj");
@@ -345,6 +352,20 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spSimpleTexture->u("M"), 1, false, glm::value_ptr(M));
 
 	modelBackpack->Draw(*spSimpleTexture);*/
+
+
+	spPointLight->use();
+	glUniformMatrix4fv(spPointLight->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spPointLight->u("V"), 1, false, glm::value_ptr(V));
+	for (size_t i = 0; i < 2; i++)
+	{
+		M = glm::mat4(1.0);
+		M = glm::translate(M, pointLights[i].position);
+		M = glm::scale(M, glm::vec3(0.2f, 0.2f, 0.2f));
+		glUniformMatrix4fv(spPointLight->u("M"), 1, false, glm::value_ptr(M));
+		glUniform3fv(spPointLight->u("color"), 1, &pointLights[i].diffuse[0]);
+		cubeTest->Draw(*spPointLight);
+	}
 
 
 	//Skybox drawing

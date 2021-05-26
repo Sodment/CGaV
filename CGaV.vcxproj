@@ -146,6 +146,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="camera.cpp" />
+    <ClCompile Include="cube.cpp" />
     <ClCompile Include="g_buffer_specular.cpp" />
     <ClCompile Include="image.cpp" />
     <ClCompile Include="lights.cpp" />
@@ -162,6 +163,7 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="cube.h" />
     <ClInclude Include="g_buffer_specular.h" />
     <ClInclude Include="image.h" />
     <ClInclude Include="lights.h" />
@@ -180,6 +182,8 @@
     <None Include="df_diff_spec_light_pass.vert" />
     <None Include="diffuse_only.frag" />
     <None Include="diffuse_only.vert" />
+    <None Include="light_cube.vert" />
+    <None Include="light_cube.frag" />
     <None Include="pbr_material.frag" />
     <None Include="pbr_material.vert" />
     <None Include="pbr_texture.frag" />
