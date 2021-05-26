@@ -19,7 +19,6 @@ vec3 FlowUV(vec2 TexCoords,vec2 flow,vec2 jump, float time, bool flowB)
     return uvw;
 }
 
-
 void main()
 {
     vec2 flowVector = texture(texture_specular1, TexCoords).xy * 2 - 1;

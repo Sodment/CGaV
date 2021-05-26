@@ -233,23 +233,6 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	/*spNormalTexture->use();
-
-	glUniform3fv(spNormalTexture->u("viewPos"), 1, &camera->Position[0]);
-
-	SetDirLight(*spNormalTexture, dirLight);
-	SetMulPointLight(*spNormalTexture, pointLights, 2);
-
-	glUniformMatrix4fv(spNormalTexture->u("P"), 1, false, glm::value_ptr(P));
-	glUniformMatrix4fv(spNormalTexture->u("V"), 1, false, glm::value_ptr(V));
-
-	M = glm::translate(M, glm::vec3(5.0f, 0.0f, 0.0f));
-	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	glUniformMatrix4fv(spNormalTexture->u("M"), 1, false, glm::value_ptr(M));
-
-	modelBackpack->Draw(*spNormalTexture);*/
-
 	spPBRtexture->use();
 	SetMulPBRLight(*spPBRtexture, pointLights, NR_LIGHTS);
 
