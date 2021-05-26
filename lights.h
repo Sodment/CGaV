@@ -1,5 +1,6 @@
 #ifndef LIGHTS_H
 #define LIGHTS_H
+#define NR_LIGHTS 5
 
 #pragma warning(disable: 4996)
 #include <GL/glew.h>
@@ -33,7 +34,7 @@ typedef struct dirlight
 }DirLight;
 
 extern DirLight dirLight;
-extern PointLight pointLights[4];
+extern PointLight pointLights[NR_LIGHTS];
 
 void SetPointLight(ShaderProgram& sp, PointLight light, int index);
 void SetMulPointLight(ShaderProgram& sp, PointLight lights[], int size);

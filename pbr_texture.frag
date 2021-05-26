@@ -1,5 +1,5 @@
 #version 330
-#define LIGHT_COUNT 4
+#define LIGHT_COUNT 5
 out vec4 FragColor;
 
 // material parameters
@@ -20,7 +20,7 @@ struct Light{
     vec3 color;
     float constant;
     float linear;
-    float quadratic;  
+    float quadratic;
 };
 
 uniform Light lights[LIGHT_COUNT];

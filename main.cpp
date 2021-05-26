@@ -252,7 +252,7 @@ void drawScene(GLFWwindow* window) {
 	modelBackpack->Draw(*spNormalTexture);*/
 
 	spPBRtexture->use();
-	SetMulPBRLight(*spPBRtexture, pointLights, 4);
+	SetMulPBRLight(*spPBRtexture, pointLights, NR_LIGHTS);
 
 	//glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
 	glUniform1f(spPBRtexture->u("lightRadius"), 100.0f);
@@ -405,7 +405,7 @@ void drawScene(GLFWwindow* window) {
 	spPointLight->use();
 	glUniformMatrix4fv(spPointLight->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPointLight->u("V"), 1, false, glm::value_ptr(V));
-	for (size_t i = 0; i < 4; i++)
+	for (size_t i = 0; i < NR_LIGHTS; i++)
 	{
 		M = glm::mat4(1.0);
 		M = glm::translate(M, pointLights[i].position);

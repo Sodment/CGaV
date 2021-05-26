@@ -1,5 +1,5 @@
 #version 330
-#define LIGHT_COUNT 4
+#define LIGHT_COUNT 5
 out vec4 FragColor;
 
 struct Material {
@@ -110,7 +110,7 @@ void main()
 
         // add to outgoing radiance Lo
         Lo += (kD * material.albedo / PI + specular) * radiance * NdotL;  // we already multiplied the BRDF by the Fresnel (kS)
-    }   
+    }
     
     // ambient lighting
     vec3 ambient = vec3(0.03) * material.albedo * material.ao;

@@ -9,7 +9,7 @@ DirLight dirLight =
     glm::vec3(0.5f, 0.5f, 0.5f),
 };
 
-PointLight pointLights[4] =
+PointLight pointLights[NR_LIGHTS] =
 {
 //1
 glm::vec3(-8.0f, 9.5f, -8.0f),
@@ -40,6 +40,15 @@ glm::vec3(1.0f, 1.0f, 1.0f),
 
 //4
 glm::vec3(8.0f, 9.5f, 8.0f),
+1.0f,
+0.14f,
+0.007f,
+glm::vec3(0.05f, 0.05f, 0.05f),
+glm::vec3(1.0f, 1.0f, 0.0f),
+glm::vec3(1.0f, 1.0f, 1.0f),
+
+//5
+glm::vec3(0.0f, 9.5f, 0.0f),
 1.0f,
 0.14f,
 0.007f,
