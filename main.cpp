@@ -50,6 +50,7 @@ ShaderProgram* spPBRtexture;
 ShaderProgram* spDeferredSpecularGeomPass;
 ShaderProgram* spDeferredSpecularLightPass;
 ShaderProgram* spPointLight;
+ShaderProgram* spWater;
 SkyBox* skybox;
 PostProcessingQuad* postProcessingQuad;
 Model* modelBackpack;
@@ -173,6 +174,9 @@ void initShaderPrograms()
 	//For light casters
 	spPointLight = new ShaderProgram("light_cube.vert", NULL, "light_cube.frag");
 
+	//For water
+	spWater = new ShaderProgram("water.vert", NULL, "water.frag");
+
 	//Thrash
 	spFunnyCat = new ShaderProgram("funnyCat.vert", "funnyCat.geom", "funnyCat.frag");
 }
@@ -182,7 +186,7 @@ void initModels()
 	quadTest = new Quad();
 	cubeTest = new Cube();
 	quadTest->AddTexture("res/quads/wood.png", "texture_diffuse");
-	quadTest->AddTexture("res/quads/ao_white.png", "texture_specular");
+	quadTest->AddTexture("res/quads/specular.png", "texture_specular");
 	//modelShield = new Model("res/shield/shield.obj");
 	//pbrmodelTestCube = new PBRModel("res/test_cube/cube.obj");
 	//pbrmodelTestSphere = new PBRModel("res/test_sphere/sphere.obj");
@@ -423,7 +427,7 @@ int main(void)
 
 	if (!window)
 	{
-		fprintf(stderr, "Error eh ncreating the window.\n");
+		fprintf(stderr, "Error when creating the window.\n");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}

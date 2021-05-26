@@ -201,6 +201,7 @@
     <None Include="simple_material.vert" />
     <None Include="diff_spec_norm.vert" />
     <None Include="water.frag" />
+    <None Include="water.vert" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="df_diff_spec_geom_pass.frag" />
