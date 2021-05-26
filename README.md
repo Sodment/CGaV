@@ -8,6 +8,7 @@ This project started as a project for my Coputer Graphics and Visualization Clas
  - basic post processing (3x3 kernel)
  - couple of glsl shaders for diffrent workflows
  - movable camera
+ - drunk effect using postprocessing and camera movement
 
 # Planned features:
   - deferred shading for both specular and metalic workflows
@@ -16,4 +17,3 @@ This project started as a project for my Coputer Graphics and Visualization Clas
   - AABB phsics
   - combine rendering and physics to create Game Objects
   - some example scene
-  - drunk effect using postprocessing and camera movement
