@@ -184,6 +184,15 @@
     <None Include="water.vert">
       <Filter>Pliki zasobów</Filter>
     </None>
+    <None Include="shadows.vert">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="shadows.geom">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="shadows.frag">
+      <Filter>Pliki zasobów</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="skybox.vert">

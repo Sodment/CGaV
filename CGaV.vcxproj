@@ -195,6 +195,9 @@
     <None Include="material.frag" />
     <None Include="diff_spec_norm.frag" />
     <None Include="funnyCat.geom" />
+    <None Include="shadows.frag" />
+    <None Include="shadows.geom" />
+    <None Include="shadows.vert" />
     <None Include="simple_material.geom" />
     <None Include="funnyCat.vert" />
     <None Include="material.vert" />

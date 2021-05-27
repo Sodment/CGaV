@@ -115,11 +115,6 @@ void SetPBRPLight(ShaderProgram& sp, PointLight light, int index)
     sprintf(string, "lights[%d].color", index);
     glUniform3fv(glGetUniformLocation(sp.shaderProgram, string), 1, &light.diffuse[0]);
     sprintf(string, "lights[%d].constant", index);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, string), light.constant);
-    sprintf(string, "lights[%d].linear", index);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, string), light.linear);
-    sprintf(string, "lights[%d].quadratic", index);
-    glUniform1f(glGetUniformLocation(sp.shaderProgram, string), light.quadratic);
 }
 
 void SetMulPBRLight(ShaderProgram& sp, PointLight lights[], int size)

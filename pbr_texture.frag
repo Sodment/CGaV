@@ -21,7 +21,7 @@ struct Light{
 };
 
 uniform Light lights[LIGHT_COUNT];
-//uniform vec3 viewPos;
+uniform vec3 viewPos;
 uniform float lightRadius;
 
 const float PI = 3.14159265359;
@@ -92,8 +92,8 @@ void main()
     float ao        = texture(texture_ao1, fs_in.TexCoords).r;
 
     vec3 N = getNormalFromMap();
-    vec3 V = normalize( - fs_in.FragPos);
-    //vec3 V = normalize(viewPos - fs_in.FragPos);
+    //vec3 V = normalize( - fs_in.FragPos);
+    vec3 V = normalize(viewPos - fs_in.FragPos);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
@@ -140,7 +140,7 @@ void main()
     }   
     
     // ambient lighting (note that the next IBL tutorial will replace 
-    // this ambient lighting with environment lighting).
+    // this ambient lighting with environment lighting).     
     vec3 ambient = vec3(0.03) * albedo * ao;
     
     vec3 color = ambient + Lo;

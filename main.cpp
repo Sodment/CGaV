@@ -21,6 +21,7 @@
 #include "g_buffer_specular.h"
 #include "quad.h"
 #include "cube.h"
+#include "shadows.h"
 
 unsigned int SCR_WIDTH = 1280;
 unsigned int SCR_HEIGHT = 1024;
@@ -51,9 +52,11 @@ ShaderProgram* spDeferredSpecularGeomPass;
 ShaderProgram* spDeferredSpecularLightPass;
 ShaderProgram* spPointLight;
 ShaderProgram* spWater;
+ShaderProgram* spShadows;
 SkyBox* skybox;
 PBRModel* modelFireplace;
 PostProcessingQuad* postProcessingQuad;
+ShadowsMap* shadowsMap;
 GBufferSpecular* gBufferSpecular;
 Quad* quadFloor;
 Quad* quadWalls;
@@ -173,6 +176,9 @@ void initShaderPrograms()
 	//For water
 	spWater = new ShaderProgram("water.vert", NULL, "water.frag");
 
+	//For shadows
+	spShadows = new ShaderProgram("shadows.vert", "shadows.geom", "shadows.frag");
+
 	//Thrash
 	spFunnyCat = new ShaderProgram("funnyCat.vert", "funnyCat.geom", "funnyCat.frag");
 }
@@ -213,6 +219,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	skybox = new SkyBox();
 	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
 	gBufferSpecular = new GBufferSpecular(SCR_WIDTH, SCR_HEIGHT);
+	shadowsMap = new ShadowsMap(SCR_WIDTH, SCR_HEIGHT);
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -236,7 +243,8 @@ void drawScene(GLFWwindow* window) {
 	spPBRtexture->use();
 	SetMulPBRLight(*spPBRtexture, pointLights, NR_LIGHTS);
 
-	glUniform3fv(spPBRtexture->u("lights[4].position"), 1, &camera->Position[0]);
+	//glUniform3fv(spPBRtexture->u("lights[4].position"), 1, &camera->Position[0]);
+	glUniform3fv(spPBRtexture->u("viewPos"), 1, &camera->Position[0]);
 	glUniform1f(spPBRtexture->u("lightRadius"), 10.00f);
 
 	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
