@@ -16,7 +16,7 @@ uniform mat4 M;
 void main()
 {
     vs_out.FragPos = vec3(M * vec4(aPos, 1.0));
-    vs_out.Normal = mat3 (M) * aNormal;
+    vs_out.Normal = mat3 (M ) * aNormal;
     vs_out.TexCoords = aTexCoords;
     gl_Position = P * V * M * vec4(aPos, 1.0);
 }
