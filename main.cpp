@@ -22,6 +22,7 @@
 #include "quad.h"
 #include "cube.h"
 #include "shadows.h"
+#include "particle_system.h"
 
 unsigned int SCR_WIDTH = 1280;
 unsigned int SCR_HEIGHT = 1024;
@@ -53,10 +54,12 @@ ShaderProgram* spDeferredSpecularLightPass;
 ShaderProgram* spPointLight;
 ShaderProgram* spWater;
 ShaderProgram* spShadows;
+ShaderProgram* spParticles;
 SkyBox* skybox;
 PBRModel* modelFireplace;
 PostProcessingQuad* postProcessingQuad;
 ShadowsMap* shadowsMap;
+ParticleGenerator* particle;
 GBufferSpecular* gBufferSpecular;
 Quad* quadFloor;
 Quad* quadWalls;
@@ -179,6 +182,9 @@ void initShaderPrograms()
 	//For shadows
 	spShadows = new ShaderProgram("shadows.vert", "shadows.geom", "shadows.frag");
 
+	//For particles
+	spParticles = new ShaderProgram("particles.vert", NULL, "particles.frag");
+
 	//Thrash
 	spFunnyCat = new ShaderProgram("funnyCat.vert", "funnyCat.geom", "funnyCat.frag");
 }
@@ -210,6 +216,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glDepthFunc(GL_LEQUAL);
 	//glEnable(GL_FRAMEBUFFER_SRGB);
 	glEnable(GL_MULTISAMPLE);
+	glEnable(GL_BLEND);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
 	glfwSetKeyCallback(window, keyCallback);
@@ -218,8 +225,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	camera = new Camera();
 	skybox = new SkyBox();
 	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
-	gBufferSpecular = new GBufferSpecular(SCR_WIDTH, SCR_HEIGHT);
-	shadowsMap = new ShadowsMap(SCR_WIDTH, SCR_HEIGHT);
+	GLuint particle_tex = TextureFromFile("res/quads/particle.png");
+	particle = new ParticleGenerator(particle_tex, 1);
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -327,6 +334,14 @@ void drawScene(GLFWwindow* window) {
 		glUniform3fv(spPointLight->u("color"), 1, &pointLights[i].diffuse[0]);
 		cubeTest->Draw(*spPointLight);
 	}
+
+	//Particles
+	spParticles->use();
+	glUniformMatrix4fv(spParticles->u("P"), 1, false, glm::value_ptr(P));
+	glUniformMatrix4fv(spParticles->u("V"), 1, false, glm::value_ptr(V));
+	glUniformMatrix4fv(spParticles->u("M"), 1, false, glm::value_ptr(M));
+	particle->Update(deltaTime, glm::vec3(0.0f, 2.0f, 0.0f), 2, glm::vec2(1.5f, 1.5f));
+	particle->Draw(*spParticles);
 
 	//Skybox drawing
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));

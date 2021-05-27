@@ -1,4 +1,4 @@
-#ifndef  SHADOWS_H
+#ifndef SHADOWS_H
 #define SHADOWS_H
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

@@ -60,6 +60,9 @@
     <ClCompile Include="shadows.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="particle_system.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shaderprogram.h">
@@ -105,6 +108,9 @@
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
     <ClInclude Include="shadows.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
+    <ClInclude Include="particle_system.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
   </ItemGroup>
@@ -191,6 +197,12 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="shadows.frag">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="particles.vert">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="particles.frag">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>
