@@ -236,8 +236,8 @@ void drawScene(GLFWwindow* window) {
 	spPBRtexture->use();
 	SetMulPBRLight(*spPBRtexture, pointLights, NR_LIGHTS);
 
-	//glUniform3fv(spPBRtexture->u("lights[0].position"), 1, &camera->Position[0]);
-	glUniform1f(spPBRtexture->u("lightRadius"), 100.0f);
+	glUniform3fv(spPBRtexture->u("lights[4].position"), 1, &camera->Position[0]);
+	glUniform1f(spPBRtexture->u("lightRadius"), 10.00f);
 
 	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));

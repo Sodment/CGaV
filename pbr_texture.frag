@@ -18,13 +18,10 @@ in VS_OUT {
 struct Light{
     vec3 position;
     vec3 color;
-    float constant;
-    float linear;
-    float quadratic;
 };
 
 uniform Light lights[LIGHT_COUNT];
-uniform vec3 viewPos;
+//uniform vec3 viewPos;
 uniform float lightRadius;
 
 const float PI = 3.14159265359;
@@ -91,11 +88,12 @@ void main()
 {		
     vec3 albedo     = pow(texture(texture_diffuse1, fs_in.TexCoords).rgb, vec3(2.2));
     float metallic  = texture(texture_metallic1, fs_in.TexCoords).r;
-    float roughness = texture(texture_roughness1, fs_in.TexCoords).r;
+    float roughness = max(texture(texture_roughness1, fs_in.TexCoords).r, 0.1);
     float ao        = texture(texture_ao1, fs_in.TexCoords).r;
 
     vec3 N = getNormalFromMap();
-    vec3 V = normalize(viewPos - fs_in.FragPos);
+    vec3 V = normalize( - fs_in.FragPos);
+    //vec3 V = normalize(viewPos - fs_in.FragPos);
 
     // calculate reflectance at normal incidence; if dia-electric (like plastic) use F0 
     // of 0.04 and if it's a metal, use the albedo color as F0 (metallic workflow)    
@@ -112,8 +110,6 @@ void main()
         float d = length(lights[i].position - fs_in.FragPos);
         float attenuation = clamp(pow(1 - pow(d/lightRadius, 4), 2), 0.0, 1.0) / (pow(d, 2) + 1);
         //float attenuation = 1.0 / (d *d);
-        //float attenuation = 1.0 / (lights[i].constant + lights[i].linear * d + 
-  		//	     lights[i].quadratic * (d * d));
         vec3 radiance = lights[i].color * attenuation;
 
         // Cook-Torrance BRDF

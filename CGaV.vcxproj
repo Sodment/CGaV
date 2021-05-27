@@ -158,6 +158,7 @@
     <ClCompile Include="post_processing.cpp" />
     <ClCompile Include="quad.cpp" />
     <ClCompile Include="shaderprogram.cpp" />
+    <ClCompile Include="shadows.cpp" />
     <ClCompile Include="skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,6 +175,7 @@
     <ClInclude Include="post_proccesing.h" />
     <ClInclude Include="quad.h" />
     <ClInclude Include="shaderprogram.h" />
+    <ClInclude Include="shadows.h" />
     <ClInclude Include="skybox.h" />
   </ItemGroup>
   <ItemGroup>

@@ -48,7 +48,7 @@ glm::vec3(1.0f, 1.0f, 0.0f),
 glm::vec3(1.0f, 1.0f, 1.0f),
 
 //5
-glm::vec3(0.0f, 9.5f, 0.0f),
+glm::vec3(0.0f, 4.5f, 0.0f),
 1.0f,
 0.14f,
 0.007f,
@@ -131,11 +131,5 @@ void SetMulPBRLight(ShaderProgram& sp, PointLight lights[], int size)
         glUniform3fv(glGetUniformLocation(sp.shaderProgram, string), 1, &lights[i].position[0]);
         sprintf(string, "lights[%d].color", i);
         glUniform3fv(glGetUniformLocation(sp.shaderProgram, string), 1, &lights[i].diffuse[0]);
-        sprintf(string, "lights[%d].constant", i);
-        glUniform1f(glGetUniformLocation(sp.shaderProgram, string), lights[i].constant);
-        sprintf(string, "lights[%d].linear", i);
-        glUniform1f(glGetUniformLocation(sp.shaderProgram, string), lights[i].linear);
-        sprintf(string, "lights[%d].quadratic", i);
-        glUniform1f(glGetUniformLocation(sp.shaderProgram, string), lights[i].quadratic);
     }
 }
