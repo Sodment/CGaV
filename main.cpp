@@ -225,8 +225,8 @@ void initOpenGLProgram(GLFWwindow* window) {
 	camera = new Camera();
 	skybox = new SkyBox();
 	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
-	GLuint particle_tex = TextureFromFile("res/quads/particle.png");
-	particle = new ParticleGenerator(particle_tex, 100);
+	GLuint particle_tex = TextureFromFile("res/quads/fire.png");
+	particle = new ParticleGenerator(particle_tex, glm::vec3(5.0f, 0.5f, -7.0f),  100);
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {

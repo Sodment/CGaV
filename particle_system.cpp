@@ -1,11 +1,12 @@
 #include "particle_system.h"
 
-ParticleGenerator::ParticleGenerator(GLuint texture, unsigned int amount)
+ParticleGenerator::ParticleGenerator(GLuint texture, glm::vec3 pos, unsigned int amount)
 {
+	this->position = pos;
 	this->texture = texture;
 	this->amount = amount;
 	particles.resize(amount);
-	for (unsigned int i = 0; i < this->particles.size(); ++i)
+	for (unsigned int i = 0; i < particles.size(); ++i)
 	{
 		// give every particle a random position
 		particles[i] = RespawnParticle();
@@ -106,7 +107,7 @@ Particle ParticleGenerator::RespawnParticle()
 	Particle part;
 	float r = dist(e2);
 	float r2 = dist(e2);
-	part.Position = glm::vec3(r, 0.0, 0.1*r);
+	part.Position = position + glm::vec3(r, 0.0, 0.1*r);
 	part.Life = r2;
 	return part;
 }

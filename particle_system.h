@@ -22,10 +22,11 @@ struct Particle {
 class ParticleGenerator
 {
 public:
-    ParticleGenerator(GLuint texture, unsigned int amount);
+    ParticleGenerator(GLuint texture, glm::vec3 pos,unsigned int amount);
     void Draw(ShaderProgram& shader);
     void Update(float dt);
 private:
+    glm::vec3 position;
     Particle RespawnParticle();
     std::vector<Particle> particles;
     unsigned int amount;
