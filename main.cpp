@@ -226,7 +226,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	skybox = new SkyBox();
 	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
 	GLuint particle_tex = TextureFromFile("res/quads/particle.png");
-	particle = new ParticleGenerator(particle_tex, 1);
+	particle = new ParticleGenerator(particle_tex, 100);
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -335,12 +335,15 @@ void drawScene(GLFWwindow* window) {
 		cubeTest->Draw(*spPointLight);
 	}
 
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(0.0f, 5.0f, 0.0f));
+
 	//Particles
 	spParticles->use();
 	glUniformMatrix4fv(spParticles->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spParticles->u("V"), 1, false, glm::value_ptr(V));
-	glUniformMatrix4fv(spParticles->u("M"), 1, false, glm::value_ptr(M));
-	particle->Update(deltaTime, glm::vec3(0.0f, 2.0f, 0.0f), 2, glm::vec2(1.5f, 1.5f));
+	glUniform1f(spParticles->u("particleSize"), 0.2f);
+	particle->Update(deltaTime);
 	particle->Draw(*spParticles);
 
 	//Skybox drawing

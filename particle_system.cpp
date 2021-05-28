@@ -2,116 +2,113 @@
 
 ParticleGenerator::ParticleGenerator(GLuint texture, unsigned int amount)
 {
-    this->amount = amount;
-    this->texture = texture;
-    Setup();
+	this->texture = texture;
+	this->amount = amount;
+	particles.resize(amount);
+	for (unsigned int i = 0; i < this->particles.size(); ++i)
+	{
+		// give every particle a random position
+		particles[i] = RespawnParticle();
+	}
+
+	glGenBuffers(1, &VAO);
+	glGenBuffers(1, &positionsBuffer);
+
+	float verticies[] =
+	{
+		0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+		0.0, 1.0f, 0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f, 0.0f, 0.0f  
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, VAO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(verticies), &verticies, GL_STATIC_DRAW);
+
+	// fill the position buffer
+	glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
+	glBufferData(GL_ARRAY_BUFFER, particles.size() * 4 * sizeof(float), positions, GL_DYNAMIC_DRAW);
+}
+
+void ParticleGenerator::Update(float dt)
+{
+	for (size_t i = 0; i < this->particles.size(); ++i)
+	{
+		// subtract from the particles lifetime
+		this->particles[i].Life -= dt;
+
+		// if the lifetime is below 0 respawn the particle
+		if (this->particles[i].Life <= 0.0f)
+		{
+			particles[i] = RespawnParticle();
+		}
+
+		// move the particle down depending on the delta time
+		this->particles[i].Position += glm::vec3(0.0f, dt * 2.0f, 0.0f);
+
+		// update the position buffer
+		this->positions[i * 4 + 0] = this->particles[i].Position[0];
+		this->positions[i * 4 + 1] = this->particles[i].Position[1];
+		this->positions[i * 4 + 2] = this->particles[i].Position[2];
+		this->positions[i * 4 + 3] = this->particles[i].Life;
+	}
 }
 
 void ParticleGenerator::Draw(ShaderProgram& shader)
 {
-    // use additive blending to give it a 'glow' effect
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-    //shader.use();
-    glActiveTexture(GL_TEXTURE0);
-    glUniform1i(glGetUniformLocation(shader.shaderProgram, "sprite"), 0);
-    for (Particle particle : particles)
-    {
-        if (particle.Life > 0.0f)
-        {
-            //printf("PARTICLE POS: %f, %f\n", particle.Position[0], particle.Position[1]);
-            glUniform2fv(glGetUniformLocation(shader.shaderProgram, "offset"), 1, &particle.Position[0]);
-            glUniform4fv(glGetUniformLocation(shader.shaderProgram, "color"), 1, &particle.Color[0]);
-            glBindTexture(GL_TEXTURE_2D, texture);
-            glBindVertexArray(VAO);
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-            glBindVertexArray(0);
-        }
-    }
-    glActiveTexture(GL_TEXTURE0);
-    // don't forget to reset to default blending mode
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(shader.shaderProgram, "sprite"), 0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glActiveTexture(GL_TEXTURE0);
+
+	// update the position buffer
+	glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, this->particles.size() * 4 * sizeof(float), this->positions);
+
+	// vertex buffer
+	glBindBuffer(GL_ARRAY_BUFFER, VAO);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+
+	// position buffer
+	glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 0, nullptr);
+	glVertexAttribDivisor(4, 1);
+
+	// draw triangles
+	glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, 4, particles.size());
+
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDisableVertexAttribArray(4);
+
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void ParticleGenerator::Update(float dt, glm::vec3 pos, unsigned int newParticles, glm::vec2 offset)
+Particle ParticleGenerator::RespawnParticle()
 {
-    // add new particles 
-    for (unsigned int i = 0; i < newParticles; ++i)
-    {
-        int unusedParticle = FirstUnusedParticle();
-        RespawnParticle(particles[unusedParticle], pos, offset);
-    }
-    // update all particles
-    for (unsigned int i = 0; i < amount; ++i)
-    {
-        Particle& p = particles[i];
-        p.Life -= dt; // reduce life
-        if (p.Life > 0.0f)
-        {	// particle is alive, thus update
-            p.Position -= p.Velocity * dt;
-            p.Color.a -= dt * 2.5f;
-        }
-    }
+	std::random_device rd;
+
+	//
+	// Engines 
+	//
+	std::mt19937 e2(rd());
+	//
+	// Distribtuions
+	//
+	std::uniform_real_distribution<> dist(0, 2);
+	Particle part;
+	float r = dist(e2);
+	float r2 = dist(e2);
+	part.Position = glm::vec3(r, 0.0, 0.1*r);
+	part.Life = r2;
+	return part;
 }
 
-void ParticleGenerator::Setup()
-{
-    GLuint VBO;
-    float particle_quad[] = {
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f,
-        0.0f, 0.0f, 0.0f, 0.0f,
 
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 1.0f, 1.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f
-    };
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-    // fill mesh buffer
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(particle_quad), particle_quad, GL_STATIC_DRAW);
-    // set mesh attributes
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-    glBindVertexArray(0);
-
-    // create this->amount default particle instances
-    for (unsigned int i = 0; i < amount; ++i)
-    {
-        particles.push_back(Particle());
-    }
-}
-
-unsigned int lastUsedParticle = 0;
-
-unsigned int ParticleGenerator::FirstUnusedParticle()
-{
-    // first search from last used particle, this will usually return almost instantly
-    for (unsigned int i = lastUsedParticle; i < amount; ++i) {
-        if (particles[i].Life <= 0.0f) {
-            lastUsedParticle = i;
-            return i;
-        }
-    }
-    // otherwise, do a linear search
-    for (unsigned int i = 0; i < lastUsedParticle; ++i) {
-        if (particles[i].Life <= 0.0f) {
-            lastUsedParticle = i;
-            return i;
-        }
-    }
-    // all particles are taken, override the first one (note that if it repeatedly hits this case, more particles should be reserved)
-    lastUsedParticle = 0;
-    return 0;
-}
-
-void ParticleGenerator::RespawnParticle(Particle& particle, glm::vec3 pos, glm::vec2 offset)
-{
-    float random = ((rand() % 100) - 50) / 10.0f;
-    float rColor = 0.5f + ((rand() % 100) / 100.0f);
-    particle.Position = pos + random + glm::vec3(offset, 0.0);
-    particle.Color = glm::vec4(rColor, rColor, rColor, 1.0f);
-    particle.Life = 1.0f;
-    particle.Velocity = glm::vec2(1.0f, 1.0) * 0.1f;
-}
