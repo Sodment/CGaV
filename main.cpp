@@ -241,7 +241,7 @@ void initModels()
 	modelBottle = new PBRModel("res/PBRModels/Vessels/bottle.obj");
 	modelBottle2 = new PBRModel("res/PBRModels/Vessels/pink_love.obj");
 	modelFireplace2 = new PBRModel("res/PBRModels/Fireplace/fireplace2.obj");
-	particle = new ParticleGenerator(TextureFromFile("res/quads/fire.png"), glm::vec3(4.8f, 0.5f, -7.0f),  200);
+	particle = new ParticleGenerator(TextureFromFile("res/quads/fire2.png"), glm::vec3(4.77f, 0.5f, -7.0f),  200);
 	//particle2 = new ParticleGenerator(TextureFromFile("res/quads/ja2_1.png"), glm::vec3(0.0f, 0.5f, 0.0f),  5);
 	skybox = new SkyBox();
 }
