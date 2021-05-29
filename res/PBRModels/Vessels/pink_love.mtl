@@ -1,7 +1,7 @@
 # Blender MTL File: 'None'
 # Material Count: 1
 
-newmtl trn_Fireplace
+newmtl trn_Bottles.002
 Ns 86.470579
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
@@ -10,8 +10,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.450000
 d 0.000000
 illum 9
-map_Kd trn_Fireplace_AlbedoTransparency.png
-map_Bump trn_Fireplace_Normal.png
+map_Kd trn_Bottles_AlbedoTransparency.png
+map_Bump trn_Bottles_Normal.png
 map_Ks ao_white.png
 map_Ka ao_white.png
-map_d trn_Fireplace_MetallicSmoothness.png
+map_d trn_Bottles_MetallicSmoothness.png
