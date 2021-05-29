@@ -91,7 +91,6 @@ void ParticleGenerator::Draw(ShaderProgram& shader)
 	glDisableVertexAttribArray(4);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	printf("IM HERE\n");
 }
 
 Particle ParticleGenerator::RespawnParticle()

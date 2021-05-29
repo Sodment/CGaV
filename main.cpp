@@ -60,6 +60,7 @@ PBRModel* modelFireplace;
 PostProcessingQuad* postProcessingQuad;
 ShadowsMap* shadowsMap;
 ParticleGenerator* particle;
+ParticleGenerator* particle2;
 GBufferSpecular* gBufferSpecular;
 Quad* quadFloor;
 Quad* quadWalls;
@@ -207,6 +208,9 @@ void initModels()
 	quadWalls->AddTexture("res/quads/wornpaintedwoodsiding-ao.png", "texture_ao");
 
 	modelFireplace = new PBRModel("res/PBRModels/Fireplace/fireplace.obj");
+	particle = new ParticleGenerator(TextureFromFile("res/quads/fire.png"), glm::vec3(5.0f, 0.5f, -7.0f),  200);
+	particle = new ParticleGenerator(TextureFromFile("res/quads/ja2_1.png"), glm::vec3(0.0f, 0.5f, 0.0f),  200);
+	skybox = new SkyBox();
 }
 
 
@@ -223,10 +227,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glfwSetCursorPosCallback(window, mouseCallback);
 	glfwSetScrollCallback(window, scrollCallback);
 	camera = new Camera();
-	skybox = new SkyBox();
 	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
-	GLuint particle_tex = TextureFromFile("res/quads/fire.png");
-	particle = new ParticleGenerator(particle_tex, glm::vec3(5.0f, 0.5f, -7.0f),  200);
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
