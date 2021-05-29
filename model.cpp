@@ -50,6 +50,7 @@ void Model::processNode(aiNode* node, const aiScene* scene)
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		meshes.push_back(processMesh(mesh, scene));
 	}
+	printf("Meshes loaded\n");
 	// after we've processed all of the meshes (if any) we then recursively process each of the children nodes
 	for (unsigned int i = 0; i < node->mNumChildren; i++)
 	{
@@ -66,6 +67,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	vector<Texture> textures;
 
 	// walk through each of the mesh's vertices
+	vertices.reserve(mesh->mNumVertices);
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		Vertex vertex;
@@ -113,6 +115,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 	{
 		aiFace face = mesh->mFaces[i];
 		// retrieve all indices of the face and store them in the indices vector
+		indices.reserve(face.mNumIndices);
 		for (unsigned int j = 0; j < face.mNumIndices; j++)
 			indices.push_back(face.mIndices[j]);
 	}

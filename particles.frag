@@ -7,6 +7,8 @@ uniform sampler2D sprite;
 
 void main()
 {
-   FragColor = texture(sprite, texCoord);
+	vec4 tex = texture(sprite, texCoord);
+	tex.a = tex.a * lifetime;
+	FragColor = tex;
    //FragColor = texture(sprite, vec2(1.0 ,0.0));
 }

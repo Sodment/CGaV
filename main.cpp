@@ -39,6 +39,8 @@ bool firstMouse = true;
 bool drunk = false;
 
 Camera* camera;
+
+// Shaders
 ShaderProgram* spSkyBox;
 ShaderProgram* spDiffuseOnly;
 ShaderProgram* spSimpleTexture;
@@ -55,10 +57,14 @@ ShaderProgram* spPointLight;
 ShaderProgram* spWater;
 ShaderProgram* spShadows;
 ShaderProgram* spParticles;
+
+// Utility
 SkyBox* skybox;
-PBRModel* modelFireplace;
 PostProcessingQuad* postProcessingQuad;
 ShadowsMap* shadowsMap;
+
+//Models
+PBRModel* modelFireplace;
 ParticleGenerator* particle;
 ParticleGenerator* particle2;
 GBufferSpecular* gBufferSpecular;
@@ -209,7 +215,7 @@ void initModels()
 
 	modelFireplace = new PBRModel("res/PBRModels/Fireplace/fireplace.obj");
 	particle = new ParticleGenerator(TextureFromFile("res/quads/fire.png"), glm::vec3(5.0f, 0.5f, -7.0f),  200);
-	particle = new ParticleGenerator(TextureFromFile("res/quads/ja2_1.png"), glm::vec3(0.0f, 0.5f, 0.0f),  200);
+	particle2 = new ParticleGenerator(TextureFromFile("res/quads/ja2_1.png"), glm::vec3(0.0f, 0.5f, 0.0f),  5);
 	skybox = new SkyBox();
 }
 
@@ -348,6 +354,8 @@ void drawScene(GLFWwindow* window) {
 	glUniform1f(spParticles->u("particleSize"), 0.2f);
 	particle->Update(deltaTime);
 	particle->Draw(*spParticles);
+	particle2->Update(deltaTime);
+	particle2->Draw(*spParticles);
 
 	//Skybox drawing
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));
