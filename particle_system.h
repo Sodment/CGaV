@@ -29,8 +29,8 @@ private:
     glm::vec3 position;
     Particle RespawnParticle();
     std::vector<Particle> particles;
+    std::vector<float> positions;
     unsigned int amount;
-    float positions[400];
     GLuint VAO,positionsBuffer, texture;
 };
 

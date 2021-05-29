@@ -226,7 +226,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	skybox = new SkyBox();
 	postProcessingQuad = new  PostProcessingQuad(SCR_WIDTH, SCR_HEIGHT);
 	GLuint particle_tex = TextureFromFile("res/quads/fire.png");
-	particle = new ParticleGenerator(particle_tex, glm::vec3(5.0f, 0.5f, -7.0f),  100);
+	particle = new ParticleGenerator(particle_tex, glm::vec3(5.0f, 0.5f, -7.0f),  200);
 }
 
 void freeOpenGLProgram(GLFWwindow* window) {
@@ -257,13 +257,6 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPBRtexture->u("V"), 1, false, glm::value_ptr(V));
 
-	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(6.0f, 0.5f, -7.0f));
-	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
-
-	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-
-	modelFireplace->Draw(*spPBRtexture);
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(0.0f, 1.0f, 0.0f));
@@ -322,6 +315,15 @@ void drawScene(GLFWwindow* window) {
 
 	quadWalls->Draw(*spPBRtexture);
 
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(6.0f, 0.5f, -7.0f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelFireplace->Draw(*spPBRtexture);
+
+	//Light Casters
 	spPointLight->use();
 	glUniformMatrix4fv(spPointLight->u("P"), 1, false, glm::value_ptr(P));
 	glUniformMatrix4fv(spPointLight->u("V"), 1, false, glm::value_ptr(V));

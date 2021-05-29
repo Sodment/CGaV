@@ -6,6 +6,7 @@ ParticleGenerator::ParticleGenerator(GLuint texture, glm::vec3 pos, unsigned int
 	this->texture = texture;
 	this->amount = amount;
 	particles.resize(amount);
+	positions.resize(4 * amount);
 	for (unsigned int i = 0; i < particles.size(); ++i)
 	{
 		// give every particle a random position
@@ -28,12 +29,12 @@ ParticleGenerator::ParticleGenerator(GLuint texture, glm::vec3 pos, unsigned int
 
 	// fill the position buffer
 	glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
-	glBufferData(GL_ARRAY_BUFFER, particles.size() * 4 * sizeof(float), positions, GL_DYNAMIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, particles.size() * 5 * sizeof(float), positions.data(), GL_DYNAMIC_DRAW);
 }
 
 void ParticleGenerator::Update(float dt)
 {
-	for (size_t i = 0; i < this->particles.size(); ++i)
+	for (size_t i = 0; i < particles.size(); ++i)
 	{
 		// subtract from the particles lifetime
 		this->particles[i].Life -= dt;
@@ -67,7 +68,7 @@ void ParticleGenerator::Draw(ShaderProgram& shader)
 
 	// update the position buffer
 	glBindBuffer(GL_ARRAY_BUFFER, positionsBuffer);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, this->particles.size() * 4 * sizeof(float), this->positions);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, this->particles.size() * 5 * sizeof(float), positions.data());
 
 	// vertex buffer
 	glBindBuffer(GL_ARRAY_BUFFER, VAO);
@@ -90,20 +91,15 @@ void ParticleGenerator::Draw(ShaderProgram& shader)
 	glDisableVertexAttribArray(4);
 
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	printf("IM HERE\n");
 }
 
 Particle ParticleGenerator::RespawnParticle()
 {
 	std::random_device rd;
 
-	//
-	// Engines 
-	//
 	std::mt19937 e2(rd());
-	//
-	// Distribtuions
-	//
-	std::uniform_real_distribution<> dist(0, 2);
+	std::uniform_real_distribution<> dist(0.5, 2);
 	Particle part;
 	float r = dist(e2);
 	float r2 = dist(e2);
