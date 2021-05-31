@@ -62,6 +62,8 @@ ShaderProgram* spParticles;
 SkyBox* skybox;
 PostProcessingQuad* postProcessingQuad;
 ShadowsMap* shadowsMap;
+ParticleGenerator* particle;
+GBufferSpecular* gBufferSpecular;
 
 //Models
 PBRModel* modelFireplace;
@@ -88,9 +90,6 @@ PBRModel* modelCup_m;
 PBRModel* modelShelf;
 PBRModel* modelBackpack;
 PBRModel* modelFirelog;
-ParticleGenerator* particle;
-//ParticleGenerator* particle2;
-GBufferSpecular* gBufferSpecular;
 Quad* quadFloor;
 Quad* quadWalls;
 
@@ -261,8 +260,8 @@ void initModels()
 	modelShelf = new PBRModel("res/PBRModels/Shelves/shelf.obj");
 	modelFirelog = new PBRModel("res/PBRModels/Firelog/firelog.obj");
 	modelBackpack = new PBRModel("res/backpack/backpack.obj");
-	particle = new ParticleGenerator(TextureFromFile("res/quads/fire2.png"), glm::vec3(4.77f, 0.5f, -7.0f),  200);
-	//particle2 = new ParticleGenerator(TextureFromFile("res/quads/ja2_1.png"), glm::vec3(0.0f, 0.5f, 0.0f),  5);
+	particle = new ParticleGenerator(TextureFromFile("res/quads/fire2.png"), glm::vec3(4.77f, 0.5f, -7.0f),  400);
+
 	skybox = new SkyBox();
 }
 
@@ -271,7 +270,6 @@ void initModels()
 void initOpenGLProgram(GLFWwindow* window) {
 	glClearColor(0, 0, 0, 1);
 	glDepthFunc(GL_LEQUAL);
-	//glEnable(GL_FRAMEBUFFER_SRGB);
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_BLEND);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -789,10 +787,6 @@ void drawScene(GLFWwindow* window) {
 	glUniform1f(spParticles->u("particleSize"), 0.2f);
 	particle->Update(deltaTime);
 	particle->Draw(*spParticles);
-	/*
-	particle2->Update(deltaTime);
-	particle2->Draw(*spParticles);
-	*/
 
 	//Skybox drawing
 	V = glm::mat4(glm::mat3(camera->GetViewMatrix()));

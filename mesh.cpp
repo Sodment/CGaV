@@ -12,7 +12,7 @@ Mesh::Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std:
 }
 
 // render the mesh
-void Mesh::Draw(ShaderProgram& shader)
+void Mesh::Draw(const ShaderProgram& shader)
 {
     // bind appropriate textures
     unsigned int diffuseNr = 1;
@@ -48,7 +48,7 @@ void Mesh::Draw(ShaderProgram& shader)
     glActiveTexture(GL_TEXTURE0);
 }
 
-void Mesh::DrawMaterial(ShaderProgram& shader)
+void Mesh::DrawMaterial(const ShaderProgram& shader)
 {
 
     glUniform3fv(glGetUniformLocation(shader.shaderProgram, "material.ambient"), 1, &this->material.Ambient[0]);

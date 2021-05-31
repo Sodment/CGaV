@@ -15,29 +15,28 @@
 #include <iostream>
 #include <map>
 #include <vector>
-using namespace std;
 
 class PBRModel
 {
 public:
     // model data 
-    vector<PBRTexture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
-    vector<PBRMesh> meshes;
-    string directory;
+    std::vector<PBRTexture> textures_loaded;	// stores all the textures loaded so far, optimization to make sure textures aren't loaded more than once.
+    std::vector<PBRMesh> meshes;
+    std::string directory;
 
-    PBRModel(string const& path);
+    PBRModel(std::string const& path);
 
-    void Draw(ShaderProgram& shader);
-    void DrawMaterial(ShaderProgram& shader);
+    void Draw(const ShaderProgram& shader);
+    void DrawMaterial(const ShaderProgram& shader);
 
 private:
-    void loadModel(string const& path);
+    void loadModel(std::string const& path);
 
     void processNode(aiNode* node, const aiScene* scene);
     PBRMesh processMesh(aiMesh* mesh, const aiScene* scene);
 
     PBRMaterial loadMaterial(aiMaterial* mat);
 
-    vector<PBRTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName);
+    std::vector<PBRTexture> loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName);
 };
 #endif

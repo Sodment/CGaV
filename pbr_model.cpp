@@ -1,28 +1,27 @@
 #include "pbr_model.h"
 #include "image.h"
-using namespace std;
 
 
-PBRModel::PBRModel(string const& path)
+PBRModel::PBRModel(std::string const& path)
 {
 	loadModel(path);
 }
 
 // draws the model, and thus all its meshes
-void PBRModel::Draw(ShaderProgram& shader)
+void PBRModel::Draw(const ShaderProgram& shader)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].Draw(shader);
 }
 
-void PBRModel::DrawMaterial(ShaderProgram& shader)
+void PBRModel::DrawMaterial(const ShaderProgram& shader)
 {
 	for (unsigned int i = 0; i < meshes.size(); i++)
 		meshes[i].DrawMaterial(shader);
 }
 
 // loads a model with supported ASSIMP extensions from file and stores the resulting meshes in the meshes vector.
-void PBRModel::loadModel(string const& path)
+void PBRModel::loadModel(std::string const& path)
 {
 	// read file via ASSIMP
 	Assimp::Importer importer;
@@ -62,10 +61,11 @@ void PBRModel::processNode(aiNode* node, const aiScene* scene)
 PBRMesh PBRModel::processMesh(aiMesh* mesh, const aiScene* scene)
 {
 	// data to fill
-	vector<PBRVertex> vertices;
-	vector<unsigned int> indices;
-	vector<PBRTexture> textures;
-
+	std::vector<PBRVertex> vertices;
+	std::vector<unsigned int> indices;
+	std::vector<PBRTexture> textures;
+	vertices.reserve(mesh->mNumVertices);
+	indices.reserve(mesh->mNumFaces);
 	// walk through each of the mesh's vertices
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
@@ -112,13 +112,13 @@ PBRMesh PBRModel::processMesh(aiMesh* mesh, const aiScene* scene)
 	PBRMaterial mat = loadMaterial(material);
 
 	// 1. albedo maps
-	vector<PBRTexture> albedoeMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
+	std::vector<PBRTexture> albedoeMaps = loadMaterialTextures(material, aiTextureType_DIFFUSE, "texture_diffuse");
 	textures.insert(textures.end(), albedoeMaps.begin(), albedoeMaps.end());
 	// 2. ao maps
-	vector<PBRTexture> aoMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_ao");
+	std::vector<PBRTexture> aoMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_ao");
 	textures.insert(textures.end(), aoMaps.begin(), aoMaps.end());
 	// 3. metallic
-	vector<PBRTexture> metallicMaps = loadMaterialTextures(material, aiTextureType_OPACITY, "texture_metallic");
+	std::vector<PBRTexture> metallicMaps = loadMaterialTextures(material, aiTextureType_OPACITY, "texture_metallic");
 	textures.insert(textures.end(), metallicMaps.begin(), metallicMaps.end());
 	// 4. normal maps
 	std::vector<PBRTexture> normalMaps = loadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
@@ -155,7 +155,7 @@ PBRMaterial PBRModel::loadMaterial(aiMaterial* mat) {
 
 // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // the required info is returned as a Texture struct.
-vector<PBRTexture> PBRModel::loadMaterialTextures(aiMaterial* mat, aiTextureType type, string typeName)
+std::vector<PBRTexture> PBRModel::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
 	vector<PBRTexture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)

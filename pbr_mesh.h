@@ -36,8 +36,8 @@ public:
     PBRMaterial material;
     GLuint VAO;
     PBRMesh(std::vector<PBRVertex> vertices, std::vector<unsigned int> indices, std::vector<PBRTexture> textures, PBRMaterial mat);
-    void Draw(ShaderProgram& shader);
-    void DrawMaterial(ShaderProgram& shader);
+    void Draw(const ShaderProgram& shader);
+    void DrawMaterial(const ShaderProgram& shader);
 
 private:
     GLuint VBO, EBO;

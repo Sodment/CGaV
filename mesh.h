@@ -37,8 +37,8 @@ public:
     Material material;
     GLuint VAO;
     Mesh(std::vector<Vertex> vertices, std::vector<unsigned int> indices, std::vector<Texture> textures, Material mat);
-    void Draw(ShaderProgram& shader);
-    void DrawMaterial(ShaderProgram& shader);
+    void Draw(const ShaderProgram& shader);
+    void DrawMaterial(const ShaderProgram& shader);
 
 private:
     GLuint VBO, EBO;

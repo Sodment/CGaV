@@ -11,7 +11,7 @@ PBRMesh::PBRMesh(std::vector<PBRVertex> vertices, std::vector<unsigned int> indi
 }
 
 // render the mesh
-void PBRMesh::Draw(ShaderProgram& shader)
+void PBRMesh::Draw(const ShaderProgram& shader)
 {
     // bind appropriate textures
     unsigned int diffuseNr = 1;
@@ -60,7 +60,7 @@ void PBRMesh::Draw(ShaderProgram& shader)
     glActiveTexture(GL_TEXTURE0);
 }
 
-void PBRMesh::DrawMaterial(ShaderProgram& shader)
+void PBRMesh::DrawMaterial(const ShaderProgram& shader)
 {
 
     glUniform3fv(glGetUniformLocation(shader.shaderProgram, "material.albedo"), 1, &this->material.Albedo[0]);
