@@ -1,5 +1,5 @@
 #version 330
-#define LIGHT_COUNT 8
+#define LIGHT_COUNT 9
 out vec4 FragColor;
 
 // material parameters

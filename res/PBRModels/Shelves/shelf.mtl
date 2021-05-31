@@ -1,0 +1,17 @@
+# Blender MTL File: 'None'
+# Material Count: 1
+
+newmtl trn_Rack
+Ns 86.470579
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 0.000000
+illum 9
+map_Kd trn_Rack_AlbedoTransparency.png
+map_Bump trn_Rack_Normal.png
+map_Ks ao_white.png
+map_Ka ao_white.png
+map_d trn_Rack_MetallicSmoothness.png

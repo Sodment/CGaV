@@ -1,6 +1,6 @@
 #ifndef LIGHTS_H
 #define LIGHTS_H
-#define NR_LIGHTS 8
+#define NR_LIGHTS 9
 
 #pragma warning(disable: 4996)
 #include <GL/glew.h>

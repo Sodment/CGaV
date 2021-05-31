@@ -78,6 +78,16 @@ PBRModel* modelBarrel;
 PBRModel* modelBottle;
 PBRModel* modelBottle2;
 PBRModel* modelFireplace2;
+PBRModel* modelPlate;
+PBRModel* modelBowl;
+PBRModel* modelSack;
+PBRModel* modelApple;
+PBRModel* modelCheese;
+PBRModel* modelTomato;
+PBRModel* modelCup_m;
+PBRModel* modelShelf;
+PBRModel* modelBackpack;
+PBRModel* modelFirelog;
 ParticleGenerator* particle;
 //ParticleGenerator* particle2;
 GBufferSpecular* gBufferSpecular;
@@ -241,6 +251,16 @@ void initModels()
 	modelBottle = new PBRModel("res/PBRModels/Vessels/bottle.obj");
 	modelBottle2 = new PBRModel("res/PBRModels/Vessels/pink_love.obj");
 	modelFireplace2 = new PBRModel("res/PBRModels/Fireplace/fireplace2.obj");
+	modelPlate = new PBRModel("res/PBRModels/Plates/plate.obj");
+	modelBowl = new PBRModel("res/PBRModels/Plates/bowl.obj");
+	modelSack = new PBRModel("res/PBRModels/Sacks/sack.obj");
+	modelApple = new PBRModel("res/PBRModels/Apple/apple.obj");
+	modelCheese = new PBRModel("res/PBRModels/Cheese/cheese.obj");
+	modelTomato = new PBRModel("res/PBRModels/Tomato/tomato.obj");
+	modelCup_m = new PBRModel("res/PBRModels/Cups/cup.obj");
+	modelShelf = new PBRModel("res/PBRModels/Shelves/shelf.obj");
+	modelFirelog = new PBRModel("res/PBRModels/Firelog/firelog.obj");
+	modelBackpack = new PBRModel("res/backpack/backpack.obj");
 	particle = new ParticleGenerator(TextureFromFile("res/quads/fire2.png"), glm::vec3(4.77f, 0.5f, -7.0f),  200);
 	//particle2 = new ParticleGenerator(TextureFromFile("res/quads/ja2_1.png"), glm::vec3(0.0f, 0.5f, 0.0f),  5);
 	skybox = new SkyBox();
@@ -424,6 +444,14 @@ void drawScene(GLFWwindow* window) {
 
 	//Candle Cup
 	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-2.0f, 4.65f, -9.0f));
+	M = glm::scale(M, glm::vec3(2.0f, 2.0f, 2.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelCup->Draw(*spPBRtexture);
+
+	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(-5.0f, 3.8f, -3.0f));
 	M = glm::scale(M, glm::vec3(2.0f, 2.0f, 2.0f));
 
@@ -482,6 +510,14 @@ void drawScene(GLFWwindow* window) {
 
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(4.2f, 6.4f, 9.4f));
+	M = glm::scale(M, glm::vec3(2.0f, 2.0f, 2.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelCandle->Draw(*spPBRtexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-2.0f, 4.85f, -9.0f));
 	M = glm::scale(M, glm::vec3(2.0f, 2.0f, 2.0f));
 
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
@@ -554,6 +590,14 @@ void drawScene(GLFWwindow* window) {
 
 	modelFlame->Draw(*spPBRtexture);
 
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-2.0f, 5.4f, -9.0f));
+	M = glm::scale(M, glm::vec3(0.08f, 0.08f, 0.08f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelFlame->Draw(*spPBRtexture);
+
 	//Barrel
 	M = glm::mat4(1.0f);
 	M = glm::translate(M, glm::vec3(-8.0f, 0.5f, 8.0f));
@@ -597,6 +641,129 @@ void drawScene(GLFWwindow* window) {
 	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
 
 	modelFireplace2->Draw(*spPBRtexture);
+
+	//Bowl
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(4.0f, 3.05f, 7.8f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelBowl->Draw(*spPBRtexture);
+
+	//Plate
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(0.5f, 3.05f, 7.3f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelPlate->Draw(*spPBRtexture);
+
+	//Sack
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-8.0f, 3.3f, 8.0f));
+	M = glm::rotate(M, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(2.0f, 2.0f, 2.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelSack->Draw(*spPBRtexture);
+
+	//Apple
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(4.3f, 3.27f, 7.85f));
+	M = glm::rotate(M, glm::radians(60.0f), glm::vec3(1.0f, 0.3f, 0.5f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelApple->Draw(*spPBRtexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(3.9f, 3.25f, 7.6f));
+	M = glm::rotate(M, glm::radians(-40.0f), glm::vec3(8.0f, 0.2f, 0.8f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelApple->Draw(*spPBRtexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(4.0f, 3.25f, 7.95f));
+	M = glm::rotate(M, glm::radians(-60.0f), glm::vec3(0.6f, 0.45f, 0.4f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelApple->Draw(*spPBRtexture);
+
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(4.07f, 3.47f, 7.78f));
+	M = glm::rotate(M, glm::radians(10.0f), glm::vec3(0.9f, 0.3f, 0.8f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelApple->Draw(*spPBRtexture);
+
+	//Cheese
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-6.2f, 1.5f, 8.0f));
+	M = glm::rotate(M, glm::radians(-70.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelCheese->Draw(*spPBRtexture);
+
+	//Tomato
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(0.5f, 3.05f, 7.3f));
+	M = glm::scale(M, glm::vec3(2.0f, 2.0f, 2.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelTomato->Draw(*spPBRtexture);
+
+	//Cup
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-0.4f, 3.05f, 8.0f));
+	M = glm::rotate(M, glm::radians(70.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelCup_m->Draw(*spPBRtexture);
+
+	//Shelf
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-4.0f, 4.5f, -10.0f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelShelf->Draw(*spPBRtexture);
+
+	//Backpack
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(-4.0f, 6.45f, -8.8f));
+	M = glm::rotate(M, glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(1.0f, 1.0f, 1.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelBackpack->Draw(*spPBRtexture);
+
+	//Firelog
+	M = glm::mat4(1.0f);
+	M = glm::translate(M, glm::vec3(6.0f, 0.95f, -6.9f));
+	M = glm::rotate(M, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelFirelog->Draw(*spPBRtexture);
 
 	//Light Casters
 	spPointLight->use();

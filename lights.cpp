@@ -82,7 +82,18 @@ glm::vec3(6.0f, 0.5f, -7.0f),
 glm::vec3(0.05f, 0.05f, 0.05f),
 glm::vec3(1.0f, 0.28f, 0.1f),
 glm::vec3(1.0f, 1.0f, 1.0f),
+
+//9
+glm::vec3(-2.0f, 5.4f, -9.0f),
+1.0f,
+0.14f,
+0.007f,
+glm::vec3(0.05f, 0.05f, 0.05f),
+glm::vec3(1.0f, 0.55f, 0.1f),
+glm::vec3(1.0f, 1.0f, 1.0f),
+
 };
+
 
 void SetPointLight(ShaderProgram& sp, PointLight light, int index)
 {
