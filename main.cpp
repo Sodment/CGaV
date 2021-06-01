@@ -37,6 +37,9 @@ float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 bool drunk = false;
+bool drinking;
+float rot_1 = 0.0f;
+float rot_2 = 0.0f;
 
 Camera* camera;
 
@@ -133,7 +136,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		if (key == GLFW_KEY_D) { direction.Right = true; }
 		if (key == GLFW_KEY_SPACE) { direction.Up = true; }
 		if (key == GLFW_KEY_LEFT_SHIFT) { direction.Down = true; }
-		if (key == GLFW_KEY_F) { drunk = true; }
+		if (key == GLFW_KEY_F) { drinking = true; }
 
 	}
 
@@ -145,8 +148,14 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
 		if (key == GLFW_KEY_D) { direction.Right = false; }
 		if (key == GLFW_KEY_SPACE) { direction.Up = false; }
 		if (key == GLFW_KEY_LEFT_SHIFT) { direction.Down = false; }
-		if (key == GLFW_KEY_F) { drunk = false; }
+		if (key == GLFW_KEY_F) { drinking = false; rot_1 = 0.0f; rot_2 = 0.0f; }
 	}
+}
+
+glm::vec3 drink_rot(glm::vec3 curr)
+{
+	glm::vec3 rot = glm::vec3(curr.x,curr.y + (curr.y * deltaTime), curr.z);
+	return glm::clamp(rot, 0.0f, 1.0f);
 }
 
 void mouseCallback(GLFWwindow* window, double xpos, double ypos)
@@ -605,23 +614,6 @@ void drawScene(GLFWwindow* window) {
 
 	modelBarrel->Draw(*spPBRtexture);
 
-	//Bottle
-	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(-4.2f, 3.8f, -2.2f));
-	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
-
-	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-
-	modelBottle->Draw(*spPBRtexture);
-
-	//Bottle 2
-	M = glm::mat4(1.0f);
-	M = glm::translate(M, glm::vec3(6.2f, 3.05f, 7.3f));
-	M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
-
-	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
-
-	modelBottle2->Draw(*spPBRtexture);
 
 	//Fireplace2
 	M = glm::mat4(1.0f);
@@ -763,6 +755,46 @@ void drawScene(GLFWwindow* window) {
 
 	modelFirelog->Draw(*spPBRtexture);
 
+	//Bottle
+	if (drinking)
+	{
+		rot_1 += 5 * deltaTime;
+		M = glm::mat4(1.0f);
+		M = glm::translate(M, glm::vec3(-4.2f, 3.8f, -2.2f));
+		M = glm::rotate(M, glm::radians(glm::clamp(rot_1, 0.0f, 45.0f)), glm::vec3(1.0f, 0.0f, 0.0f));
+		M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+	}
+	else
+	{
+		M = glm::mat4(1.0f);
+		M = glm::translate(M, glm::vec3(-4.2f, 3.8f, -2.2f));
+		M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+	}
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelBottle->Draw(*spPBRtexture);
+
+	//Bottle 2
+	if (drinking)
+	{
+		rot_2 += 5 * deltaTime;
+		M = glm::mat4(1.0f);
+		M = glm::translate(M, glm::vec3(6.2f, 3.05f, 7.3f));
+		M = glm::rotate(M, glm::radians(glm::clamp(rot_1, 0.0f, 45.0f)), glm::vec3(-1.0f, 0.0f, 0.0f));
+		M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+	}
+	else
+	{
+		M = glm::mat4(1.0f);
+		M = glm::translate(M, glm::vec3(6.2f, 3.05f, 7.3f));
+		M = glm::scale(M, glm::vec3(3.0f, 3.0f, 3.0f));
+	}
+
+	glUniformMatrix4fv(spPBRtexture->u("M"), 1, false, glm::value_ptr(M));
+
+	modelBottle2->Draw(*spPBRtexture);
+
 	//Light Casters
 	spPointLight->use();
 	glUniformMatrix4fv(spPointLight->u("P"), 1, false, glm::value_ptr(P));
@@ -861,11 +893,31 @@ int main(void)
 	initShaderPrograms();
 	initModels();
 	glfwSetTime(0);
+	float drunk_time = 0.0f;
+	float drinking_time = 0.0f;
 	while (!glfwWindowShouldClose(window))
 	{
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		camera->ProcessKeyboard(deltaTime);
+		if (drinking)
+		{
+			drinking_time += deltaTime;
+		}
+		if (drinking_time > 8.0f)
+		{
+			drunk = true;
+			drinking_time = 0.0f;
+		}
+		if (drunk)
+		{
+			drunk_time += deltaTime;
+			if (drunk_time > 60.0f)
+			{
+				drunk = false;
+				drunk_time = 0.0f;
+			}
+		}
 		glfwSetTime(0);
 		drawScene(window);
 		glfwPollEvents();

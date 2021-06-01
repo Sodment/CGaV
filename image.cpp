@@ -4,9 +4,9 @@
 #include <iostream>
 
 
-GLuint TextureFromFile(const char* path, const string& directory)
+GLuint TextureFromFile(const char* path, const std::string& directory)
 {
-	string filename = string(path);
+	std::string filename = std::string(path);
 	filename = directory + '/' + filename;
 	//printf("path: %s\n", path);
 	//cout << "Directory format " << directory << endl;
@@ -47,7 +47,7 @@ GLuint TextureFromFile(const char* path, const string& directory)
 
 GLuint TextureFromFile(std::string path)
 {
-	string filename = string(path);
+	std::string filename = std::string(path);
 	GLuint textureID;
 	glGenTextures(1, &textureID);
 
@@ -83,9 +83,9 @@ GLuint TextureFromFile(std::string path)
 	return textureID;
 }
 
-GLuint TextureFromFileClamp(const char* path, const string& directory)
+GLuint TextureFromFileClamp(const char* path, const std::string& directory)
 {
-	string filename = string(path);
+	std::string filename = std::string(path);
 	filename = directory + '/' + filename;
 	//printf("path: %s\n", path);
 	//cout << "Directory format " << directory << endl;

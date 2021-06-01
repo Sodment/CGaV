@@ -29,7 +29,7 @@ void PBRModel::loadModel(std::string const& path)
 	// check for errors
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
 	{
-		cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+		std::cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << std::endl;
 		return;
 	}
 	// retrieve the directory path of the filepath
@@ -46,7 +46,6 @@ void PBRModel::processNode(aiNode* node, const aiScene* scene)
 	for (unsigned int i = 0; i < node->mNumMeshes; i++)
 	{
 		// the node object only contains indices to index the actual objects in the scene. 
-		// the scene contains all the data, node is just to keep stuff organized (like relations between nodes).
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		meshes.push_back(processMesh(mesh, scene));
 	}
@@ -70,7 +69,7 @@ PBRMesh PBRModel::processMesh(aiMesh* mesh, const aiScene* scene)
 	for (unsigned int i = 0; i < mesh->mNumVertices; i++)
 	{
 		PBRVertex vertex;
-		glm::vec3 vector; // we declare a placeholder vector since assimp uses its own vector class that doesn't directly convert to glm's vec3 class so we transfer the data to this placeholder glm::vec3 first.
+		glm::vec3 vector; //placeholder vector since assimp uses its own vector class
 		// positions
 		vector.x = mesh->mVertices[i].x;
 		vector.y = mesh->mVertices[i].y;
@@ -88,8 +87,6 @@ PBRMesh PBRModel::processMesh(aiMesh* mesh, const aiScene* scene)
 		if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
 		{
 			glm::vec2 vec;
-			// a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-			// use models where a vertex can have multiple texture coordinates so we always take the first set (0).
 			vec.x = mesh->mTextureCoords[0][i].x;
 			vec.y = mesh->mTextureCoords[0][i].y;
 			vertex.TexCoords = vec;
@@ -99,7 +96,7 @@ PBRMesh PBRModel::processMesh(aiMesh* mesh, const aiScene* scene)
 
 		vertices.push_back(vertex);
 	}
-	// now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+	// now walk through each of the mesh's faces
 	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
 	{
 		aiFace face = mesh->mFaces[i];
@@ -117,7 +114,7 @@ PBRMesh PBRModel::processMesh(aiMesh* mesh, const aiScene* scene)
 	// 2. ao maps
 	std::vector<PBRTexture> aoMaps = loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_ao");
 	textures.insert(textures.end(), aoMaps.begin(), aoMaps.end());
-	// 3. metallic
+	// 3. metallic maps
 	std::vector<PBRTexture> metallicMaps = loadMaterialTextures(material, aiTextureType_OPACITY, "texture_metallic");
 	textures.insert(textures.end(), metallicMaps.begin(), metallicMaps.end());
 	// 4. normal maps
@@ -157,7 +154,7 @@ PBRMaterial PBRModel::loadMaterial(aiMaterial* mat) {
 // the required info is returned as a Texture struct.
 std::vector<PBRTexture> PBRModel::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
-	vector<PBRTexture> textures;
+	std::vector<PBRTexture> textures;
 	for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
 	{
 		aiString str;
